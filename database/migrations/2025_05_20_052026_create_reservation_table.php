@@ -12,16 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('reservation', function (Blueprint $table) {
-            $table->id('reservationID'); // Primary key for reservations
-            $table->foreignId('customerID')->constrained('customer')->onDelete('cascade'); // Foreign key to customer table
-            // Corrected: Referencing 'restaurant_tables' and its 'tableId' primary key
-            $table->foreignId('tableId')->constrained('restaurant_tables', 'tableId')->onDelete('cascade'); // Foreign key to restaurant_tables table
-            $table->dateTime('date_time'); // Date and time of the reservation
-            $table->integer('size'); // Number of people for the reservation
-            $table->enum('status', ['confirmed', 'cancelled', 'completed'])->default('confirmed'); // Status of the reservation
-            $table->boolean('preorder_food')->default(false); // Indicates if food was preordered
-            $table->integer('duration')->default(120); // Duration of the reservation in minutes (e.g., 120 for 2 hours)
-            $table->timestamps(); // Adds created_at and updated_at columns
+            $table->id('reservationID');
+
+            $table->unsignedBigInteger('customerID');
+            $table->foreign('customerID')
+                ->references('customerID')
+                ->on('customer')
+                ->onDelete('cascade');
+
+            $table->foreignId('tableId')
+                ->constrained('restaurant_tables', 'tableId')
+                ->onDelete('cascade');
+
+            $table->dateTime('date_time');
+            $table->integer('size');
+            $table->enum('status', ['confirmed', 'cancelled', 'completed'])->default('confirmed');
+            $table->boolean('preorder_food')->default(false);
+            $table->integer('duration')->default(120);
+            $table->timestamps();
         });
     }
 
