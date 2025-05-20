@@ -12,15 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->id('userID'); // Renamed from 'id' to 'userID' as per your schema
+            $table->string('username')->unique(); // Using 'username' for login
+            $table->string('email')->unique()->nullable(); // Keep email, but allow nullable if username is primary login
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('role', ['admin', 'user'])->default('user'); // Keep the 'role' field
             $table->rememberToken();
             $table->timestamps();
         });
 
+        // These are standard Laravel tables for password resets and sessions.
+        // It's generally good to keep them if you plan to use Laravel's built-in authentication features.
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
