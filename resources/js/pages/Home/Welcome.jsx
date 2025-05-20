@@ -1,9 +1,8 @@
 // resources/js/Pages/Home/Welcome.jsx
 
 import React from 'react';
-import { Head } from '@inertiajs/react'; // For setting the browser tab title
-import Navbar from "../Components/Navbar";
-
+import { Head } from '@inertiajs/react';
+import Navbar from '../../Components/Navbar';
 
 export default function Welcome() {
     const restaurantName = "Dr. Wine";
