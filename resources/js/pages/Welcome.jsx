@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react'; 
+import { Head } from '@inertiajs/react';
 import Layout from '@/components/layout';
 
 export default function Welcome() {
@@ -169,9 +169,30 @@ export default function Welcome() {
                     </div>
                 </div>
 
+                {/* This is your updated container for the form */}
                 <div
-                    className="absolute top-1/2 right-10 w-[350px] h-[450px] border-2 border-white rounded-lg -translate-y-1/2 pointer-events-none z-0"
-                ></div>
+                    className="absolute top-1/2 right-10 w-[350px] h-[450px]
+                               bg-black/40 border border-white/30 rounded-md p-8
+                               backdrop-blur-sm -translate-y-1/2 z-10"
+                >
+                    {/* BEGIN: INSERTED FORM CONTENT HERE */}
+                    <form className="contact-form">
+                        <div className="form-row">
+                            <input type="text" placeholder="Name" className="form-input" />
+                            <input type="text" placeholder="Phone number" className="form-input" />
+                        </div>
+                        <div className="form-row">
+                            <input type="email" placeholder="Email" className="form-input full-width" />
+                        </div>
+                        <div className="form-row">
+                            <textarea placeholder="Please enter your message" className="form-input full-width message-box"></textarea>
+                        </div>
+                        <div className="form-row">
+                            <button type="submit" className="send-message-button">Send Message</button>
+                        </div>
+                    </form>
+                    {/* END: INSERTED FORM CONTENT HERE */}
+                </div>
             </div>
             {/* ===== CONTACT US SECTION END ===== */}
         </Layout>
