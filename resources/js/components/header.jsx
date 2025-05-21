@@ -12,8 +12,8 @@ export default function Header() {
                     <Link href="/" className="text-gray-700 hover:text-red-600">Home</Link>
                     <Link href="/reservation" className="text-gray-700 hover:text-red-600">Reservation</Link>
                     <Link href="/menu" className="text-gray-700 hover:text-red-600">Menu</Link>
-                    <Link href="/contact" className="text-gray-700 hover:text-red-600">Contact Us</Link>
-                    <Link href="/about" className="text-gray-700 hover:text-red-600">About Us</Link>
+                    <Link href="/contact" className="text-gray-700 hover:text-red-600">Contact </Link>
+                    <Link href="/about" className="text-gray-700 hover:text-red-600">About </Link>
                 </nav>
 
                 {/* Buttons on the right */}
