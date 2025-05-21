@@ -30,7 +30,7 @@ class Reservation extends Model
      */
     protected $fillable = [
         'customerID',      // Foreign key to customer
-        'tableId',         // Foreign key to table
+        'tableID',         // Foreign key to table
         'date_time',       // Date and time of reservation
         'size',            // Number of people
         'status',          // Status of reservation (confirmed, cancelled, completed)
@@ -59,7 +59,7 @@ class Reservation extends Model
     // Define Relationship: A Reservation belongs to one Table
     public function table()
     {
-        return $this->belongsTo(Table::class, 'tableId', 'tableId');
+        return $this->belongsTo(Table::class, 'tableID', 'tableID');
         // 'tableId' is the FK in the 'reservation' table
         // 'tableId' is the PK in the 'table' table
     }

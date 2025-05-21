@@ -21,7 +21,7 @@ class RestaurantTable extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'tableId'; // Define primary key name
+    protected $primaryKey = 'tableID'; // Define primary key name
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +37,6 @@ class RestaurantTable extends Model
     public function reservations()
     {
         // Modified: Changed 'table' to 'restaurant_tables' in the relationship definition to match the actual table name
-        return $this->hasMany(Reservation::class, 'tableId', 'tableId');
+        return $this->hasMany(Reservation::class, 'tableID', 'tableID');
     }
 }

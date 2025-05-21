@@ -17,7 +17,7 @@ export default function Header() {
                 <nav className="flex-1 flex justify-center space-x-6">
                     {/* You might want to add 'active' styling based on current Inertia.js page */}
                     <Link href="/" className="text-gray-700 hover:text-red-600">Home</Link>
-                    <Link href="/reservation" className="text-gray-700 hover:text-red-600">Reservation</Link>
+                    <Link href={route('reservation')} className="text-gray-700 hover:text-red-600">Reservation</Link>
                     <Link href="/menu" className="text-gray-700 hover:text-red-600">Menu</Link>
                     <Link href="/contact" className="text-gray-700 hover:text-red-600">Contact</Link>
                     <Link href="/about" className="text-gray-700 hover:text-red-600">About</Link>

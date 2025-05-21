@@ -9,10 +9,10 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-     public function up()
+    public function up()
     {
         Schema::create('pre_order', function (Blueprint $table) {
-            $table->id('preorderID');
+            $table->id('preorderID'); // primary key with custom name
 
             $table->unsignedBigInteger('reservationID');
             $table->foreign('reservationID')
@@ -26,7 +26,8 @@ return new class extends Migration
                 ->on('menu_item')
                 ->onDelete('cascade');
 
-            $table->integer('quantity')->unsigned();
+            $table->unsignedInteger('quantity'); // unsigned integer for quantity
+
             $table->timestamps();
         });
     }
@@ -34,7 +35,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('pre_order');
     }

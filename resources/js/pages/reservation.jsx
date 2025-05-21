@@ -1,97 +1,126 @@
-import { useState } from 'react';
-import { Head } from '@inertiajs/react';
-import Layout from '@/components/layout';
+import React, { useState } from 'react';
+import { router, Head } from '@inertiajs/react';
+import axios from 'axios';  // Make sure axios is imported
+import Layout from '../Components/layout';
 
-export default function Reservation() {
+const Reservation = () => {
   const [form, setForm] = useState({
     name: '',
+    phone: '',
+    email: '',
     date: '',
     time: '',
     size: '',
   });
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const [availableTimes, setAvailableTimes] = useState([]);
+  const [errors, setErrors] = useState({});
+
+  const fixedTimes = [
+    '09:00', '11:00', '13:00', '15:00', '17:00', '19:00'
+  ];
+
+  const handleDateChange = (e) => {
+    const selectedDate = e.target.value;
+    setForm({ ...form, date: selectedDate, time: '' });
+
+    axios.post('/reservation/available-times', { date: selectedDate })
+      .then(res => setAvailableTimes(res.data))
+      .catch(() => setAvailableTimes([]));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Submit logic here
-    console.log(form);
+    setErrors({}); // clear previous errors
+
+    router.post('/reservation', form, { onError: setErrors });
   };
 
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDate = tomorrow.toISOString().split('T')[0];
+
   return (
-    <>
-      <Head />
-      <Layout>
-        <div className="min-h-[calc(100vh-160px)] flex items-center justify-center p-4">
-          <div className="w-full max-w-xl bg-white rounded-lg shadow p-8">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
-              Book a Reservation
-            </h2>
+    <Layout>
+      <Head title="Reserve a Table" />
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-gray-700 mb-1">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-                  required
-                />
-              </div>
+      <div className="max-w-xl mx-auto p-6 bg-white rounded-xl shadow mt-8">
+        <h1 className="text-2xl font-bold mb-4">Reserve a Table</h1>
 
-              <div className="flex space-x-4">
-                <div className="flex-1">
-                  <label className="block text-gray-700 mb-1">Date</label>
-                  <input
-                    type="date"
-                    name="date"
-                    value={form.date}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-                    required
-                  />
-                </div>
-                <div className="flex-1">
-                  <label className="block text-gray-700 mb-1">Time</label>
-                  <input
-                    type="time"
-                    name="time"
-                    value={form.time}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-gray-700 mb-1">Party Size</label>
-                <input
-                  type="number"
-                  name="size"
-                  value={form.size}
-                  onChange={handleChange}
-                  min="1"
-                  max="20"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition"
-              >
-                Reserve Table
-              </button>
-            </form>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name */}
+          <div>
+            <label className="block">Name</label>
+            <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })}
+              className="w-full border rounded p-2" />
+            {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
           </div>
-        </div>
-      </Layout>
-    </>
+
+          {/* Phone */}
+          <div>
+            <label className="block">Phone</label>
+            <input type="text" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })}
+              className="w-full border rounded p-2" />
+            {errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}
+          </div>
+
+          {/* Email */}
+          <div>
+            <label className="block">Email</label>
+            <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })}
+              className="w-full border rounded p-2" />
+            {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
+          </div>
+
+          {/* Date */}
+          <div>
+            <label className="block">Date</label>
+            <input type="date" value={form.date} onChange={handleDateChange}
+              min={minDate} className="w-full border rounded p-2" />
+            {errors.date && <span className="text-red-500 text-sm">{errors.date}</span>}
+          </div>
+
+          {/* Time Slot */}
+          <div>
+            <label className="block">Time Slot</label>
+            <select value={form.time} onChange={e => setForm({ ...form, time: e.target.value })}
+              className="w-full border rounded p-2">
+              <option value="">Select Time</option>
+              {fixedTimes.map(time => (
+                <option
+                  key={time}
+                  value={time}
+                  disabled={availableTimes.length > 0 && !availableTimes.includes(time)}
+                >
+                  {time} - {String(Number(time.split(":")[0]) + 2).padStart(2, "0")}:00
+                </option>
+              ))}
+            </select>
+            {errors.time && <span className="text-red-500 text-sm">{errors.time}</span>}
+          </div>
+
+          {/* Party Size */}
+          <div>
+            <label className="block">Party Size</label>
+            <select value={form.size} onChange={e => setForm({ ...form, size: e.target.value })}
+              className="w-full border rounded p-2">
+              <option value="">Select Size</option>
+              {[...Array(10)].map((_, i) => (
+                <option key={i + 1} value={i + 1}>{i + 1}</option>
+              ))}
+            </select>
+            {errors.size && <span className="text-red-500 text-sm">{errors.size}</span>}
+          </div>
+
+          <button type="submit"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Reserve Table
+          </button>
+        </form>
+      </div>
+    </Layout>
   );
-}
+};
+
+export default Reservation;

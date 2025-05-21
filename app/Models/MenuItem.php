@@ -47,7 +47,7 @@ class MenuItem extends Model
     // Define Relationship: A Menu Item belongs to one Menu
     public function menu()
     {
-        return $this->belongsTo(Menu::class, 'menuId', 'menuId');
+        return $this->belongsTo(Menu::class, 'menuID', 'menuID');
         // 'menuId' is the FK in the 'menu_item' table
         // 'menuId' is the PK in the 'menu' table
     }

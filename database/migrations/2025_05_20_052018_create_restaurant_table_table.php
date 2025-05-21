@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Modified: Changed table name from 'restaurant_table' to 'restaurant_tables' for consistency
         Schema::create('restaurant_tables', function (Blueprint $table) {
-            $table->id('tableId'); // This correctly sets 'tableId' as the primary key
+            $table->id('tableID'); // This correctly sets 'tableId' as the primary key
             $table->integer('table_number')->unique();
             $table->integer('capacity');
+            $table->enum('table_status', ['available', 'occupied', 'maintenance'])->default('available');
             $table->timestamps();
         });
     }
@@ -25,7 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Modified: Changed table name from 'table' to 'restaurant_tables' for consistency
         Schema::dropIfExists('restaurant_tables');
     }
 };

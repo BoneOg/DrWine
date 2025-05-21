@@ -3,7 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\RestaurantTable; // Import your Table model (or RestaurantTable if that's what you named it)
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class RestaurantTableSeeder extends Seeder
 {
@@ -12,21 +13,45 @@ class RestaurantTableSeeder extends Seeder
      */
     public function run(): void
     {
-        RestaurantTable::create([
-            'table_number' => 1,
-            'capacity' => 2,
-        ]);
+        $now = Carbon::now();
 
-        RestaurantTable::create([
-            'table_number' => 2,
-            'capacity' => 4,
+        DB::table('restaurant_tables')->insert([
+            [
+                'table_number' => 1,
+                'capacity' => 2,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'table_number' => 2,
+                'capacity' => 2,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'table_number' => 3,
+                'capacity' => 4,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'table_number' => 4,
+                'capacity' => 6,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'table_number' => 5,
+                'capacity' => 8,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'table_number' => 6,
+                'capacity' => 10,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
         ]);
-
-        RestaurantTable::create([
-            'table_number' => 3,
-            'capacity' => 6,
-        ]);
-
-        // Add more tables as needed
     }
 }

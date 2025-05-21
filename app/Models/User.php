@@ -12,57 +12,34 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'users'; // Explicitly specify table name, though it's often the default
+    protected $table = 'users';
 
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'userID'; // Define primary key name
+    protected $primaryKey = 'userID';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public $incrementing = true;
+
+    protected $keyType = 'int';
+
     protected $fillable = [
-        'username', // Username for login
+        'username',
         'password',
-        'role', // Role (admin or user)
-        'email', // If you added email to users
+        'role',
+        'email',
         'email_verified_at',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed', // Laravel 10+ automatically hashes passwords
+        'password' => 'hashed',
     ];
 
-    // Define Relationship: A User can be linked to many Customer records
     public function customers()
     {
-        // A User can have many Customer profiles associated with them (if user_id in customer table is foreign key)
-        return $this->hasMany(Customer::class, 'user_id', 'userID'); // 'user_id' is the FK in the 'customer' table, 'userID' is the PK in 'users'
+        return $this->hasMany(Customer::class, 'userID', 'userID');
     }
 }

@@ -21,7 +21,7 @@ class Menu extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'menuId'; // Define primary key name
+    protected $primaryKey = 'menuID'; // Define primary key name
 
     /**
      * The attributes that are mass assignable.
@@ -45,7 +45,7 @@ class Menu extends Model
     // Define Relationship: A Menu can have many Menu Items
     public function menuItems()
     {
-        return $this->hasMany(MenuItem::class, 'menuId', 'menuId');
+        return $this->hasMany(MenuItem::class, 'menuID', 'menuID');
         // 'menuId' is the FK in the 'menu_item' table
         // 'menuId' is the PK in the 'menu' table
     }

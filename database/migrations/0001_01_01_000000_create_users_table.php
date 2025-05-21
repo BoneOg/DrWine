@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('userID'); // Renamed from 'id' to 'userID' as per your schema
-            $table->string('username')->unique(); // Using 'username' for login
-            $table->string('email')->unique()->nullable(); // Keep email, but allow nullable if username is primary login
+            $table->enum('role', ['admin', 'user', 'guest'])->default('guest');
+            $table->string('username')->unique(); // username is unique for login
+            $table->string('email')->nullable(); // removed unique() to allow duplicates and made nullable
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['admin', 'user'])->default('user'); // Keep the 'role' field
             $table->rememberToken();
             $table->timestamps();
         });
