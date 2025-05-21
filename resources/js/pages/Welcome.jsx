@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import Layout from '@/components/layout';
 
 export default function Welcome() {
@@ -35,16 +35,19 @@ export default function Welcome() {
                     <p className="mb-7 text-base leading-relaxed font-roboto">
                         {heroDescription}
                     </p>
-                    <button
-                        className="mr-5 px-5 py-2 text-base border-2 border-black bg-transparent text-black cursor-pointer rounded transition-colors duration-300 hover:bg-black hover:text-white"
+                    <Link
+                        href="/menu" // <--- This is the key change: specify the route URL
+                        className="mr-5 px-5 py-2 text-base border-2 border-black bg-transparent text-black cursor-pointer rounded transition-colors duration-300 hover:bg-black hover:text-white inline-block" // Apply button styles directly to Link, and add inline-block if needed
                     >
                         See Menu
-                    </button>
-                    <button
+                    </Link>
+                    <Link
+                        href="/reservation"
                         className="px-5 py-2 text-base border-2 border-black bg-black text-white cursor-pointer rounded transition-colors duration-300 hover:bg-transparent hover:text-black"
                     >
                         Book a Table
-                    </button>
+                    </Link>
+
                 </div>
             </div>
             {/* ===== HERO SECTION END ===== */}
@@ -81,11 +84,13 @@ export default function Welcome() {
                     <p className="mb-8 text-sm leading-relaxed font-roboto">
                         {aboutUsDescription}
                     </p>
-                    <button
+                    <Link
+                        href='/about'
                         className="px-6 py-3 text-base border-2 border-white bg-transparent text-white cursor-pointer rounded transition-colors duration-300 hover:bg-white hover:text-black"
                     >
                         View More
-                    </button>
+                    </Link>
+
                 </div>
             </div>
             {/* ===== ABOUT US SECTION END ===== */}
@@ -100,11 +105,12 @@ export default function Welcome() {
                     <p className="mb-8 text-sm leading-relaxed font-roboto">
                         {menuDescription}
                     </p>
-                    <button
-                        className="px-6 py-3 text-base border-2 border-white bg-transparent text-white cursor-pointer rounded transition-colors duration-300 hover:bg-white hover:text-black"
+                    <Link
+                        href="/menu" // Direct URL to your menu page
+                        className="px-6 py-3 text-base border-2 border-white bg-transparent text-white cursor-pointer rounded transition-colors duration-300 hover:bg-white hover:text-black inline-block"
                     >
                         View Menu
-                    </button>
+                    </Link>
                 </div>
 
                 {/* Right Side: Images */}
