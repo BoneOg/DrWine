@@ -1,65 +1,95 @@
 import React from 'react';
+import { FaFacebookF, FaInstagram, FaPhone } from 'react-icons/fa';
+import { MdEmail } from 'react-icons/md';
 
 export default function ContactSection() {
   return (
     <section
-      className="relative py-20 md:py-32 bg-cover bg-center text-white"
-      style={{ backgroundImage: "url('/images/contact-background.jpg')" }} /* IMPORTANT: Verify this path */
+      className="relative py-10 md:py-12 bg-cover bg-center text-white"
+      style={{
+        backgroundImage: `url('/assets/contactsection.jpg'), url('/images/contact-background.jpg')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
     >
-      {/* Overlay to darken background image and make text more readable */}
       <div className="absolute inset-0 bg-black opacity-60"></div>
 
-      <div className="relative z-10 container mx-auto px-4">
-        {/* Contact Us Title */}
-        {/* Note: The image uses a custom font and red highlight for "Us".
-            You'll need to define 'font-contact-us' in your tailwind.config.js
-            and potentially import the font globally if you want to match this.
-            Otherwise, it will use a default font.
-        */}
-        <h2 className="text-6xl md:text-7xl font-contact-us text-center mb-16">
-          Contact <span className="text-red-500">Us</span>
+      <div className="relative z-10 container mx-auto px-4" style={{ maxWidth: '1200px' }}>
+        {/* Fluid font size for heading */}
+        <h2
+          className="font-arizonia italic text-center mb-10 md:mb-16"
+          style={{
+            fontSize: 'clamp(3rem, 8vw, 10rem)', // Adjust these as needed
+          }}
+        >
+          Contact <span className="text-[#FF0000]">U</span>s
         </h2>
 
-        {/* This is the main content wrapper for the two columns (Info/Hours and Form) */}
-        {/* It will be max-width and aligned to the right on large screens */}
-        <div className="flex flex-col lg:flex-row lg:max-w-4xl lg:ml-auto mx-auto items-start justify-between gap-12">
-          {/* Left Column: Contact Info & Opening Hours */}
-          <div className="lg:w-1/2 flex flex-col items-start space-y-8">
-            {/* Contact Info */}
+
+
+        <div className="flex flex-col lg:flex-row mx-auto items-start justify-between gap-8 md:gap-12 lg:gap-20">
+          {/* Left Column */}
+          <div className="lg:w-2/5 flex flex-col items-start space-y-6 md:space-y-8">
             <div>
-              <h3 className="text-3xl font-semibold mb-6">Contact Info</h3>
-              <ul className="space-y-4 text-xl">
-                <li>
-                  <a href="https://facebook.com/drwine.bgc" target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-red-500 transition-colors duration-300">
-                    <span className="mr-3 text-2xl w-6">FB</span> {/* Placeholder for Facebook icon */}
-                    https://www.facebook.com/drwine.bgc
-                  </a>
-                </li>
-                <li>
-                  <a href="https://instagram.com/drwine.bgc/" target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-red-500 transition-colors duration-300">
-                    <span className="mr-3 text-2xl w-6">IG</span> {/* Placeholder for Instagram icon */}
-                    https://www.instagram.com/drwine.bgc/
-                  </a>
-                </li>
-                <li>
-                  <a href="tel:09177152807" className="flex items-center hover:text-red-500 transition-colors duration-300">
-                    <span className="mr-3 text-2xl w-6">📞</span> {/* Placeholder for Phone icon */}
-                    0917 715 2807
-                  </a>
-                </li>
-                <li>
-                  <a href="mailto:reservation.drwinebgc@gmail.com" className="flex items-center hover:text-red-500 transition-colors duration-300">
-                    <span className="mr-3 text-2xl w-6">✉️</span> {/* Placeholder for Email icon */}
-                    reservation.drwinebgc@gmail.com
-                  </a>
-                </li>
-              </ul>
+              <h3
+                className="font-semibold mb-3 pb-2 border-b border-white border-opacity-30"
+                style={{ fontSize: 'clamp(1.125rem, 2vw, 1.875rem)' }}
+              >
+                Contact Info
+              </h3>
+              <ul className="space-y-3 md:space-y-4" style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.25rem)' }}>
+                {[
+                  {
+                    href: 'https://facebook.com/drwine.bgc',
+                    icon: <FaFacebookF />,
+                    text: 'drwine.bgc',
+                  },
+                  {
+                    href: 'https://instagram.com/drwine.bgc/',
+                    icon: <FaInstagram />,
+                    text: 'drwine.bgc',
+                  },
+                  {
+                    href: 'tel:09177152807',
+                    icon: <FaPhone />,
+                    text: '0917 715 2807',
+                  },
+                  {
+                    href: 'mailto:reservation.drwinebgc@gmail.com',
+                    icon: <MdEmail />,
+                    text: 'reservation.drwinebgc@gmail.com',
+                    isEmail: true, // add a flag to identify the email item
+                  },
+                ].map(({ href, icon, text, isEmail }) => {
+                // If it's the email, override href with Gmail compose URL:
+                const gmailHref = 'https://mail.google.com/mail/?view=cm&fs=1&to=reservation.drwinebgc@gmail.com';
+
+                return (
+                  <li key={text}>
+                    <a
+                      href={isEmail ? gmailHref : href}
+                      target={href.startsWith('http') || isEmail ? '_blank' : undefined}
+                      rel={href.startsWith('http') || isEmail ? 'noopener noreferrer' : undefined}
+                      className="flex items-center hover:text-red-500 transition-colors duration-300"
+                      style={{ fontSize: 'inherit' }}
+                    >
+                      <span style={{ marginRight: '0.75rem', fontSize: 'clamp(1rem, 2vw, 1.5rem)' }}>{icon}</span>
+                      {text}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
             </div>
 
-            {/* Opening Hours */}
             <div>
-              <h3 className="text-3xl font-semibold mb-6">Opening Hours</h3>
-              <ul className="space-y-2 text-xl">
+              <h3
+                className="font-semibold mb-3 pb-2 border-b border-white border-opacity-30"
+                style={{ fontSize: 'clamp(1.125rem, 2vw, 1.875rem)' }}
+              >
+                Opening Hours
+              </h3>
+              <ul className="space-y-2" style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.25rem)' }}>
                 <li className="flex justify-between">
                   <span>Monday - Friday</span>
                   <span>7:00 am - 11:30 pm</span>
@@ -76,39 +106,42 @@ export default function ContactSection() {
             </div>
           </div>
 
-          {/* Right Column: Contact Form */}
-          <div className="w-full lg:w-1/2 bg-white bg-opacity-5 p-8 rounded-lg shadow-xl border border-white border-opacity-20 backdrop-filter backdrop-blur-sm">
-            <form className="space-y-6">
+          {/* Right Column */}
+          <div
+            className="w-full lg:w-3/5 bg-none bg-opacity-10 p-6 md:p-8 rounded-lg shadow-xl border border-white border-opacity-20 backdrop-filter backdrop-blur-sm"
+            style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1rem)' }}
+          >
+            <form className="space-y-4 md:space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Name Field */}
-                <input
-                  type="text"
-                  placeholder="Name"
-                  className="p-4 bg-transparent border border-white border-opacity-50 rounded-lg focus:outline-none focus:border-red-500 placeholder-gray-300"
-                />
-                {/* Phone Number Field */}
-                <input
-                  type="text"
-                  placeholder="Phone number"
-                  className="p-4 bg-transparent border border-white border-opacity-50 rounded-lg focus:outline-none focus:border-red-500 placeholder-gray-300"
-                />
+                {[
+                  { type: 'text', placeholder: 'Name' },
+                  { type: 'text', placeholder: 'Phone number' },
+                ].map(({ type, placeholder }) => (
+                  <input
+                    key={placeholder}
+                    type={type}
+                    placeholder={placeholder}
+                    className="bg-transparent border border-white border-opacity-50 rounded-md focus:outline-none focus:border-red-500 placeholder-gray-300 text-white"
+                    style={{ padding: 'clamp(0.5rem, 1vw, 1rem)', fontSize: 'inherit' }}
+                  />
+                ))}
               </div>
-              {/* Email Field */}
               <input
                 type="email"
                 placeholder="Email"
-                className="w-full p-4 bg-transparent border border-white border-opacity-50 rounded-lg focus:outline-none focus:border-red-500 placeholder-gray-300"
+                className="w-full bg-transparent border border-white border-opacity-50 rounded-md focus:outline-none focus:border-red-500 placeholder-gray-300 text-white"
+                style={{ padding: 'clamp(0.5rem, 1vw, 1rem)', fontSize: 'inherit' }}
               />
-              {/* Message Textarea */}
               <textarea
                 placeholder="Please enter your message"
                 rows="6"
-                className="w-full p-4 bg-transparent border border-white border-opacity-50 rounded-lg focus:outline-none focus:border-red-500 placeholder-gray-300 resize-none"
-              ></textarea>
-              {/* Send Message Button */}
+                className="w-full bg-transparent border border-white border-opacity-50 rounded-md focus:outline-none focus:border-red-500 placeholder-gray-300 resize-none text-white"
+                style={{ padding: 'clamp(0.5rem, 1vw, 1rem)', fontSize: 'inherit' }}
+              />
               <button
                 type="submit"
-                className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-6 rounded-lg transition-colors duration-300"
+                className="w-full bg-red-600 hover:bg-red-700 text-white font-bold rounded-md transition-colors duration-300 uppercase"
+                style={{ padding: 'clamp(0.75rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem)' }}
               >
                 Send Message
               </button>

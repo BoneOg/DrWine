@@ -1,4 +1,10 @@
 @import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Arizonia&display=swap');
+
 
 @plugin 'tailwindcss-animate';
 
@@ -6,8 +12,8 @@
   --font-sans:
     'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
-  --color-background: oklch(1 0 0);
-  --color-foreground: oklch(0.145 0 0);
+  --color-background: oklch(1 0 0); /* <-- CHANGED BACK TO WHITE */
+  --color-foreground: oklch(0.145 0 0); /* Adjust to appropriate text color for a white background */
   --color-primary: oklch(0.205 0 0);
   --color-primary-foreground: oklch(0.985 0 0);
   --color-border: oklch(0.922 0 0);
@@ -33,9 +39,26 @@
     width: 100%;
     height: 100%;
     overflow-x: hidden;
+    overscroll-behavior-y: none; /* Keep this to prevent bounce visual effect */
+  }
+
+  *, *::before, *::after {
+  box-sizing: border-box;
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans; /* This will now use your white --color-background */
   }
+}
+
+.responsive-text {
+  font-size: clamp(1rem, 2vw, 2rem);
+}
+
+.responsive-padding {
+  padding: clamp(0.5rem, 1vw, 1.5rem);
+}
+
+.font-arizonia {
+  font-family: 'Arizonia', cursive;
 }

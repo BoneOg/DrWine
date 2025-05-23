@@ -1,6 +1,6 @@
 import Layout from '@/components/layout';
 import { Head } from '@inertiajs/react';
-import Contact from '@/components/Contact';
+import ContactSection from '@/components/Contact';
 
 export default function About() {
   return (
@@ -80,8 +80,8 @@ export default function About() {
           </div>
         </section>
 
-        {/* Integrate the reusable ContactSection component */}
-        <Contact />
+        {/* ContactSection component */}
+        <ContactSection />
       </Layout>
     </>
   );

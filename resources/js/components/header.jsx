@@ -18,7 +18,7 @@ export default function Header() {
     };
 
     return (
-        <header className="bg-black/80 backdrop-blur-sm sticky top-0 z-50">
+        <header className="absolute top-0 left-0 w-full z-50 bg-black/60 backdrop-blur-sm">
             <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between md:px-12">
                 {/* Logo */}
                 <Link href="/" className="shrink-0">
@@ -28,7 +28,7 @@ export default function Header() {
                         className="h-10 w-10 object-cover rounded-full border border-white md:h-14 md:w-14"
                     />
                 </Link>
-
+                
                 {/* Hamburger Icon (Mobile) */}
                 <div className="md:hidden">
                     <button onClick={toggleMobileMenu} className="text-white focus:outline-none">
