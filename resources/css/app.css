@@ -4,6 +4,7 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Arizonia&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cardo&display=swap');
 
 
 @plugin 'tailwindcss-animate';
@@ -47,7 +48,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans; /* This will now use your white --color-background */
+    @apply bg-background text-foreground font-sans;
   }
 }
 
@@ -61,4 +62,8 @@
 
 .font-arizonia {
   font-family: 'Arizonia', cursive;
+}
+
+.font-cardo {
+  font-family: 'Cardo', serif;
 }

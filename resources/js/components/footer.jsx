@@ -1,6 +1,6 @@
 export default function Footer() {
     return (
-        <footer className="bg-gray-900 text-white p-4 text-center
+        <footer className="bg-black/70 text-white p-4 text-center
                            h-[120px] md:h-[180px] // Responsive height: 120px on small, 180px on md and up
                            flex flex-col items-center justify-center">
             {/* Logo on top of the text - Responsive Sizing */}

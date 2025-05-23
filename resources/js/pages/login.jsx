@@ -10,61 +10,64 @@ export default function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Here you would typically send the form data to your backend for authentication
         console.log('Attempting login with:', form);
-        // Example: Inertia.post('/login', form);
     };
 
     return (
         <>
             <Head title="Login" />
 
-            <div
-                className="relative min-h-screen bg-cover bg-center flex justify-end items-start p-12"
-                style={{ backgroundImage: "url('/images/wine-background.png')" }} // Adjust path to your wine glass image
-            >
-                {/* Overlay for the Dr. Wine logo and slogan */}
-                <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center text-gray-800">
-                    <img src="/images/dr-wine-logo.png" alt="Le Bistrot du Dr. Wine" className="mx-auto h-24 mb-2" /> {/* Adjust path to your logo */}
-                    <p className="text-lg font-serif">where food meets royalty</p>
+            <div className="min-h-screen bg-white flex flex-col items-center justify-center relative overflow-hidden">
+                <div className="flex flex-col md:flex-row w-full h-full md:h-screen">
+                    {/* Left Side: Wine Image */}
+                    <div className="w-full md:w-1/2 flex items-end justify-center relative h-100 md:h-auto">
+                        <img
+                            src="/assets/login-image.png"
+                            alt="Wine Glass"
+                            className="max-h-full md:max-h-[95%] w-auto object-contain absolute bottom-0"
+                        />
+                    </div>
+
+                    {/* Right Side: Login Card */}
+                    <div className="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12">
+                        <div className="bg-black rounded-lg p-6 md:p-10 w-full max-w-md shadow-2xl">
+                            <h2 className="text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-center text-white">
+                                <span className="text-red-500">W</span>elcome back!
+                            </h2>
+                            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+                                <input
+                                    type="text"
+                                    name="usernameOrEmail"
+                                    value={form.usernameOrEmail}
+                                    onChange={handleChange}
+                                    placeholder="Email or Username"
+                                    className="w-full px-4 md:px-5 py-3 md:py-4 bg-black border border-white rounded-md text-white placeholder-gray-400 text-base md:text-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    required
+                                />
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={form.password}
+                                    onChange={handleChange}
+                                    placeholder="Password"
+                                    className="w-full px-4 md:px-5 py-3 md:py-4 bg-black border border-white rounded-md text-white placeholder-gray-400 text-base md:text-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    required
+                                />
+                                <button
+                                    type="submit"
+                                    className="w-full bg-black text-white py-3 md:py-4 px-4 border border-white rounded-md text-lg font-semibold hover:bg-gray-900 transition-colors duration-200"
+                                >
+                                    Login
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="bg-black border-2 border-blue-500 rounded-md p-6 w-80 text-white shadow-lg">
-                    <h2 className="text-3xl font-bold mb-6 text-center">
-                        <span className="text-red-500">W</span>elcome back!
-                    </h2>
-                    <form onSubmit={handleSubmit} className="space-y-5">
-                        <div>
-                            <input
-                                type="text"
-                                name="usernameOrEmail"
-                                value={form.usernameOrEmail}
-                                onChange={handleChange}
-                                placeholder="Email or Username"
-                                className="w-full px-4 py-3 bg-black border border-white rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <input
-                                type="password"
-                                name="password"
-                                value={form.password}
-                                onChange={handleChange}
-                                placeholder="Password"
-                                className="w-full px-4 py-3 bg-black border border-white rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                required
-                            />
-                        </div>
-
-                        <button
-                            type="submit"
-                            className="w-full bg-black text-white py-3 px-4 border border-white rounded-md text-lg font-semibold hover:bg-gray-900 transition-colors duration-200"
-                        >
-                            Login
-                        </button>
-                    </form>
+                {/* Logo and Slogan */}
+                <div className="absolute bottom-24 md:bottom-20 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-10 px-4">
+                    <img src="/assets/logo1.png" alt="Le Bistrot du Dr. Wine" className="mx-auto h-16 md:h-24 mb-2 md:mb-3" />
+                    <p className="text-lg md:text-2xl font-serif">where food meets royalty</p>
                 </div>
             </div>
         </>
