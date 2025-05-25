@@ -20,7 +20,7 @@ export default function Login() {
             <div className="min-h-screen bg-white flex flex-col items-center justify-center relative overflow-hidden">
                 <div className="flex flex-col md:flex-row w-full h-full md:h-screen">
                     {/* Left Side: Wine Image */}
-                    <div className="w-full md:w-1/2 flex items-end justify-center relative h-100 md:h-auto">
+                    <div className="w-full md:w-1/2 flex items-end justify-center relative">
                         <img
                             src="/assets/login-image.png"
                             alt="Wine Glass"
@@ -65,8 +65,8 @@ export default function Login() {
                 </div>
 
                 {/* Logo and Slogan */}
-                <div className="absolute bottom-24 md:bottom-20 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-10 px-4">
-                    <img src="/assets/logo1.png" alt="Le Bistrot du Dr. Wine" className="mx-auto h-16 md:h-24 mb-2 md:mb-3" />
+                <div className="absolute bottom-16 md:bottom-20 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-10 px-4">
+                    <img src="/assets/logo1.png" alt="Le Bistrot du Dr. Wine" className="mx-auto h-14 md:h-20 mb-2 md:mb-3" />
                     <p className="text-lg md:text-2xl font-serif">where food meets royalty</p>
                 </div>
             </div>
