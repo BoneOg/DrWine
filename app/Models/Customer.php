@@ -20,7 +20,7 @@ class Customer extends Model
         'userID',    // Correct foreign key to User (use 'userID' to match DB column)
     ];
 
-    public function reservations()
+    public function reservation()
     {
         return $this->hasMany(Reservation::class, 'customerID', 'customerID');
     }

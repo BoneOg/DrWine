@@ -3,6 +3,7 @@ import { router, Head } from '@inertiajs/react';
 import axios from 'axios';
 import Layout from '../Components/layout';
 
+
 const Reservation = () => {
   const [form, setForm] = useState({
     name: '',

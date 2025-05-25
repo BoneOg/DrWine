@@ -22,9 +22,7 @@ class ReservationController extends Controller
     {
         $date = $request->input('date');
 
-        $fixedSlots = [
-            '09:00', '11:00', '13:00', '15:00', '17:00', '19:00',
-        ];
+        $fixedSlots = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
 
         $existing = Reservation::whereDate('date_time', $date)
             ->whereIn('status', ['confirmed', 'completed'])
@@ -87,8 +85,7 @@ class ReservationController extends Controller
             return back()->withErrors(['time' => 'No available tables for this time and party size.']);
         }
 
-        // Create reservation
-        Reservation::create([
+        $reservation = Reservation::create([
             'customerID' => $customer->customerID,
             'tableID' => $table->tableID,
             'date_time' => $dateTime,
@@ -97,6 +94,36 @@ class ReservationController extends Controller
             'duration' => 120,
         ]);
 
-       return Inertia::location('/checkout');
+        return redirect()->route('checkout', ['reservationID' => $reservation->reservationID]);
+    }
+
+    public function cancel($reservationID)
+    {
+        $reservation = Reservation::with('customer.user')->findOrFail($reservationID);
+
+        // Delete reservation
+        $reservation->delete();
+
+        // Delete customer and user
+        if ($reservation->customer) {
+            $user = $reservation->customer->user;
+            $reservation->customer->delete();
+
+            if ($user) {
+                $user->delete();
+            }
+        }
+
+        return redirect()->route('reservation')->with('success', 'Reservation canceled and data deleted.');
+    }
+
+    public function markAsCompleted($reservationID)
+    {
+        $reservation = Reservation::findOrFail($reservationID);
+        $reservation->status = 'completed';
+        $reservation->save();
+
+        return redirect()->route('transactions.show', ['transaction' => $reservation->transaction->transactionID ?? 1]);
+        // You must adjust this if transaction isn't guaranteed. Otherwise, this assumes transaction exists.
     }
 }

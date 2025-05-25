@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('transaction', function (Blueprint $table) {
             $table->id('transactionID'); // Primary key for transactions
-            // Corrected: Referencing 'reservation' table and its 'reservationID' primary key
+            // Foreign key to reservation table
             $table->foreignId('reservationID')->constrained('reservation', 'reservationID')->onDelete('cascade');
             $table->integer('amount');
             $table->enum('transaction_type', ['reservation', 'food'])->default('reservation');
-            $table->enum('payment_method', ['cash', 'card'])->nullable();
-            $table->timestamps(); // This correctly adds 'created_at' and 'updated_at'
+            $table->enum('payment_method', ['GCash', 'Mastercard', 'Visa', 'PayMaya', 'PayPal'])->nullable();
+            $table->timestamps(); // created_at & updated_at
         });
     }
 

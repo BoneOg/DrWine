@@ -33,8 +33,8 @@ class RestaurantTable extends Model
         'capacity',     // Capacity of the table
     ];
 
-    // Define Relationship: A Table can have many Reservations
-    public function reservations()
+    // Define Relationship: A Table can have many Reservation
+    public function reservation()
     {
         // Modified: Changed 'table' to 'restaurant_tables' in the relationship definition to match the actual table name
         return $this->hasMany(Reservation::class, 'tableID', 'tableID');

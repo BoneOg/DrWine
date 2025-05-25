@@ -59,7 +59,7 @@ class Reservation extends Model
     // Define Relationship: A Reservation belongs to one Table
     public function table()
     {
-        return $this->belongsTo(Table::class, 'tableID', 'tableID');
+        return $this->belongsTo(RestaurantTable::class, 'tableID', 'tableID');
         // 'tableId' is the FK in the 'reservation' table
         // 'tableId' is the PK in the 'table' table
     }
