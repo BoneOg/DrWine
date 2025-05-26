@@ -23,22 +23,22 @@ class TransactionController extends Controller
         }
 
         $transaction = Transaction::create($validated);
-        $transaction->load('reservation.customer'); // eager load related data
+        $transaction->load('reservation.customer');
 
-        // ✅ Return the Inertia page directly (no redirect)
-        return Inertia::render('transaction', [
+        // --- MODIFIED LINE ---
+        return Inertia::render('transaction', [ // Matches resources/js/Pages/transaction.jsx
             'transaction' => $transaction,
         ]);
     }
 
     public function show(Transaction $transaction)
     {
-        $transaction->load('reservation.customer'); // Load related data
+        $transaction->load('reservation.customer');
 
-        return Inertia::render('transaction', [
+        // --- MODIFIED LINES ---
+        return Inertia::render('transaction', [ // Matches resources/js/Pages/transaction.jsx
             'transaction' => $transaction,
-            'reservation' => $transaction->reservation // ✅ Pass reservation
+            // Removed: 'reservation' => $transaction->reservation
         ]);
     }
-
 }
