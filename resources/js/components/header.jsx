@@ -34,6 +34,7 @@ export default function Header() {
     ];
 
     return (
+<<<<<<< Updated upstream
         <>
             <header className={`fixed w-full z-50 transition-all duration-300 overflow-hidden ${isScrolled ? 'bg-black/95' : 'bg-black/80'}`}>
                 <div className="container mx-auto">
@@ -105,6 +106,26 @@ export default function Header() {
                             </button>
                         </div>
                     </div>
+=======
+        <header className="absolute top-0 left-0 w-full z-50 bg-transparent">
+            <div className=" mx-auto px-6 py-4 flex items-center justify-between md:px-10">
+                {/* Logo */}
+                <Link href="/" className="shrink-0">
+                    <img
+                        src="/assets/logo.png"
+                        alt="DrWine Logo"
+                        className="h-10 w-10 object-cover rounded-full border border-white md:h-14 md:w-14"
+                    />
+                </Link>
+                
+                {/* Hamburger Icon (Mobile) */}
+                <div className="md:hidden">
+                    <button onClick={toggleMobileMenu} className="text-white focus:outline-none">
+                        <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+>>>>>>> Stashed changes
                 </div>
 
                 {/* Mobile Menu */}

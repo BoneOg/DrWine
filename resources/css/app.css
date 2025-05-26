@@ -35,6 +35,13 @@
   --color-border: oklch(0.269 0 0);
 }
 
+@font-face {
+  font-family: 'TAN';
+  src: url('../assets/font/TAN-Angleton-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @layer base {
   * {
     @apply border-border;
