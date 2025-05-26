@@ -31,8 +31,17 @@ const Reservation = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
-    router.post('/reservation', form, { onError: setErrors });
+
+    const fullDateTime = `${form.date} ${form.time}`;
+
+    router.post('/reservation', {
+      ...form,
+      date_time: fullDateTime, // Combine date and time
+    }, {
+      onError: setErrors,
+    });
   };
+
 
   const today = new Date();
   const tomorrow = new Date(today);

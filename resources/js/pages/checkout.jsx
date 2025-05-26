@@ -22,6 +22,7 @@ export default function Checkout({ reservation }) {
       amount: 20,
       transaction_type: 'reservation',
       payment_method: selectedMethod,
+      payment_details: paymentInfo,
     });
   };
 
@@ -29,7 +30,12 @@ export default function Checkout({ reservation }) {
     router.delete(`/reservation/${reservation.reservationID}/cancel`);
   };
 
-  // Inputs UI per payment method
+  // Format date/time exactly as you have it:
+  const dateTime = new Date(reservation.date_time);
+  const dateStr = dateTime.toLocaleDateString('en-US', { timeZone: 'UTC' });
+  const timeStr = dateTime.toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' });
+
+  // Render inputs based on payment method selected
   const renderPaymentInputs = () => {
     switch (selectedMethod) {
       case 'GCash':
@@ -91,23 +97,12 @@ export default function Checkout({ reservation }) {
           </div>
         );
       case 'PayMaya':
-        return (
-          <div className="space-y-3">
-            <input
-              type="email"
-              placeholder="PayMaya Email"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={paymentInfo.email || ''}
-              onChange={e => setPaymentInfo({ ...paymentInfo, email: e.target.value })}
-            />
-          </div>
-        );
       case 'PayPal':
         return (
           <div className="space-y-3">
             <input
               type="email"
-              placeholder="PayPal Email"
+              placeholder={`${selectedMethod} Email`}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={paymentInfo.email || ''}
               onChange={e => setPaymentInfo({ ...paymentInfo, email: e.target.value })}
@@ -118,7 +113,7 @@ export default function Checkout({ reservation }) {
         return null;
     }
   };
-  
+
   return (
     <>
       <Head title="Checkout" />
@@ -132,7 +127,8 @@ export default function Checkout({ reservation }) {
               <p><strong>Name:</strong> {reservation.customer?.name}</p>
               <p><strong>Phone:</strong> {reservation.customer?.phone}</p>
               <p><strong>Email:</strong> {reservation.customer?.email}</p>
-              <p><strong>Date & Time Slot:</strong> {new Date(reservation.date_time).toLocaleString()}</p>
+              <p><strong>Date:</strong> {dateStr}</p>
+              <p><strong>Time Slot:</strong> {timeStr}</p>
               <p><strong>Guest Size:</strong> {reservation.size}</p>
               <p><strong>Reservation Fee:</strong> $20</p>
             </section>
@@ -165,6 +161,7 @@ export default function Checkout({ reservation }) {
                 ))}
               </div>
 
+              {/* Show inputs only if payment method selected */}
               {selectedMethod && (
                 <div className="mt-6">
                   {renderPaymentInputs()}
