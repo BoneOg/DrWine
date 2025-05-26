@@ -40,6 +40,6 @@ class Reservation extends Model
 
     public function transaction()
     {
-        return $this->hasOne(Transaction::class, 'reservationID', 'reservationID');
+        return $this->hasMany(Transaction::class, 'reservationID', 'reservationID');
     }
 }

@@ -38,8 +38,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function customers()
+    public function customer()
     {
-        return $this->hasMany(Customer::class, 'userID', 'userID');
+        return $this->hasOne(\App\Models\Customer::class, 'userID', 'userID');
     }
+
 }
