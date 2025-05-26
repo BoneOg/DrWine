@@ -44,8 +44,7 @@ class ReservationController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'email' => 'required|email|max:255',
-            'date' => 'required|date',
-            'time' => 'required',
+            'date_time' => 'required|date_format:Y-m-d H:i',
             'size' => 'required|integer|min:1|max:10',
         ]);
 
@@ -64,7 +63,8 @@ class ReservationController extends Controller
             'email' => $request->email,
         ]);
 
-        $dateTime = Carbon::parse($request->date . ' ' . $request->time);
+        $dateTime = Carbon::createFromFormat('Y-m-d H:i', $request->date . ' ' . $request->time, config('app.timezone'));
+
 
         // Find available table
         $table = RestaurantTable::where('capacity', '>=', $request->size)
@@ -82,7 +82,7 @@ class ReservationController extends Controller
             ->first();
 
         if (!$table) {
-            return back()->withErrors(['time' => 'No available tables for this time and party size.']);
+            return back()->withErrors(['date_time' => 'No available tables for this time and party size.']);
         }
 
         $reservation = Reservation::create([
@@ -101,10 +101,10 @@ class ReservationController extends Controller
     {
         $reservation = Reservation::with('customer.user')->findOrFail($reservationID);
 
-        // Delete reservation
+        
         $reservation->delete();
 
-        // Delete customer and user
+
         if ($reservation->customer) {
             $user = $reservation->customer->user;
             $reservation->customer->delete();
@@ -124,6 +124,6 @@ class ReservationController extends Controller
         $reservation->save();
 
         return redirect()->route('transactions.show', ['transaction' => $reservation->transaction->transactionID ?? 1]);
-        // You must adjust this if transaction isn't guaranteed. Otherwise, this assumes transaction exists.
+
     }
 }
