@@ -3,7 +3,6 @@ import { router, Head } from '@inertiajs/react';
 import axios from 'axios';
 import Layout from '../Components/layout';
 
-
 const Reservation = () => {
   const [form, setForm] = useState({
     name: '',
@@ -36,17 +35,18 @@ const Reservation = () => {
 
     router.post('/reservation', {
       ...form,
-      date_time: fullDateTime, // Combine date and time
+      date_time: fullDateTime,
     }, {
       onError: setErrors,
     });
   };
 
-
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
   const minDate = tomorrow.toISOString().split('T')[0];
+
+  const isFormComplete = form.name && form.phone && form.email && form.date && form.time && form.size;
 
   return (
     <Layout>
@@ -62,6 +62,7 @@ const Reservation = () => {
               <label className="block">Name</label>
               <input
                 type="text"
+                required
                 value={form.name}
                 onChange={e => setForm({ ...form, name: e.target.value })}
                 className="w-full border rounded p-2"
@@ -73,9 +74,14 @@ const Reservation = () => {
             <div>
               <label className="block">Phone</label>
               <input
-                type="text"
+                type="tel"
+                required
+                pattern="[0-9]+"
                 value={form.phone}
-                onChange={e => setForm({ ...form, phone: e.target.value })}
+                onChange={e => {
+                  const numbersOnly = e.target.value.replace(/\D/g, '');
+                  setForm({ ...form, phone: numbersOnly });
+                }}
                 className="w-full border rounded p-2"
               />
               {errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}
@@ -86,6 +92,7 @@ const Reservation = () => {
               <label className="block">Email</label>
               <input
                 type="email"
+                required
                 value={form.email}
                 onChange={e => setForm({ ...form, email: e.target.value })}
                 className="w-full border rounded p-2"
@@ -98,6 +105,7 @@ const Reservation = () => {
               <label className="block">Date</label>
               <input
                 type="date"
+                required
                 value={form.date}
                 onChange={handleDateChange}
                 min={minDate}
@@ -110,6 +118,7 @@ const Reservation = () => {
             <div>
               <label className="block">Time Slot</label>
               <select
+                required
                 value={form.time}
                 onChange={e => setForm({ ...form, time: e.target.value })}
                 className="w-full border rounded p-2"
@@ -132,6 +141,7 @@ const Reservation = () => {
             <div>
               <label className="block">Party Size</label>
               <select
+                required
                 value={form.size}
                 onChange={e => setForm({ ...form, size: e.target.value })}
                 className="w-full border rounded p-2"
@@ -144,9 +154,13 @@ const Reservation = () => {
               {errors.size && <span className="text-red-500 text-sm">{errors.size}</span>}
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full"
+              disabled={!isFormComplete}
+              className={`w-full px-4 py-2 rounded text-white ${
+                isFormComplete ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
+              }`}
             >
               Reserve Table
             </button>

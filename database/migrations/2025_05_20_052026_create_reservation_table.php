@@ -27,7 +27,6 @@ return new class extends Migration
             $table->dateTime('date_time');
             $table->integer('size');
             $table->enum('status', ['confirmed', 'cancelled', 'completed'])->default('confirmed');
-            $table->boolean('preorder_food')->default(false);
             $table->integer('duration')->default(120);
             $table->timestamps();
         });

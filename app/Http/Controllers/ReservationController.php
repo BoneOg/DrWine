@@ -21,21 +21,31 @@ class ReservationController extends Controller
     public function getAvailableTimes(Request $request)
     {
         $date = $request->input('date');
-
         $fixedSlots = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
 
-        $existing = Reservation::whereDate('date_time', $date)
-            ->whereIn('status', ['confirmed', 'completed'])
-            ->pluck('date_time');
+        $availableSlots = [];
 
-        $takenTimes = [];
-        foreach ($existing as $res) {
-            $time = Carbon::parse($res)->format('H:i');
-            $takenTimes[] = $time;
+        foreach ($fixedSlots as $slot) {
+            $dateTime = Carbon::createFromFormat('Y-m-d H:i', "$date $slot");
+
+            $availableTable = RestaurantTable::where('table_status', 'available')
+                ->get()
+                ->filter(function ($table) use ($dateTime) {
+                    return !Reservation::where('tableID', $table->tableID)
+                        ->whereBetween('date_time', [
+                            $dateTime,
+                            $dateTime->copy()->addMinutes(120)
+                        ])
+                        ->exists();
+                })
+                ->count();
+
+            if ($availableTable > 0) {
+                $availableSlots[] = $slot;
+            }
         }
 
-        $available = array_diff($fixedSlots, $takenTimes);
-        return response()->json(array_values($available));
+        return response()->json($availableSlots);
     }
 
     public function store(Request $request)
@@ -65,8 +75,6 @@ class ReservationController extends Controller
 
         $dateTime = Carbon::createFromFormat('Y-m-d H:i', $request->date . ' ' . $request->time, config('app.timezone'));
 
-
-        // Find available table
         $table = RestaurantTable::where('capacity', '>=', $request->size)
             ->where('table_status', 'available')
             ->orderBy('capacity', 'asc')
@@ -97,33 +105,4 @@ class ReservationController extends Controller
         return redirect()->route('checkout', ['reservationID' => $reservation->reservationID]);
     }
 
-    public function cancel($reservationID)
-    {
-        $reservation = Reservation::with('customer.user')->findOrFail($reservationID);
-
-        
-        $reservation->delete();
-
-
-        if ($reservation->customer) {
-            $user = $reservation->customer->user;
-            $reservation->customer->delete();
-
-            if ($user) {
-                $user->delete();
-            }
-        }
-
-        return redirect()->route('reservation')->with('success', 'Reservation canceled and data deleted.');
-    }
-
-    public function markAsCompleted($reservationID)
-    {
-        $reservation = Reservation::findOrFail($reservationID);
-        $reservation->status = 'completed';
-        $reservation->save();
-
-        return redirect()->route('transactions.show', ['transaction' => $reservation->transaction->transactionID ?? 1]);
-
-    }
 }
