@@ -37,12 +37,26 @@
                             <div className="bg-green-50 p-4 rounded-lg border border-green-200">
                                 <h2 className="text-xl font-semibold text-green-700 mb-3">Reservation Details</h2>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-gray-700">
-                                    <p>
-                                        <strong className="font-medium text-gray-800">Date:</strong> {new Date(reservation?.date_time).toLocaleDateString() || 'N/A'}
-                                    </p>
-                                    <p>
-                                        <strong className="font-medium text-gray-800">Time Slot:</strong> {new Date(reservation?.date_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) || 'N/A'}
-                                    </p>
+                                    {(() => {
+                                    const dateTime = new Date(reservation?.date_time);
+                                    const dateStr = dateTime.toLocaleDateString('en-US', { timeZone: 'UTC' });
+                                    const timeStr = dateTime.toLocaleTimeString('en-US', {
+                                        timeZone: 'UTC',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    });
+
+                                    return (
+                                        <>
+                                        <p>
+                                            <strong className="font-medium text-gray-800">Date:</strong> {dateStr}
+                                        </p>
+                                        <p>
+                                            <strong className="font-medium text-gray-800">Time Slot:</strong> {timeStr}
+                                        </p>
+                                        </>
+                                    );
+                                    })()}
                                     <p>
                                         <strong className="font-medium text-gray-800">Guest Size:</strong> {reservation?.size || 'N/A'}
                                     </p>
