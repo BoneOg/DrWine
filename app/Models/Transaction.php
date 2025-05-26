@@ -9,48 +9,20 @@ class Transaction extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'transaction'; // Explicitly specify table name
+    protected $table = 'transaction';
 
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'transactionID'; // Define primary key name
+    protected $primaryKey = 'transactionID';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'reservationID',    // Foreign key to reservation
-        'amount',           // Transaction amount
-        'transaction_type', // Type of transaction (reservation, food)
-        'payment_method', 
-        'status',  // Payment method (cash, card)
-        // 'created_at' and 'updated_at' are handled automatically by default timestamps
+        'reservationID',
+        'amount',
+        'transaction_type',
+        'payment_method',
+        'status',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        // No specific casts needed if created_at is handled by Eloquent timestamps and other fields are strings/integers
-    ];
-
-    // Define Relationship: A Transaction belongs to one Reservation
     public function reservation()
     {
         return $this->belongsTo(Reservation::class, 'reservationID', 'reservationID');
-        // 'reservationID' is the FK in the 'transaction' table
-        // 'reservationID' is the PK in the 'reservation' table
     }
 }
