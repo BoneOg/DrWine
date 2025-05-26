@@ -1,8 +1,17 @@
 @import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Arizonia&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cardo&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Upright&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alexandria&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baskerville&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@100;600&display=swap');
 
 @plugin 'tailwindcss-animate';
 
@@ -65,6 +74,36 @@
   font-family: 'Cardo', serif;
 }
 
+.font-cormorant {
+    font-family: 'Cormorant Upright', serif;
+}
+
+.font-cormorant-upright {
+  font-family: 'Cormorant Upright', serif;
+}
+
+.font-thin {
+  font-weight: 100; /* Default Tailwind font-thin is 100 */
+}
+
+.font-alexandria {
+    font-family: 'Alexandria', sans-serif;  
+}
+
 .font-fraunces {
-  font-family: 'Fraunces', serif;
+    font-family: 'Fraunces', serif;
+}
+
+.fraunces-regular {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+}
+
+.fraunces-semibold {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+}
+
+.font-baskerville {
+    font-family: 'Baskerville', 'Georgia', serif;
 }
