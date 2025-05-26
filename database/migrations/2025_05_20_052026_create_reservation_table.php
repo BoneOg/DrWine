@@ -26,7 +26,7 @@ return new class extends Migration
 
             $table->dateTime('date_time');
             $table->integer('size');
-            $table->enum('status', ['confirmed', 'cancelled', 'completed'])->default('confirmed');
+            $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
             $table->integer('duration')->default(120);
             $table->timestamps();
         });

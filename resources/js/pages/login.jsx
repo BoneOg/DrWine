@@ -1,75 +1,83 @@
-import { Head } from '@inertiajs/react';
-import { useState } from 'react';
+import { Link, useForm } from '@inertiajs/react';
+import Layout from '@/components/layout';
 
 export default function Login() {
-    const [form, setForm] = useState({ usernameOrEmail: '', password: '' });
+  const { data, setData, post, processing, errors } = useForm({
+    usernameOrEmail: '',
+    password: '',
+  });
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    post('/login');
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Attempting login with:', form);
-    };
+  return (
+    <Layout>
+      <div className="flex flex-col md:flex-row w-full max-w-6xl mx-auto my-16 bg-white rounded-lg shadow-xl overflow-hidden">
+        {/* Left Side: Wine Image */}
+        <div className="hidden md:flex md:w-1/2 items-end justify-center relative bg-black">
+          <img
+            src="/assets/login-image.png"
+            alt="Wine Glass"
+            className="max-h-full md:max-h-[95%] w-auto object-contain absolute bottom-0"
+          />
+        </div>
 
-    return (
-        <>
-            <Head title="Login" />
+        {/* Right Side: Login Card */}
+        <div className="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12">
+          <div className="bg-black rounded-lg p-6 md:p-10 w-full max-w-md shadow-2xl">
+            <h2 className="text-3xl font-bold text-center text-white mb-6">
+              <span className="text-red-500">W</span>elcome back!
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <input
+                type="text"
+                name="usernameOrEmail"
+                value={data.usernameOrEmail}
+                onChange={(e) => setData('usernameOrEmail', e.target.value)}
+                placeholder="Email or Username"
+                className="w-full px-4 py-3 bg-black border border-white rounded-md text-white placeholder-gray-400 text-base focus:outline-none focus:ring-1 focus:ring-blue-500"
+                required
+              />
+              <input
+                type="password"
+                name="password"
+                value={data.password}
+                onChange={(e) => setData('password', e.target.value)}
+                placeholder="Password"
+                className="w-full px-4 py-3 bg-black border border-white rounded-md text-white placeholder-gray-400 text-base focus:outline-none focus:ring-1 focus:ring-blue-500"
+                required
+              />
+              {errors.usernameOrEmail && <p className="text-red-500">{errors.usernameOrEmail}</p>}
+              {errors.password && <p className="text-red-500">{errors.password}</p>}
+              <button
+                type="submit"
+                disabled={processing}
+                className="w-full bg-red-600 text-white py-3 px-4 rounded-md hover:bg-red-700 transition"
+              >
+                {processing ? 'Logging in...' : 'Login'}
+              </button>
+            </form>
 
-            <div className="min-h-screen bg-white flex flex-col items-center justify-center relative overflow-hidden">
-                <div className="flex flex-col md:flex-row w-full h-full md:h-screen">
-                    {/* Left Side: Wine Image */}
-                    <div className="w-full md:w-1/2 flex items-end justify-center relative">
-                        <img
-                            src="/assets/login-image.png"
-                            alt="Wine Glass"
-                            className="max-h-full md:max-h-[95%] w-auto object-contain absolute bottom-0"
-                        />
-                    </div>
+            <p className="mt-4 text-center text-white text-sm">
+              Don't have an account?{' '}
+              <Link
+                href="/register"
+                className="text-red-500 hover:underline font-semibold"
+              >
+                Register here
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
 
-                    {/* Right Side: Login Card */}
-                    <div className="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12">
-                        <div className="bg-black rounded-lg p-6 md:p-10 w-full max-w-md shadow-2xl">
-                            <h2 className="text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-center text-white">
-                                <span className="text-red-500">W</span>elcome back!
-                            </h2>
-                            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-                                <input
-                                    type="text"
-                                    name="usernameOrEmail"
-                                    value={form.usernameOrEmail}
-                                    onChange={handleChange}
-                                    placeholder="Email or Username"
-                                    className="w-full px-4 md:px-5 py-3 md:py-4 bg-black border border-white rounded-md text-white placeholder-gray-400 text-base md:text-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                    required
-                                />
-                                <input
-                                    type="password"
-                                    name="password"
-                                    value={form.password}
-                                    onChange={handleChange}
-                                    placeholder="Password"
-                                    className="w-full px-4 md:px-5 py-3 md:py-4 bg-black border border-white rounded-md text-white placeholder-gray-400 text-base md:text-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                    required
-                                />
-                                <button
-                                    type="submit"
-                                    className="w-full bg-black text-white py-3 md:py-4 px-4 border border-white rounded-md text-lg font-semibold hover:bg-gray-900 transition-colors duration-200"
-                                >
-                                    Login
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Logo and Slogan */}
-                <div className="absolute bottom-16 md:bottom-20 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-10 px-4">
-                    <img src="/assets/logo1.png" alt="Le Bistrot du Dr. Wine" className="mx-auto h-14 md:h-20 mb-2 md:mb-3" />
-                    <p className="text-lg md:text-2xl font-serif">where food meets royalty</p>
-                </div>
-            </div>
-        </>
-    );
+      {/* Logo and Slogan */}
+      <div className="text-center text-gray-800 px-4 mb-16">
+        <img src="/assets/logo1.png" alt="Logo" className="mx-auto h-14 md:h-20 mb-3" />
+        <p className="text-lg md:text-2xl font-serif">where food meets royalty</p>
+      </div>
+    </Layout>
+  );
 }

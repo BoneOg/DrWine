@@ -22,11 +22,16 @@ class TransactionController extends Controller
             return redirect()->back()->withErrors(['reservation' => 'Cannot proceed with cancelled reservation.']);
         }
 
+        // ✅ Add default 'status' to transaction
+        $validated['status'] = 'confirmed';
+
         $transaction = Transaction::create($validated);
         $transaction->load('reservation.customer');
 
-        // --- MODIFIED LINE ---
-        return Inertia::render('transaction', [ // Matches resources/js/Pages/transaction.jsx
+        // ✅ Update reservation status to confirmed after successful transaction
+        $reservation->update(['status' => 'confirmed']);
+
+        return Inertia::render('transaction', [
             'transaction' => $transaction,
         ]);
     }
@@ -35,10 +40,8 @@ class TransactionController extends Controller
     {
         $transaction->load('reservation.customer');
 
-        // --- MODIFIED LINES ---
-        return Inertia::render('transaction', [ // Matches resources/js/Pages/transaction.jsx
+        return Inertia::render('transaction', [
             'transaction' => $transaction,
-            // Removed: 'reservation' => $transaction->reservation
         ]);
     }
 }

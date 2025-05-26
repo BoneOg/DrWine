@@ -32,7 +32,8 @@ class Transaction extends Model
         'reservationID',    // Foreign key to reservation
         'amount',           // Transaction amount
         'transaction_type', // Type of transaction (reservation, food)
-        'payment_method',   // Payment method (cash, card)
+        'payment_method', 
+        'status',  // Payment method (cash, card)
         // 'created_at' and 'updated_at' are handled automatically by default timestamps
     ];
 

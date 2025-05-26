@@ -98,7 +98,7 @@ class ReservationController extends Controller
             'tableID' => $table->tableID,
             'date_time' => $dateTime,
             'size' => $request->size,
-            'status' => 'confirmed',
+            'status' => 'pending',
             'duration' => 120,
         ]);
 

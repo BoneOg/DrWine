@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\AuthController;
 
 // Public pages
 Route::get('/', fn () => Inertia::render('Welcome'));
@@ -12,6 +13,7 @@ Route::inertia('/menu', 'menu')->name('menu');
 Route::inertia('/contact', 'contact')->name('contact');
 Route::inertia('/about', 'about')->name('about');
 Route::inertia('/login', 'login')->name('login');
+Route::inertia('/register', 'register')->name('register');
 
 // Reservation routes
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation');
@@ -26,6 +28,16 @@ Route::get('/checkout/{reservationID}', [CheckoutController::class, 'index'])->n
 // Transaction routes
 Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
 Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
+
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::inertia('/login', 'login')->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
+
+Route::middleware('auth')->group(function () {
+    Route::inertia('/admin', 'admin_side/admin')->name('admin.dashboard');
+    Route::inertia('/user', 'user_side/user')->name('user.dashboard');
+});
 
 // Fallback route
 Route::fallback(fn () => Inertia::render('notfound'));
