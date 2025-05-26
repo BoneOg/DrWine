@@ -40,7 +40,7 @@ export default function Contact() {
                   >
                     Contact Info
                   </h3>
-                  <ul className="space-y-3 md:space-y-4 text-base md:text-lg lg:text-xl"> {/* Added responsive font sizes */}
+                  <ul className="space-y-3 md:space-y-4 text-base md:text-lg lg:text-xl"> 
                     {[
                       {
                         href: 'https://facebook.com/drwine.bgc',
@@ -73,7 +73,6 @@ export default function Contact() {
                             target={href.startsWith('http') || isEmail ? '_blank' : undefined}
                             rel={href.startsWith('http') || isEmail ? 'noopener noreferrer' : undefined}
                             className="flex items-center hover:text-red-500 transition-colors duration-300"
-                            // style={{ fontSize: 'inherit' }} // Inherit is good, but explicit sizes give more control
                           >
                             <span className="mr-3 text-xl md:text-2xl"> {/* Responsive icon size */}
                                 {icon}

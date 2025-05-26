@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
     // Admin Dashboard
     Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/booking', [AdminController::class, 'booking'])->name('admin.booking');
-    
+
 });
 
 // Fallback route for 404

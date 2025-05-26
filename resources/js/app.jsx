@@ -8,7 +8,7 @@ import axios from 'axios';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
-  title: (title) => `${title}  ${appName}`,
+  title: (title) => `DrWine`,
   resolve: (name) =>
     resolvePageComponent(`./pages/${name}.jsx`, import.meta.glob('./pages/**/*.jsx')),
   setup({ el, App, props }) {
