@@ -62,9 +62,9 @@ class ReservationController extends Controller
         $user = User::create([
             'username' => 'guest_' . uniqid(),
             'email' => $request->email,
-            'password' => bcrypt('guest123'),
+            'password' => null,
             'role' => 'guest',
-        ]);
+        ]); 
 
         $customer = Customer::create([
             'userID' => $user->userID,

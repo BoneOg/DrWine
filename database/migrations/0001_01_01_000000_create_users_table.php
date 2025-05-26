@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('username')->unique(); // username is unique for login
             $table->string('email')->nullable(); // removed unique() to allow duplicates and made nullable
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
