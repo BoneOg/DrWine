@@ -20,7 +20,7 @@ export default function AdminSidebar() {
       <nav className="flex flex-col space-y-4 text-gray-800 font-semibold">
         <Link href="/admin" className="hover:text-red-600 transition">Dashboard</Link>
         <Link href="/admin/users" className="hover:text-red-600 transition">Users</Link>
-        <Link href="/admin/booking" className="hover:text-red-600 transition">Bookings</Link>
+        <Link href="/admin/booking" className="hover:text-red-600 transition">Booking</Link>
       </nav>
 
       {/* Action Buttons */}
