@@ -1,130 +1,141 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import { User } from 'lucide-react';
+import { FaUser } from 'react-icons/fa';
 
 export default function Header() {
     const { url } = usePage();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const navItems = [
-        { label: 'Home', href: '/' },
-        { label: 'Menu', href: '/menu' },
-        { label: 'Reservation', href: route('reservation') },
-        { label: 'About', href: '/about' },
-        { label: 'Contact', href: '/contact' },
+    const navLinks = [
+        { name: 'Home', path: '/' },
+        { name: 'Menu', path: '/menu' },
+        { name: 'Reservation', path: route('reservation') },
+        { name: 'About', path: '/about' },
+        { name: 'Contact', path: '/contact' },
     ];
 
-    const toggleMobileMenu = () => {
-        setIsMobileMenuOpen(!isMobileMenuOpen);
-    };
-
     return (
-        <header className="absolute top-0 left-0 w-full z-50 bg-black/60 backdrop-blur-sm">
-            {/* Removed px-5 md:px-8 from here to eliminate padding on the edges */}
-            <div className="relative max-w-5xl mx-auto py-4 flex items-center justify-between w-full">
-                {/* Left: Logo */}
-                <div className="flex items-center shrink-0">
-                    <Link href="/" className="shrink-0">
-                        <img
-                            src="/assets/logo.png"
-                            alt="DrWine Logo"
-                            className="h-10 w-10 object-cover rounded-full border border-white md:h-14 md:w-14"
-                        />
-                    </Link>
-                </div>
+        <header className="fixed w-full z-50 bg-black/80 backdrop-blur-sm">
+            <div className="container mx-auto">
+                <div className="flex items-center h-20 relative">
+                    {/* Logo */}
+                    <div className="pl-40">
+                        <Link href="/" className="flex-shrink-0 block transition-transform duration-300 hover:scale-110">
+                            <img
+                                src="/assets/logo.png"
+                                alt="DrWine Logo"
+                                className="h-14 w-14 rounded-full object-cover border border-white transition-all duration-300 hover:border-red-500 hover:border-2"
+                            />
+                        </Link>
+                    </div>
 
-                {/* Center: Nav Items (absolutely centered for larger screens) */}
-                <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                    <nav className="flex space-x-6 text-white">
-                        {navItems.map((item) => {
-                            const isActive =
-                                url === item.href ||
-                                (item.href && item.href.includes('reservation') && url && url.includes('reservation'));
-
+                    {/* Navigation Links - Centered */}
+                    <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 space-x-8">
+                        {navLinks.map((link) => {
+                            const isActive = url === link.path ||
+                                (link.path.includes('reservation') && url.includes('reservation'));
+                            
                             return (
                                 <Link
-                                    key={item.label}
-                                    href={item.href}
-                                    className={`relative pb-1 transition duration-300 hover:text-red-500 ${
-                                        isActive ? 'font-bold text-white' : 'text-white'
+                                    key={link.name}
+                                    href={link.path}
+                                    className={`relative text-white transition-all duration-300 text-sm uppercase tracking-wider group ${
+                                        isActive ? 'font-medium' : ''
                                     }`}
                                 >
-                                    {item.label}
-                                    {isActive && (
-                                        <span className="absolute bottom-0 left-0 h-0.5 w-full bg-red-600 transition-all duration-300" />
-                                    )}
+                                    <span className="relative inline-block">
+                                        {link.name}
+                                        <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 ${isActive ? 'w-full' : 'group-hover:w-full'}`} />
+                                    </span>
                                 </Link>
                             );
                         })}
                     </nav>
-                </div>
 
-                {/* Right: Reservation Button + Account Icon */}
-                <div className="hidden md:flex items-center space-x-4 ml-auto">
-                    <Link
-                        href={route('reservation')}
-                        className="rounded-sm border border-red-600 px-3 py-1 font-bold text-white transition duration-300 hover:bg-red-600 hover:text-white md:px-4 md:py-2 md:text-base"
-                    >
-                        Make a Reservation
-                    </Link>
+                    {/* Right Section */}
+                    <div className="flex items-center space-x-4 ml-auto pr-6">
+                        <Link
+                            href={route('reservation')}
+                            className="hidden md:inline-flex items-center px-6 py-2.5 border border-red-600 text-sm text-white transition-all duration-300 hover:bg-red-600 hover:scale-105 uppercase tracking-wider"
+                        >
+                            Make a Reservation
+                        </Link>
+                        <Link
+                            href="/login"
+                            className="p-2 text-white transition-all duration-300 hover:text-red-500 hover:scale-110"
+                            aria-label="User Account"
+                        >
+                            <FaUser className="w-5 h-5" />
+                        </Link>
 
-                    <Link href="/login" className="text-white hover:opacity-75">
-                        <User className="w-8 h-8" />
-                    </Link>
-                </div>
-
-                {/* Mobile Menu Button */}
-                <div className="md:hidden">
-                    <button onClick={toggleMobileMenu} className="text-white focus:outline-none">
-                        <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
+                        {/* Mobile Menu Button */}
+                        <button
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            className="md:hidden p-2 text-white focus:outline-none transition-colors duration-300 hover:text-red-500"
+                            aria-label="Toggle Menu"
+                        >
+                            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M4 6h16M4 12h16M4 18h16"
+                                />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="fixed inset-0 z-40 flex flex-col items-center justify-start pt-24 px-6 space-y-6 bg-black/80 backdrop-blur-lg transition-all duration-300 md:hidden">
-                    <button onClick={toggleMobileMenu} className="absolute right-4 top-4 text-3xl text-white focus:outline-none">
-                        &times;
-                    </button>
+                <div className="fixed inset-0 z-40 bg-black bg-opacity-95 md:hidden">
+                    <div className="flex flex-col h-full pt-20 px-4">
+                        <button
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="absolute top-4 right-4 p-2 text-white transition-colors duration-300 hover:text-red-500"
+                            aria-label="Close Menu"
+                        >
+                            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M6 18L18 6M6 6l12 12"
+                                />
+                            </svg>
+                        </button>
 
-                    <nav className="flex flex-col items-center space-y-6 text-xl text-white">
-                        {navItems.map((item) => {
-                            const isActive =
-                                url === item.href ||
-                                (item.href && item.href.includes('reservation') && url && url.includes('reservation'));
+                        <nav className="flex flex-col space-y-4">
+                            {navLinks.map((link) => {
+                                const isActive = url === link.path ||
+                                    (link.path.includes('reservation') && url.includes('reservation'));
+                                
+                                return (
+                                    <Link
+                                        key={link.name}
+                                        href={link.path}
+                                        className={`text-white text-lg uppercase tracking-wider transition-colors duration-300 hover:text-red-500 ${
+                                            isActive ? 'text-red-500' : ''
+                                        }`}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                        {link.name}
+                                    </Link>
+                                );
+                            })}
+                        </nav>
 
-                            return (
-                                <Link
-                                    key={item.label}
-                                    href={item.href}
-                                    onClick={toggleMobileMenu}
-                                    className={`relative pb-1 transition duration-300 hover:text-red-500 ${
-                                        isActive ? 'font-bold text-white' : 'text-white'
-                                    }`}
-                                >
-                                    {item.label}
-                                    {isActive && (
-                                        <span className="absolute bottom-0 left-0 h-0.5 w-full bg-red-600 transition-all duration-300" />
-                                    )}
-                                </Link>
-                            );
-                        })}
-                    </nav>
-
-                    <Link
-                        href={route('reservation')}
-                        onClick={toggleMobileMenu}
-                        className="rounded-sm border border-red-600 px-6 py-3 text-lg font-bold text-white transition duration-300 hover:bg-red-600 hover:text-white"
-                    >
-                        Make a Reservation
-                    </Link>
-
-                    <Link href="/login" onClick={toggleMobileMenu} className="flex items-center text-white hover:opacity-75">
-                         <User className="w-8 h-8" />
-                    </Link>
+                        <div className="mt-8 flex flex-col space-y-4">
+                            <Link
+                                href={route('reservation')}
+                                className="px-4 py-2 border border-red-600 text-white text-center transition-all duration-300 hover:bg-red-600 hover:scale-105 uppercase tracking-wider"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Make a Reservation
+                            </Link>
+                        </div>
+                    </div>
                 </div>
             )}
         </header>
