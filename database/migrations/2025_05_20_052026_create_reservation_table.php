@@ -20,8 +20,8 @@ return new class extends Migration
                 ->on('customer')
                 ->onDelete('cascade');
 
-            $table->foreignId('tableId')
-                ->constrained('restaurant_tables', 'tableId')
+            $table->foreignId('tableID')
+                ->constrained('restaurant_tables', 'tableID')
                 ->onDelete('cascade');
 
             $table->dateTime('date_time');

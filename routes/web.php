@@ -6,6 +6,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 
 // Public pages
 Route::get('/', fn () => Inertia::render('Welcome'));
@@ -35,8 +36,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
 Route::middleware('auth')->group(function () {
-    Route::inertia('/admin', 'admin_side/admin')->name('admin.dashboard');
+
     Route::inertia('/user', 'user_side/user')->name('user.dashboard');
+
+    Route::inertia('/admin', 'admin_side/admin')->name('admin.dashboard');
+    Route::get('/admin/booking', [AdminController::class, 'booking'])->name('admin.booking');
+
 });
 
 // Fallback route
