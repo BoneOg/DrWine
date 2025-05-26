@@ -25,7 +25,7 @@ export default function Welcome() {
 
             {/* ===== HERO SECTION START ===== */}
             <div
-                className="relative flex items-center justify-start w-screen min-h-screen text-white bg-center bg-cover sm:bg-fixed pt-16 sm:pt-0 z-10"
+                className="relative flex items-center justify-start w-screen min-h-screen text-white bg-center bg-cover sm:bg-fixed pt-16 sm:pt-0 z-10 overflow-hidden"
                 style={{
                     backgroundImage: "url('/assets/heroimage.jpg')",
                 }}
@@ -50,6 +50,93 @@ export default function Welcome() {
                 </div>
             </div>
             {/* ===== HERO SECTION END ===== */}
+
+            {/* ===== MENU SECTION START ===== */}
+            <div className="w-screen min-h-screen flex flex-col items-center justify-start bg-[#001127] text-white py-16 overflow-hidden">
+                {/* Headings */}
+                <div className="text-center mb-12">
+                    <p className="font-fraunces font-light text-2xl mb-2 italic">Dr. Wine's Best</p>
+                    <h2 className="font-fraunces font-light text-6xl sm:text-7xl md:text-8xl">
+                        Menu
+                    </h2>
+                </div>
+
+                {/* Image Grid */}
+                <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 mb-16">
+                    {/* Menu Item 1 */}
+                    <div className="relative overflow-hidden group aspect-w-1 aspect-h-1">
+                        <img
+                            src="/assets/menu-item1.jpg"
+                            alt="Smoked Salmon Platter"
+                            className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-90"
+                        />
+                        <div className="absolute inset-0 flex items-end justify-start p-4 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+                            <div className="text-left">
+                                <p className="font-semibold text-lg sm:text-xl md:text-2xl mb-1">Smoked Salmon Platter</p>
+                                <p className="text-sm sm:text-base mb-1">Delicately smoked salmon with fresh herbs.</p>
+                                <p className="text-lg sm:text-xl font-bold">$28.00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Menu Item 2 */}
+                    <div className="relative overflow-hidden group aspect-w-1 aspect-h-1">
+                        <img
+                            src="/assets/menu-item2.jpg"
+                            alt="Seared Scallops"
+                            className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-90"
+                        />
+                        <div className="absolute inset-0 flex items-end justify-start p-4 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+                            <div className="text-left">
+                                <p className="font-semibold text-lg sm:text-xl md:text-2xl mb-1">Seared Scallops</p>
+                                <p className="text-sm sm:text-base mb-1">Perfectly seared scallops on a bed of risotto.</p>
+                                <p className="text-lg sm:text-xl font-bold">$35.00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Menu Item 3 */}
+                    <div className="relative overflow-hidden group aspect-w-1 aspect-h-1">
+                        <img
+                            src="/assets/heroimage.jpg"
+                            alt="Signature Seafood Boil"
+                            className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-90"
+                        />
+                        <div className="absolute inset-0 flex items-end justify-start p-4 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+                            <div className="text-left">
+                                <p className="font-semibold text-lg sm:text-xl md:text-2xl mb-1">Signature Seafood Boil</p>
+                                <p className="text-sm sm:text-base mb-1">A rich medley of fresh seafood and spices.</p>
+                                <p className="text-lg sm:text-xl font-bold">$55.00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Menu Item 4 */}
+                    <div className="relative overflow-hidden group aspect-w-1 aspect-h-1">
+                        <img
+                            src="/assets/about-food.jpg"
+                            alt="Braised Beef Cheeks"
+                            className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-90"
+                        />
+                        <div className="absolute inset-0 flex items-end justify-start p-4 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+                            <div className="text-left">
+                                <p className="font-semibold text-lg sm:text-xl md:text-2xl mb-1">Braised Beef Cheeks</p>
+                                <p className="text-sm sm:text-base mb-1">Tender beef braised to perfection with root vegetables.</p>
+                                <p className="text-lg sm:text-xl font-bold">$42.00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* View Menu Button */}
+                <Link
+                    href="/menu"
+                    className="px-8 py-3 border-2 border-white text-white uppercase tracking-wider transition-colors duration-300 hover:bg-white hover:text-[#0A192F] font-semibold"
+                >
+                    View Menu
+                </Link>
+            </div>
+            {/* ===== MENU SECTION END ===== */}
 
             {/* ===== ABOUT US SECTION START ===== */}
             <div className="w-screen bg-black min-h-screen overflow-hidden relative z-10 flex items-center py-16 md:py-24">
@@ -96,95 +183,6 @@ export default function Welcome() {
             </div>
             {/* ===== ABOUT US SECTION END ===== */}
 
-            {/* ===== MENU SECTION START ===== */}
-            {/* ===== MENU SECTION START ===== */}
-<div className="w-screen min-h-screen flex flex-col items-center justify-start bg-[#001127] text-white py-16">
-    {/* Headings */}
-    <div className="text-center mb-12">
-        <p className="font-arizonia text-2xl mb-2 italic">Dr. Wine's Best</p>
-        <h2 className="font-cormorant-upright text-6xl sm:text-7xl md:text-8xl">
-            Menu
-        </h2>
-    </div>
-
-    {/* Image Grid */}
-    <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 mb-16">
-        {/* Menu Item 1 */}
-        <div className="relative overflow-hidden group aspect-w-1 aspect-h-1">
-            <img
-                src="/assets/menu-item1.jpg"
-                alt="Smoked Salmon Platter"
-                className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-90"
-            />
-            <div className="absolute inset-0 flex items-end justify-start p-4 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-                <div className="text-left">
-                    <p className="font-semibold text-lg sm:text-xl md:text-2xl mb-1">Smoked Salmon Platter</p>
-                    <p className="text-sm sm:text-base mb-1">Delicately smoked salmon with fresh herbs.</p>
-                    <p className="text-lg sm:text-xl font-bold">$28.00</p>
-                </div>
-            </div>
-        </div>
-
-        {/* Menu Item 2 */}
-        <div className="relative overflow-hidden group aspect-w-1 aspect-h-1">
-            <img
-                src="/assets/menu-item2.jpg"
-                alt="Seared Scallops"
-                className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-90"
-            />
-            <div className="absolute inset-0 flex items-end justify-start p-4 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-                <div className="text-left">
-                    <p className="font-semibold text-lg sm:text-xl md:text-2xl mb-1">Seared Scallops</p>
-                    <p className="text-sm sm:text-base mb-1">Perfectly seared scallops on a bed of risotto.</p>
-                    <p className="text-lg sm:text-xl font-bold">$35.00</p>
-                </div>
-            </div>
-        </div>
-
-        {/* Menu Item 3 */}
-        <div className="relative overflow-hidden group aspect-w-1 aspect-h-1">
-            <img
-                src="/assets/heroimage.jpg"
-                alt="Signature Seafood Boil"
-                className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-90"
-            />
-            <div className="absolute inset-0 flex items-end justify-start p-4 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-                <div className="text-left">
-                    <p className="font-semibold text-lg sm:text-xl md:text-2xl mb-1">Signature Seafood Boil</p>
-                    <p className="text-sm sm:text-base mb-1">A rich medley of fresh seafood and spices.</p>
-                    <p className="text-lg sm:text-xl font-bold">$55.00</p>
-                </div>
-            </div>
-        </div>
-
-        {/* Menu Item 4 */}
-        <div className="relative overflow-hidden group aspect-w-1 aspect-h-1">
-            <img
-                src="/assets/about-food.jpg"
-                alt="Braised Beef Cheeks"
-                className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-90"
-            />
-            <div className="absolute inset-0 flex items-end justify-start p-4 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-                <div className="text-left">
-                    <p className="font-semibold text-lg sm:text-xl md:text-2xl mb-1">Braised Beef Cheeks</p>
-                    <p className="text-sm sm:text-base mb-1">Tender beef braised to perfection with root vegetables.</p>
-                    <p className="text-lg sm:text-xl font-bold">$42.00</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {/* View Menu Button */}
-    <Link
-        href="/menu"
-        className="px-8 py-3 border-2 border-white text-white uppercase tracking-wider transition-colors duration-300 hover:bg-white hover:text-[#0A192F] font-semibold"
-    >
-        View Menu
-    </Link>
-</div>
-{/* ===== MENU SECTION END ===== */}
-
-            {/* ===== MENU SECTION END ===== */}
 
             {/* ===== CONTACT US SECTION START ===== */}
             <ContactSection />

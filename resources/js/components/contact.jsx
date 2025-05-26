@@ -5,37 +5,40 @@ import { MdEmail } from 'react-icons/md';
 export default function ContactSection() {
   return (
     <section
-      className="relative py-10 md:py-12 bg-cover bg-center text-white"
+      className="relative py-16 md:py-20 lg:py-24 bg-cover bg-center text-white overflow-hidden"
       style={{
-        backgroundImage: `url('/assets/contactsection.jpg'), url('/images/contact-background.jpg')`,
+        backgroundImage: `url('/assets/contactsection.jpg')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
     >
+      {/* Overlay */}
       <div className="absolute inset-0 bg-black opacity-60"></div>
 
-      <div className="relative z-10 container mx-auto px-4" style={{ maxWidth: '1200px' }}>
-        <div className="flex flex-col lg:flex-row mx-auto items-start justify-between gap-8 md:gap-12 lg:gap-20">
+      <div className="relative container z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-16 xl:gap-20">
           {/* Left Column */}
-          <div className="lg:w-3/6 flex flex-col items-start space-y-5 md:space-y-10">
+          <div className="lg:w-1/2 space-y-8 sm:space-y-10">
             <h2
-              className="font-fraunces font-thin text-left mb-8"
+              className="font-fraunces font-light leading-tight"
               style={{
-                fontSize: 'clamp(3rem, 4vw, 5rem)',
-                fontWeight: 400,
-                letterSpacing: '0.02em',
+                fontSize: 'clamp(2.5rem, 6vw, 5rem)',
               }}
             >
               Contact Us
             </h2>
+
             <div>
               <h3
-                className="font-semibold mb-3 pb-2 border-b border-white border-opacity-30"
-                style={{ fontSize: 'clamp(1.125rem, 2vw, 1.875rem)' }}
+                className="font-semibold mb-4 sm:mb-6 border-b border-white border-opacity-30 pb-2"
+                style={{ fontSize: 'clamp(1.25rem, 2.2vw, 1.75rem)' }}
               >
                 Contact Info
               </h3>
-              <ul className="space-y-4 md:space-y-5" style={{ fontSize: 'clamp(0.95rem, 1.15vw, 1.25rem)' }}>
+              <ul
+                className="space-y-4 sm:space-y-5 text-white"
+                style={{ fontSize: 'clamp(0.95rem, 1.15vw, 1.25rem)' }}
+              >
                 {[
                   {
                     href: 'https://www.facebook.com/drwine.bgc',
@@ -59,19 +62,18 @@ export default function ContactSection() {
                     isEmail: true,
                   },
                 ].map(({ href, icon, text, isEmail }) => {
-                  // If it's the email, override href with Gmail compose URL:
-                  const gmailHref = 'https://mail.google.com/mail/?view=cm&fs=1&to=reservation.drwinebgc@gmail.com';
+                  const gmailHref =
+                    'https://mail.google.com/mail/?view=cm&fs=1&to=reservation.drwinebgc@gmail.com';
                   return (
-                    <li key={text} className="flex items-center gap-4">
-                      <span className="flex items-center justify-center bg-white bg-opacity-90 rounded-md" style={{ width: 36, height: 36 }}>
-                        <span style={{ color: '#222', fontSize: '1.3rem' }}>{icon}</span>
+                    <li key={text} className="flex items-center gap-3 sm:gap-4">
+                      <span className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-md bg-white bg-opacity-90 transition-transform duration-300 hover:-translate-y-1">
+                        <span className="text-black text-lg sm:text-xl">{icon}</span>
                       </span>
                       <a
                         href={isEmail ? gmailHref : href}
                         target={href.startsWith('http') || isEmail ? '_blank' : undefined}
                         rel={href.startsWith('http') || isEmail ? 'noopener noreferrer' : undefined}
-                        className="hover:text-red-500 transition-colors duration-300 break-all"
-                        style={{ fontSize: 'inherit' }}
+                        className="hover:text-red-500 break-all transition-colors duration-300"
                       >
                         {text}
                       </a>
@@ -83,51 +85,38 @@ export default function ContactSection() {
           </div>
 
           {/* Right Column */}
-          {/* Right Column */}
-          <div
-            className="w-full lg:w-3/5 max-w-xl p-4 md:p-6 rounded-none border border-white border-opacity-40 backdrop-filter backdrop-blur-sm bg-none bg-opacity-5 self-stretch flex flex-col justify-between"
-            style={{ fontSize: 'clamp(0.85rem, 1vw, 1rem)' }}
-          >
-            <form className="space-y-3 md:space-y-4 h-full flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {[
-                    { type: 'text', placeholder: 'Name' },
-                    { type: 'text', placeholder: 'Phone number' },
-                  ].map(({ type, placeholder }) => (
-                    <input
-                      key={placeholder}
-                      type={type}
-                      placeholder={placeholder}
-                      className="bg-transparent border border-white border-opacity-60 rounded-md focus:outline-none focus:border-red-500 placeholder-gray-200 text-white"
-                      style={{ padding: '0.5rem 0.75rem', fontSize: 'inherit' }}
-                    />
-                  ))}
-                </div>
+          <div className="lg:w-1/2 w-full max-w-xl mx-auto lg:mx-0 border border-white border-opacity-40 backdrop-blur-sm p-5 sm:p-6 md:p-8">
+            <form className="space-y-4 sm:space-y-5 text-white">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 <input
-                  type="email"
-                  placeholder="Email"
-                  className="w-full bg-transparent border border-white border-opacity-60 rounded-md focus:outline-none focus:border-red-500 placeholder-gray-200 text-white"
-                  style={{ padding: '0.5rem 0.75rem', fontSize: 'inherit' }}
+                  type="text"
+                  placeholder="Name"
+                  className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 sm:px-4 py-2 sm:py-2.5 placeholder-gray-300 focus:outline-none focus:border-red-500 transition-colors duration-300 text-sm sm:text-base"
                 />
-                <textarea
-                  placeholder="Please enter your message"
-                  rows="4"
-                  className="w-full bg-transparent border border-white border-opacity-60 rounded-md focus:outline-none focus:border-red-500 placeholder-gray-200 resize-none text-white"
-                  style={{ padding: '0.5rem 0.75rem', fontSize: 'inherit' }}
+                <input
+                  type="text"
+                  placeholder="Phone number"
+                  className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 sm:px-4 py-2 sm:py-2.5 placeholder-gray-300 focus:outline-none focus:border-red-500 transition-colors duration-300 text-sm sm:text-base"
                 />
               </div>
-
+              <input
+                type="email"
+                placeholder="Email"
+                className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 sm:px-4 py-2 sm:py-2.5 placeholder-gray-300 focus:outline-none focus:border-red-500 transition-colors duration-300 text-sm sm:text-base"
+              />
+              <textarea
+                rows="4"
+                placeholder="Please enter your message"
+                className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 sm:px-4 py-2 sm:py-2.5 placeholder-gray-300 resize-none focus:outline-none focus:border-red-500 transition-colors duration-300 text-sm sm:text-base"
+              />
               <button
                 type="submit"
-                className="w-full bg-none bg-opacity-20 hover:bg-red-700 text-white font-medium rounded-sm transition-colors duration-300 uppercase border border-white border-opacity-40 shadow"
-                style={{ padding: '0.75rem 1.5rem', fontSize: '1rem' }}
+                className="w-full bg-transparent border border-white border-opacity-60 py-2.5 sm:py-3 rounded-md hover:bg-red-700 transition-colors duration-300 uppercase tracking-wide text-sm sm:text-base"
               >
                 Send Message
               </button>
             </form>
           </div>
-
         </div>
       </div>
     </section>

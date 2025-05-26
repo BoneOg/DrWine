@@ -6,89 +6,95 @@ export default function Footer() {
     const googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=DrWine+BGC+Forbestown";
 
     return (
-        <footer className="bg-[#0A121C] text-white py-12 px-4"> 
-            <div className="max-w-6xl mx-auto">
-
-                {/* Top Section: Logo with horizontal lines */}
-                <div className="relative flex items-center justify-center mb-8">
-                    <hr className="absolute left-0 right-0 border-t border-gray-700 w-full" />
-                    <img
-                        src="/assets/logo.png"
-                        alt="DrWine Logo"
-                        className="relative z-10 h-24 w-24 object-cover rounded-full bg-[#0A121C] p-2" 
-                    />
-                </div>
-
-                {/* Main Content: Three Columns */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left mb-12">
-                    {/* Column 1: Opening Hours */}
-                    <div className="md:pl-25">
-                        <p className="font-fraunces text-lg mb-4">Opening Hours</p>
-                        <div className="space-y-2">
-                            <p className="text-sm md:text-base flex justify-center md:justify-start">
-                                <span className="w-24 shrink-0">Monday - Friday</span> <span>7:00 am - 11:30 pm</span>
-                            </p>
-                            <p className="text-sm md:text-base flex justify-center md:justify-start">
-                                <span className="w-24 shrink-0">Saturday</span> <span>8:30 am - 10:00 pm</span>
-                            </p>
-                            <p className="text-sm md:text-base flex justify-center md:justify-start">
-                                <span className="w-24 shrink-0">Sunday</span> <span>Closed</span>
-                            </p>
+        <>
+            <footer className="bg-[#0A121C] text-white py-8 sm:py-10 md:py-12 px-4 footer-element overflow-hidden"> 
+                <div className="max-w-6xl mx-auto">
+                    {/* Top Section: Logo with horizontal lines */}
+                    <div className="relative flex items-center justify-center mb-6 sm:mb-8 md:mb-10 footer-element">
+                        <hr className="absolute left-0 right-0 border-t border-gray-700 w-full" />
+                        <div className="relative z-10 bg-[#0A121C] p-2">
+                            <img
+                                src="/assets/logo.png"
+                                alt="DrWine Logo"
+                                className="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 object-cover rounded-full footer-logo" 
+                            />
                         </div>
                     </div>
 
-                    {/* Column 2: Navigation Links */}
-                    <div>
-                        <p className="flex flex-col items-center font-fraunces text-lg mb-4">Navigation</p>
-                        <nav className="flex flex-col items-center space-y-2">
-                            <Link href="/" className="hover:text-red-500 transition-colors duration-200">Home</Link>
-                            <Link href="/menu" className="hover:text-red-500 transition-colors duration-200">Menu</Link>
-                            <Link href={route('reservation')} className="hover:text-red-500 transition-colors duration-200">Reservation</Link>
-                            <Link href="/about" className="hover:text-red-500 transition-colors duration-200">About</Link>
-                            <Link href="/contact" className="hover:text-red-500 transition-colors duration-200">Contact</Link>
-                        </nav>
-                    </div>
+                    {/* Main Content: Three Columns */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center md:text-left mb-8 sm:mb-10 md:mb-12 footer-element">
+                        {/* Column 1: Opening Hours */}
+                        <div className="md:pl-4 lg:pl-8">
+                            <h3 className="font-fraunces text-base sm:text-lg mb-3 sm:mb-4 footer-element">Opening Hours</h3>
+                            <div className="space-y-1.5 sm:space-y-2">
+                                <p className="text-xs sm:text-sm md:text-base flex flex-col sm:flex-row items-center md:items-start footer-element">
+                                    <span className="w-full sm:w-24 shrink-0 mb-1 sm:mb-0">Monday - Friday</span>
+                                    <span className="text-gray-300">7:00 am - 11:30 pm</span>
+                                </p>
+                                <p className="text-xs sm:text-sm md:text-base flex flex-col sm:flex-row items-center md:items-start footer-element">
+                                    <span className="w-full sm:w-24 shrink-0 mb-1 sm:mb-0">Saturday</span>
+                                    <span className="text-gray-300">8:30 am - 10:00 pm</span>
+                                </p>
+                                <p className="text-xs sm:text-sm md:text-base flex flex-col sm:flex-row items-center md:items-start footer-element">
+                                    <span className="w-full sm:w-24 shrink-0 mb-1 sm:mb-0">Sunday</span>
+                                    <span className="text-gray-300">Closed</span>
+                                </p>
+                            </div>
+                        </div>
 
-                    {/* Column 3: Contact Information */}
-                    <div>
-                        <p className="font-fraunces text-lg mb-4">Contact Us</p>
-                        <div className="space-y-2">
-                            {/* Make Phone Number Clickable */}
-                            <p className="text-sm md:text-base">
-                                <a href="tel:+639177152807" className="hover:text-red-500 transition-colors duration-200">
-                                    0917 715 2807
-                                </a>
-                            </p>
-                            {/* Make Email Clickable and direct to Gmail */}
-                            <p className="text-sm md:text-base">
-                                <a
-                                    href="https://mail.google.com/mail/?view=cm&fs=1&to=reservation.drwinebgc@gmail.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:text-red-500 transition-colors duration-200"
-                                >
-                                    reservation.drwinebgc@gmail.com
-                                </a>
-                            </p>
-                            {/* Make Address Clickable and direct to Google Maps */}
-                            <p className="text-sm md:text-base">
-                                <a
-                                    href={googleMapsUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:text-red-500 transition-colors duration-200"
-                                >
-                                    Forbestown, BGC
-                                </a>
-                            </p>
+                        {/* Column 2: Navigation Links */}
+                        <div>
+                            <h3 className="font-fraunces text-base flex flex-col items-center sm:text-lg mb-3 sm:mb-4 footer-element">Navigation</h3>
+                            <nav className="flex flex-col items-center space-y-1.5 sm:space-y-2">
+                                <Link href="/" className="text-xs sm:text-sm md:text-base footer-link">Home</Link>
+                                <Link href="/menu" className="text-xs sm:text-sm md:text-base footer-link">Menu</Link>
+                                <Link href={route('reservation')} className="text-xs sm:text-sm md:text-base footer-link">Reservation</Link>
+                                <Link href="/about" className="text-xs sm:text-sm md:text-base footer-link">About</Link>
+                                <Link href="/contact" className="text-xs sm:text-sm md:text-base footer-link">Contact</Link>
+                            </nav>
+                        </div>
+
+                        {/* Column 3: Contact Information */}
+                        <div>
+                            <h3 className="font-fraunces text-base sm:text-lg mb-3 sm:mb-4 footer-element">Contact Us</h3>
+                            <div className="space-y-1.5 sm:space-y-2">
+                                {/* Phone Number */}
+                                <p className="text-xs sm:text-sm md:text-base footer-element">
+                                    <a href="tel:+639177152807" className="footer-link">
+                                        0917 715 2807
+                                    </a>
+                                </p>
+                                {/* Email */}
+                                <p className="text-xs sm:text-sm md:text-base footer-element">
+                                    <a
+                                        href="https://mail.google.com/mail/?view=cm&fs=1&to=reservation.drwinebgc@gmail.com"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="footer-link"
+                                    >
+                                        reservation.drwinebgc@gmail.com
+                                    </a>
+                                </p>
+                                {/* Address */}
+                                <p className="text-xs sm:text-sm md:text-base footer-element">
+                                    <a
+                                        href={googleMapsUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="footer-link"
+                                    >
+                                        Forbestown, BGC
+                                    </a>
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Bottom Section: Copyright and Bottom Line */}
-                <hr className="border-t border-gray-700 mb-4" />
-                <p className="text-sm text-center">© DrWine. All rights reserved.</p>
-            </div>
-        </footer>
+                    {/* Bottom Section: Copyright and Bottom Line */}
+                    <hr className="border-t border-gray-700 mb-3 sm:mb-4" />
+                    <p className="text-xs sm:text-sm text-center text-gray-400 footer-element">© DrWine. All rights reserved.</p>
+                </div>
+            </footer>
+        </>
     );
 }
