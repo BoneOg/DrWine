@@ -41,6 +41,8 @@ Route::middleware('auth')->group(function () {
 
     Route::inertia('/admin', 'admin_side/admin')->name('admin.dashboard');
     Route::get('/admin/booking', [AdminController::class, 'booking'])->name('admin.booking');
+    Route::post('/admin/reservations/action', [AdminController::class, 'handleReservationAction']);
+
 
 });
 

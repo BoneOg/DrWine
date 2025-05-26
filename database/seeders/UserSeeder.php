@@ -14,8 +14,8 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'username' => 'admin_user',
-            'password' => Hash::make('password'), // Always hash passwords for security!
+            'username' => 'admin',
+            'password' => Hash::make('123123'), // Always hash passwords for security!
             'role' => 'admin',
             'email' => 'admin@example.com', // Add if you have an email field
             'email_verified_at' => now(), // Optional: Set a timestamp if you want
@@ -23,8 +23,8 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'username' => 'regular_user',
-            'password' => Hash::make('password123'),
+            'username' => 'user',
+            'password' => Hash::make('123123'),
             'role' => 'user',
             'email' => 'user@example.com', // Add if you have an email field
             'email_verified_at' => now(),
