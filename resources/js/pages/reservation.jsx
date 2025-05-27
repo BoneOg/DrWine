@@ -1,223 +1,248 @@
-import React, { useState } from 'react';
-import { router, Head } from '@inertiajs/react';
-import axios from 'axios';
-import Layout from '../Components/layout';
+import { useState } from 'react';
+import Layout from '@/components/layout';
+import { router } from '@inertiajs/react';
 
-const Reservation = () => {
-  const [form, setForm] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    date: '',
-    time: '',
-    size: '',
-  });
+export default function Reservation() {
+  const today = new Date();
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  const timeSlots = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
+  const guests = Array.from({ length: 10 }, (_, i) => i + 1);
 
-  const [availableTimes, setAvailableTimes] = useState([]);
-  const [errors, setErrors] = useState({});
+  const [selectedMonth, setSelectedMonth] = useState(today.getMonth());
+  const [selectedDay, setSelectedDay] = useState(today.getDate());
+  const [selectedTime, setSelectedTime] = useState(timeSlots[0]);
+  const [selectedGuests, setSelectedGuests] = useState(1);
 
-  const fixedTimes = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
 
-  const handleDateChange = (e) => {
-    const selectedDate = e.target.value;
-    setForm({ ...form, date: selectedDate, time: '' });
+  const currentYear = today.getFullYear();
+  const selectedDate = new Date(currentYear, selectedMonth, selectedDay);
+  const daysInMonth = new Date(currentYear, selectedMonth + 1, 0).getDate();
 
-    axios.post('/reservation/available-times', { date: selectedDate })
-      .then(res => setAvailableTimes(res.data))
-      .catch(() => setAvailableTimes([]));
+  const getDayOfWeek = (date) => {
+    return date.toLocaleDateString('en-US', { weekday: 'long' });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setErrors({});
+  const firstDayOfWeek = new Date(currentYear, selectedMonth, 1).getDay();
+  const emptyCellsCount = (firstDayOfWeek + 6) % 7;
 
-    const fullDateTime = `${form.date} ${form.time}`;
+  const isPast = (day) => {
+    const date = new Date(currentYear, selectedMonth, day);
+    return date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  };
+
+  const formValid =
+    name.trim() !== '' &&
+    email.trim() !== '' &&
+    phone.trim() !== '' &&
+    selectedGuests > 0 &&
+    !isPast(selectedDay);
+
+  const handleSubmit = () => {
+    if (!formValid) return;
+
+    const formattedDate = `${currentYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
+    const dateTime = `${formattedDate} ${selectedTime}`;
 
     router.post('/reservation', {
-      ...form,
-      date_time: fullDateTime,
-    }, {
-      onError: setErrors,
+      name,
+      email,
+      phone,
+      size: selectedGuests,
+      date_time: dateTime
     });
   };
 
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const minDate = tomorrow.toISOString().split('T')[0];
+  // Track dropdown open states separately
+  const [isMonthOpen, setIsMonthOpen] = useState(false);
+  const [isTimeOpen, setIsTimeOpen] = useState(false);
+  const [isGuestsOpen, setIsGuestsOpen] = useState(false);
 
-  const isFormComplete = form.name && form.phone && form.email && form.date && form.time && form.size;
+  // Arrow rotation class helper
+  const arrowClass = (isOpen) =>
+    `w-4 h-4 absolute right-1 top-1/2 pointer-events-none transition-transform duration-300 ease-in-out ${
+      isOpen ? 'rotate-[90deg]' : 'rotate-0'
+    }`;
 
   return (
     <Layout>
-      <Head />
+        <div className="min-h-screen bg-black text-white flex items-center justify-center px-10 pt-32 pb-32">
+          <div className="transform scale-[1] sm:scale-[1.1] md:scale-[1.2] origin-top overflow-hidden">
+          <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-[4fr_2fr] gap-15 items-stretch">
 
-      <div className="min-h-screen bg-[#000000] pt-32 pb-12 px-4 relative overflow-hidden">
-        {/* Background Image with Overlay */}
-        <div className="absolute inset-0">
-          <img 
-            src="/assets/reserve.png" 
-            alt="Background" 
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-[#000000] opacity-50"></div>
-        </div>
 
-        <div className="max-w-4xl mx-auto relative z-10">
-          {/* Header Section */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-6xl font-fraunces font-light text-white mb-4">
-              <span className="text-red-600">B</span>ook a Table
-            </h1>
-            <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">
-              Join us for an unforgettable dining experience. Reserve your table and let us prepare something special for you.
-            </p>
-          </div>
+            <div className="flex flex-col flex-grow">
+              <h1 className="text-5xl font-felix mb-6 tracking-wide">RESERVATION</h1>
 
-          {/* Form Container */}
-          <div className="relative bg-white/5 backdrop-blur-xl rounded-none p-8 md:p-12 shadow-2xl 
-          border border-white/10 before:absolute before:inset-0 before:bg-gradient-to-b 
-          before:from-white/5 before:to-transparent before:rounded-none before:-z-10">
-            <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-8">
-              {/* Left Column */}
-              <div className="space-y-6">
-                {/* Name */}
-                <div className="space-y-2">
-                  <label className="block text-white/80 text-sm uppercase tracking-wider">Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={form.name}
-                    onChange={e => setForm({ ...form, name: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white 
-                    placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 
-                    focus:ring-red-500/50 transition-all duration-300 backdrop-blur-sm"
-                    placeholder="Your full name"
+              <div className="flex gap-6 mb-4 max-w-md w-full">
+                {/* Month Dropdown */}
+                <div className="relative flex-1">
+                  <label className="block text-sm font-monts text-gray-400 mb-1">Month</label>
+                  <select
+                    value={selectedMonth}
+                    onChange={(e) => {
+                      setSelectedMonth(Number(e.target.value));
+                      setSelectedDay(1);
+                    }}
+                    onFocus={() => setIsMonthOpen(true)}
+                    onBlur={() => setIsMonthOpen(false)}
+                    className="w-full text-white bg-transparent border-b border-gray-500 text-base font-light font-monts tracking-wide py-1 pr-6 appearance-none focus:outline-none focus:border-white"
+                  >
+                    {months.map((month, index) => (
+                      <option key={month} value={index}>{month}</option>
+                    ))}
+                  </select>
+                  <img
+                    src="/assets/drop.png"
+                    alt="Dropdown arrow"
+                    className={arrowClass(isMonthOpen)}
                   />
-                  {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
                 </div>
 
-                {/* Phone */}
-                <div className="space-y-2">
-                  <label className="block text-white/80 text-sm uppercase tracking-wider">Phone</label>
-                  <input
-                    type="tel"
-                    required
-                    pattern="[0-9]+"
-                    value={form.phone}
-                    onChange={e => {
-                      const numbersOnly = e.target.value.replace(/\D/g, '');
-                      setForm({ ...form, phone: numbersOnly });
-                    }}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white 
-                    placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 
-                    focus:ring-red-500/50 transition-all duration-300 backdrop-blur-sm"
-                    placeholder="Your phone number"
+                {/* Time Dropdown */}
+                <div className="relative flex-1">
+                  <label className="block text-sm font-monts text-gray-400 mb-1">Time</label>
+                  <select
+                    value={selectedTime}
+                    onChange={(e) => setSelectedTime(e.target.value)}
+                    onFocus={() => setIsTimeOpen(true)}
+                    onBlur={() => setIsTimeOpen(false)}
+                    className="w-full text-white bg-transparent border-b border-gray-500 text-base font-light font-monts tracking-wide py-1 pr-6 appearance-none focus:outline-none focus:border-white"
+                  >
+                    {timeSlots.map((slot) => (
+                      <option key={slot} value={slot}>{slot}</option>
+                    ))}
+                  </select>
+                  <img
+                    src="/assets/drop.png"
+                    alt="Dropdown arrow"
+                    className={arrowClass(isTimeOpen)}
                   />
-                  {errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}
+                </div>
+
+                {/* Guests Dropdown */}
+                <div className="relative flex-1">
+                  <label className="block text-sm font-monts text-gray-400 mb-1">Guests</label>
+                  <select
+                    value={selectedGuests}
+                    onChange={(e) => setSelectedGuests(Number(e.target.value))}
+                    onFocus={() => setIsGuestsOpen(true)}
+                    onBlur={() => setIsGuestsOpen(false)}
+                    className="w-full text-white bg-transparent border-b border-gray-500 text-base font-light font-monts tracking-wide py-1 pr-6 appearance-none focus:outline-none focus:border-white"
+                  >
+                    {guests.map((num) => (
+                      <option key={num} value={num}>{num}</option>
+                    ))}
+                  </select>
+                  <img
+                    src="/assets/drop.png"
+                    alt="Dropdown arrow"
+                    className={arrowClass(isGuestsOpen)}
+                  />
+                </div>
+              </div>
+
+              {/* Rest of your calendar and form unchanged */}
+              <div className="grid grid-cols-7 font-monts text-center gap-1 text-base max-w-md pt-2 flex-grow">
+                {['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'].map(day => (
+                  <div key={day} className="font-bold">{day}</div>
+                ))}
+                {Array.from({ length: emptyCellsCount }).map((_, i) => (
+                  <div key={`empty-${i}`}></div>
+                ))}
+                {Array.from({ length: daysInMonth }).map((_, i) => {
+                  const day = i + 1;
+                  const isSelected = day === selectedDay;
+                  const past = isPast(day);
+
+                  return (
+                    <div
+                      key={day}
+                      onClick={() => !past && setSelectedDay(day)}
+                      className={`py-1 rounded-full transition text-sm cursor-pointer ${
+                        past
+                          ? 'text-gray-600 cursor-not-allowed'
+                          : isSelected
+                          ? 'bg-red-700 text-white'
+                          : 'hover:bg-white hover:text-black'
+                      }`}
+                    >
+                      {day}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="flex flex-col justify-between flex-grow">
+              <div className="mt-[85px]">
+                <div className="mb-6 ">
+                  <label className="block text-sm font-monts text-gray-400 mb-1">When</label>
+                  <div className="border-b border-gray-400 pb-1 font-monts text-xs">
+                    {`${months[selectedMonth]} ${selectedDay} (${getDayOfWeek(selectedDate)}), ${selectedTime}, ${selectedGuests} Guest${selectedGuests > 1 ? 's' : ''}`}
+                  </div>
+                </div>
+
+                {/* Name - Only letters and space */}
+                <div className="mb-4 ">
+                  <label className="block text-sm font-monts text-gray-400 mb-1">Name</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                      setName(value);
+                    }}
+                    className="w-full bg-transparent border-b border-gray-400 pb-1 text-xs font-monts outline-none "
+                  />
                 </div>
 
                 {/* Email */}
-                <div className="space-y-2">
-                  <label className="block text-white/80 text-sm uppercase tracking-wider">Email</label>
+                <div className="mb-4">
+                  <label className="block text-sm font-monts text-gray-400 mb-1">Email</label>
                   <input
                     type="email"
-                    required
-                    value={form.email}
-                    onChange={e => setForm({ ...form, email: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white 
-                    placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 
-                    focus:ring-red-500/50 transition-all duration-300 backdrop-blur-sm"
-                    placeholder="Your email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-transparent border-b border-gray-400 pb-1 text-xs font-monts outline-none"
                   />
-                  {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
                 </div>
-              </div>
 
-              {/* Right Column */}
-              <div className="space-y-6">
-                {/* Date */}
-                <div className="space-y-2">
-                  <label className="block text-white/80 text-sm uppercase tracking-wider">Date</label>
+                {/* Phone - Only integers */}
+                <div className="mb-8">
+                  <label className="block text-sm font-monts text-gray-400 mb-1">Phone Number</label>
                   <input
-                    type="date"
-                    required
-                    value={form.date}
-                    onChange={handleDateChange}
-                    min={minDate}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white 
-                    placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 
-                    focus:ring-red-500/50 transition-all duration-300 backdrop-blur-sm [color-scheme:dark]"
+                    type="text"
+                    value={phone}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      setPhone(value);
+                    }}
+                    className="w-full bg-transparent border-b border-gray-400 pb-1 text-xs font-monts outline-none"
                   />
-                  {errors.date && <span className="text-red-500 text-sm">{errors.date}</span>}
-                </div>
-
-                {/* Time */}
-                <div className="space-y-2">
-                  <label className="block text-white/80 text-sm uppercase tracking-wider">Time Slot</label>
-                  <select
-                    required
-                    value={form.time}
-                    onChange={e => setForm({ ...form, time: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white 
-                    placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 
-                    focus:ring-red-500/50 transition-all duration-300 backdrop-blur-sm"
-                  >
-                    <option value="" className="bg-[#0A121C]">Select Time</option>
-                    {fixedTimes.map(time => (
-                      <option
-                        key={time}
-                        value={time}
-                        disabled={availableTimes.length > 0 && !availableTimes.includes(time)}
-                        className="bg-[#0A121C]"
-                      >
-                        {time} - {String(Number(time.split(":")[0]) + 2).padStart(2, "0")}:00
-                      </option>
-                    ))}
-                  </select>
-                  {errors.time && <span className="text-red-500 text-sm">{errors.time}</span>}
-                </div>
-
-                {/* Party Size */}
-                <div className="space-y-2">
-                  <label className="block text-white/80 text-sm uppercase tracking-wider">Party Size</label>
-                  <select
-                    required
-                    value={form.size}
-                    onChange={e => setForm({ ...form, size: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white 
-                    placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 
-                    focus:ring-red-500/50 transition-all duration-300 backdrop-blur-sm"
-                  >
-                    <option value="" className="bg-[#0A121C]">Select Size</option>
-                    {[...Array(10)].map((_, i) => (
-                      <option key={i + 1} value={i + 1} className="bg-[#0A121C]">
-                        {i + 1} {i === 0 ? 'Person' : 'People'}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.size && <span className="text-red-500 text-sm">{errors.size}</span>}
                 </div>
               </div>
 
-              {/* Submit Button - Full Width */}
-              <div className="md:col-span-2 mt-6">
-                <button
-                  type="submit"
-                  disabled={!isFormComplete}
-                  className={`w-full bg-gradient-to-r from-red-600/80 to-red-700/80 hover:from-red-600 hover:to-red-700 
-                  text-white font-medium rounded-lg transition-all duration-300 py-4 uppercase tracking-wider
-                  shadow-lg hover:shadow-red-500/20 backdrop-blur-sm ${!isFormComplete && 'opacity-50 cursor-not-allowed'}`}
-                >
-                  {isFormComplete ? 'Confirm Reservation' : 'Please Fill All Fields'}
-                </button>
-              </div>
-            </form>
+              <button
+                onClick={handleSubmit}
+                disabled={!formValid}
+                className={`px-4 py-2 text-base font-monts shadow transition ${
+                  formValid
+                    ? 'bg-white text-black hover:bg-gray-500 cursor-pointer'
+                    : 'bg-gray-500 text-gray-300 opacity-50 cursor-not-allowed'
+                }`}
+              >
+                {formValid ? 'Book a Table' : 'Complete Reservation Details'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </Layout>
   );
-};
-
-export default Reservation;
+}

@@ -1,7 +1,4 @@
 @import 'tailwindcss';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Arizonia&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cardo&display=swap');
@@ -19,8 +16,8 @@
   --font-sans:
     'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
-  --color-background: oklch(1 0 0); /* <-- CHANGED BACK TO WHITE */
-  --color-foreground: oklch(0.145 0 0); /* Adjust to appropriate text color for a white background */
+  --color-background: oklch(1 0 0); 
+  --color-foreground: oklch(0.145 0 0); 
   --color-primary: oklch(0.205 0 0);
   --color-primary-foreground: oklch(0.985 0 0);
   --color-border: oklch(0.922 0 0);
@@ -35,6 +32,8 @@
   --color-border: oklch(0.269 0 0);
 }
 
+
+
 @font-face {
   font-family: 'TAN';
   src: url('../assets/font/TAN-Angleton-Regular.ttf') format('truetype');
@@ -45,6 +44,13 @@
 @font-face {
     font-family: 'Felix';
     src: url('/assets/font/felix.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Monts';
+    src: url('/assets/font/monts.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -110,6 +116,10 @@
 
 .font-felix {
   font-family: 'Felix', serif;
+}
+
+.font-monts {
+  font-family: 'Monts', serif;
 }
 
 .fraunces-regular {
@@ -198,4 +208,9 @@ h1, h2, h3, p, img {
 
 .hamburger-line {
   transition: all 0.3s ease-in-out;
+}
+
+select option {
+  background-color: rgba(13, 27, 42, 0.99);
+  color: white; 
 }
