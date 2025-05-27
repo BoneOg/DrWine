@@ -58,22 +58,17 @@ class ReservationController extends Controller
             'size' => 'required|integer|min:1|max:10',
         ]);
 
-        // Create guest user and customer
-        $user = User::create([
-            'username' => 'guest_' . uniqid(),
-            'email' => $request->email,
-            'password' => bcrypt('guest123'),
-            'role' => 'guest',
-        ]);
+        // Determine if the request is from an authenticated user
+        $user = auth()->user();
 
         $customer = Customer::create([
-            'userID' => $user->userID,
+            'userID' => $user?->userID, // Set to null if guest
             'name' => $request->name,
             'phone' => $request->phone,
             'email' => $request->email,
         ]);
 
-        $dateTime = Carbon::createFromFormat('Y-m-d H:i', $request->date . ' ' . $request->time, config('app.timezone'));
+        $dateTime = Carbon::createFromFormat('Y-m-d H:i', $request->date_time, config('app.timezone'));
 
         $table = RestaurantTable::where('capacity', '>=', $request->size)
             ->where('table_status', 'available')
@@ -104,5 +99,4 @@ class ReservationController extends Controller
 
         return redirect()->route('checkout', ['reservationID' => $reservation->reservationID]);
     }
-
 }

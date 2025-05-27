@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('customer', function (Blueprint $table) {
             $table->id('customerID');
 
-            $table->unsignedBigInteger('userID'); 
+            // Make userID nullable and still a foreign key to users.userID
+            $table->unsignedBigInteger('userID')->nullable();
             $table->foreign('userID')
-                ->references('userID')  
+                ->references('userID')
                 ->on('users')
                 ->onDelete('cascade');
 
