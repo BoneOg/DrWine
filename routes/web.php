@@ -6,7 +6,8 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\UserController; // Make sure this is present and correct
 
 // Public Pages
 Route::get('/', fn () => Inertia::render('Welcome'));
@@ -36,18 +37,31 @@ Route::get('/checkout/{reservationID}', [CheckoutController::class, 'index'])->n
 Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
 Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
 
-// Authenticated Routes
+// Authenticated Routes (for all authenticated users)
 Route::middleware('auth')->group(function () {
 
-    // User Dashboard
+    // User Dashboard (for regular users)
     Route::get('/user', [AuthController::class, 'userDashboard'])->name('user.dashboard');
-    Route::delete('/user/delete', [AuthController::class, 'deleteAccount'])->name('user.delete')->middleware('auth');
+    Route::delete('/user/delete', [AuthController::class, 'deleteAccount'])->name('user.delete');
 
-    // Admin Dashboard
-    Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/booking', [AdminController::class, 'booking'])->name('admin.booking');
+    // **ADMINISTRATOR ROUTES GROUP**
+    // This group applies 'auth' and 'admin' middleware, sets '/admin' URL prefix, and 'admin.' name prefix
+    Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+        // Admin Dashboard
+        Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard'); // Becomes /admin, named admin.dashboard
 
-});
+        // Booking Management
+        Route::get('/booking', [AdminController::class, 'booking'])->name('booking'); // Becomes /admin/booking, named admin.booking
+        Route::post('/reservation-action', [AdminController::class, 'handleReservationAction'])->name('reservation-action');
+
+        // **User Management (ADD THESE ROUTES)**
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');         // URL: /admin/users, Name: admin.users.index
+        Route::get('/users/create', [UserController::class, 'create'])->name('users.create'); // URL: /admin/users/create, Name: admin.users.create
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');         // URL: POST /admin/users, Name: admin.users.store
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy'); // URL: DELETE /admin/users/{id}, Name: admin.users.destroy
+    });
+
+}); // Closes the main 'auth' middleware group
 
 // Fallback route for 404
 Route::fallback(fn () => Inertia::render('notfound'));
