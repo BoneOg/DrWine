@@ -99,4 +99,22 @@ class ReservationController extends Controller
 
         return redirect()->route('checkout', ['reservationID' => $reservation->reservationID]);
     }
+
+    public function cancel(Request $request, $reservationID)
+    {
+        $reservation = Reservation::findOrFail($reservationID);
+        
+        // Check if the user has permission to cancel this reservation
+        if (auth()->check()) {
+            $customer = Customer::where('userID', auth()->id())->first();
+            if ($reservation->customerID !== $customer->customerID) {
+                return redirect()->route('reservation')->with('error', 'You are not authorized to cancel this reservation.');
+            }
+        }
+
+        $reservation->status = 'cancelled';
+        $reservation->save();
+
+        return redirect()->route('reservation')->with('success', 'Reservation cancelled successfully');
+    }
 }
