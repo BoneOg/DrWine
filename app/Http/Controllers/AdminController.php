@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Admin; 
+namespace App\Http\Controllers; 
 
-use App\Http\Controllers\Controller; 
 use App\Models\Reservation;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -10,18 +9,14 @@ use Inertia\Inertia;
 
 class AdminController extends Controller
 {
-    /**
-     * Display the admin dashboard.
-     */
+ 
     public function dashboard()
     {
-        // Counts from the 'reservation' table's status
         $totalPendingReservations = Reservation::where('status', 'pending')->count();
         $totalConfirmedReservations = Reservation::where('status', 'confirmed')->count();
         $totalCancelledReservations = Reservation::where('status', 'cancelled')->count();
         $totalCompletedReservations = Reservation::where('status', 'completed')->count();
 
-        // Counts from the 'transaction' table's status
         $totalPendingTransactions = Transaction::where('status', 'pending_payment')->count();
         $totalPaidTransactions = Transaction::where('status', 'paid')->count();
         $totalFailedTransactions = Transaction::where('status', 'failed')->count();
@@ -40,9 +35,6 @@ class AdminController extends Controller
         ]);
     }
 
-    /**
-     * Display the list of bookings for admin.
-     */
     public function booking()
     {
         $reservations = Reservation::with(['customer', 'table', 'transaction'])
@@ -97,5 +89,43 @@ class AdminController extends Controller
         $reservation->save();
 
         return redirect()->back()->with('success', 'Status updated successfully.');
+    }
+
+    public function userlist(Request $request)
+    {
+        $query = User::query();
+
+        // --- Search Logic ---
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%') // Search by new 'name' column
+                  ->orWhere('username', 'like', '%' . $search . '%') // Also search by 'username'
+                  ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        }
+
+        // --- Sort Logic ---
+        $sortBy = $request->input('sort_by', 'username'); // **CHANGE DEFAULT SORT TO 'username'**
+        $sortOrder = $request->input('sort_order', 'asc');
+
+        // Validate allowed sort columns to prevent SQL injection
+        // **ADD 'username' to allowed sorts**
+        $allowedSorts = ['id', 'name', 'username', 'email', 'created_at', 'role'];
+        if (!in_array($sortBy, $allowedSorts)) {
+            $sortBy = 'username'; // Fallback if invalid sort_by is provided
+        }
+        if (!in_array($sortOrder, ['asc', 'desc'])) {
+            $sortOrder = 'asc'; // Fallback if invalid sort_order is provided
+        }
+
+        $query->orderBy($sortBy, $sortOrder);
+
+        $users = $query->paginate(10);
+
+        return Inertia::render('admin_side/admin_users', [
+            'users' => $users->toArray(),
+            'filters' => $request->only(['search', 'sort_by', 'sort_order']),
+        ]);
     }
 }

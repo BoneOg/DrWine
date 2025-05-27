@@ -14,13 +14,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Register your custom 'admin' route middleware alias here
+        // Register route middleware aliases
         $middleware->alias([
-            'admin' => \App\Http\Middleware\AdminMiddleware::class, // <--- ADD THIS LINE
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'role' => \App\Http\Middleware\RoleMiddleware::class, // optional if you plan to use flexible roles
         ]);
 
+        // Middleware to exclude certain cookies from encryption
         $middleware->encryptCookies(except: ['appearance']);
 
+        // Global web middleware stack (runs for all web routes)
         $middleware->web(append: [
             HandleAppearance::class,
             HandleInertiaRequests::class,
@@ -28,5 +31,6 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+        // You can define custom exception handling here
+    })
+    ->create();

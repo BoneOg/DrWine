@@ -1,4 +1,3 @@
-import React from 'react';
 import { Head } from '@inertiajs/react';
 import AdminSidebar from './admin_sidebar'; // Adjust path if admin_sidebar.jsx is not in the same directory
 

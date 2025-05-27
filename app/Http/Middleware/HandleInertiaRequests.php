@@ -10,13 +10,11 @@ class HandleInertiaRequests extends Middleware
 {
     /**
      * The root template that's loaded on the first page visit.
-     *
-     * @var string
      */
     protected $rootView = 'app';
 
     /**
-     * Determines the current asset version.
+     * Determine the current asset version.
      */
     public function version(Request $request): ?string
     {
@@ -26,16 +24,27 @@ class HandleInertiaRequests extends Middleware
     /**
      * Define the props that are shared by default.
      *
-     * @return array<string, mixed>
+     * @return array<string, \Closure|mixed>
      */
     public function share(Request $request): array
     {
         return [
             ...parent::share($request),
+
+            // Share authenticated user
             'auth' => [
                 'user' => $request->user(),
             ],
-            'ziggy' => fn (): array => [
+
+            // Flash messages (for success/errors, etc.)
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
+                'errors' => fn () => $request->session()->get('errors'),
+            ],
+
+            // Ziggy for route() support in JS
+            'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
