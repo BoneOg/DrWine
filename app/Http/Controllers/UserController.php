@@ -13,23 +13,24 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        $customer = Customer::where('userID', $user->userID)->first();
+        $customers = Customer::where('userID', $user->userID)->pluck('customerID');
 
-        $transactions = [];
+        $transactions = Transaction::with('reservation')
+            ->whereHas('reservation', function ($query) use ($customers) {
+                $query->whereIn('customerID', $customers);
+            })
+            ->get();
 
-        if ($customer) {
-            $transactions = Transaction::with('reservation')
-                ->whereHas('reservation.customer', function ($q) use ($customer) {
-                    $q->where('customerID', $customer->customerID);
-                })->get();
-        }
+        // If you still want to show the first customer’s info (e.g. for profile section)
+        $primaryCustomer = Customer::where('userID', $user->userID)->first();
 
         return Inertia::render('user_side/user', [
             'user' => $user,
-            'customer' => $customer,
+            'customer' => $primaryCustomer,
             'transactions' => $transactions,
         ]);
     }
+
 
     public function deleteAccount()
     {

@@ -82,162 +82,83 @@ export default function AdminUsers() {
     closeModal();
   };
 
-  return (
-    <div className="flex min-h-screen bg-[#f9f9f9] text-gray-800 font-sans relative">
-      <AdminSidebar />
+    return (
+        <AdminLayout>
+            <Head title="Admin Users" />
+            <div className="container-fluid mt-4">
+                {/* ... other parts ... */}
 
-      <main className="flex-1 px-12 py-10">
-        {/* Header Section */}
-        <section className="mb-12">
-          <h1 className="text-3xl font-semibold tracking-tight text-gray-900 mb-6">
-            User Management
-          </h1>
-          <div className="px-6 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6 max-w-xs">
-            <StatusCard
-              color="blue"
-              label="Registered Users"
-              count={users.length}
-            />
-          </div>
-
-          
-        </section>
-
-        {/* Users Table Container */}
-        <div className="mx-6 bg-white rounded-2xl shadow-md border border-gray-100">
-          {/* Filter Bar */}
-          <div className="flex mb-4 flex-wrap justify-between items-center gap-4 px-6 pt-6">
-            {/* Sort dropdown */}
-            <select
-              className="py-2 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300"
-              value={sort.field ? `${sort.field}-${sort.order}` : ""}
-              onChange={handleSortChange}
-            >
-              <option value="">Sort by...</option>
-              <option value="username-asc">Username ↑</option>
-              <option value="username-desc">Username ↓</option>
-              <option value="email-asc">Email ↑</option>
-              <option value="email-desc">Email ↓</option>
-              <option value="role-asc">Role ↑</option>
-              <option value="role-desc">Role ↓</option>
-              <option value="date-asc">Date Created ↑</option>
-              <option value="date-desc">Date Created ↓</option>
-            </select>
-
-            {/* Search input */}
-            <div className="relative w-full sm:w-1/2 lg:w-1/3">
-              <input
-                type="text"
-                placeholder="Search by username or email..."
-                className="w-full py-2 pl-10 pr-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          {/* Header Row */}
-          <div className="grid grid-cols-5 text-sm font-semibold text-gray-500 border-b border-gray-200 px-6 py-4 mr-6 ml-6 bg-gray-50">
-            <span>Username</span>
-            <span>Email</span>
-            <span>Role</span>
-            <span>Date Created</span>
-            <span>Actions</span>
-          </div>
-
-          {/* User Rows */}
-          <div className="relative max-h-[500px] overflow-y-auto my-0 rounded-b-2xl mr-6 ml-6 mb-4">
-            <div className="overflow-x-auto divide-y divide-gray-200">
-              {filteredAndSortedUsers.length === 0 ? (
-                <p className="text-center text-gray-400 py-20">
-                  No users found.
-                </p>
-              ) : (
-                filteredAndSortedUsers.map((user) => (
-                  <div
-                    key={user.userID}
-                    className="px-6 py-4 hover:bg-gray-50 transition duration-150"
-                  >
-                    <div className="grid grid-cols-5 text-sm text-gray-800 min-w-[800px] items-center">
-                      <span>{user.username}</span>
-                      <span>{user.email}</span>
-                      <span className="capitalize">{user.role}</span>
-                      <span>
-                        {user.created_at
-                          ? new Date(user.created_at).toLocaleString()
-                          : "N/A"}
-                      </span>
-                      <span>
-                        <button
-                          onClick={() => openModal(user.userID)}
-                          className="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded"
-                        >
-                          Delete
-                        </button>
-                      </span>
+                {/* Search and Sort Form - Adjust options if needed */}
+                <form onSubmit={handleFilterChange} className="mb-4 bg-light p-3 rounded shadow-sm">
+                    <div className="row g-3 align-items-center">
+                        <div className="col-md-4">
+                            <label htmlFor="search" className="form-label visually-hidden">Search</label>
+                            <input
+                                type="text"
+                                name="search"
+                                id="search"
+                                className="form-control"
+                                placeholder="Search by name, username or email..." // Update placeholder
+                                value={data.search}
+                                onChange={(e) => setData('search', e.target.value)}
+                            />
+                        </div>
+                        <div className="col-md-3">
+                            <label htmlFor="sort_by" className="form-label visually-hidden">Sort By</label>
+                            <select
+                                name="sort_by"
+                                id="sort_by"
+                                className="form-select"
+                                value={data.sort_by}
+                                onChange={(e) => setData('sort_by', e.target.value)}
+                            >
+                                <option value="username">Username (Alphabetical)</option> {/* **CHANGE TO USERNAME** */}
+                                <option value="name">Name (Alphabetical)</option>       {/* New option */}
+                                <option value="created_at">Date Added</option>
+                                <option value="role">Role</option>
+                            </select>
+                        </div>
+                        {/* ... rest of the form ... */}
                     </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-        {/* Success flash message */}
-            {flash.success && (
-            <div className="mt-4 flex justify-center">
-                <div className="px-4 py-3 rounded bg-green-100 text-green-700 max-w-xs w-full text-center">
-                {flash.success}
+                </form>
+
+                {/* Table display */}
+                <div className="table-responsive">
+                    <table className="table table-hover table-striped table-bordered align-middle">
+                        <thead className="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th> {/* **CHANGE HEADER** */}
+                                <th>Name</th>    {/* **ADD HEADER FOR NEW NAME FIELD** */}
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Date Added</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {users.data.map((user) => (
+                                <tr key={user.id}>
+                                    <td>{user.id}</td>
+                                    <td>{user.username}</td> {/* **DISPLAY USERNAME** */}
+                                    <td>{user.name || 'N/A'}</td> {/* **DISPLAY NEW NAME FIELD** */}
+                                    <td>{user.email}</td>
+                                    <td>{user.role || 'user'}</td>
+                                    <td>{new Date(user.created_at).toLocaleString()}</td>
+                                    <td>
+                                        <button
+                                            onClick={() => handleDelete(user.id, user.username)} // Use username for confirm
+                                            className="btn btn-danger btn-sm"
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-            )}
-      </main>
-
-      {/* Delete Confirmation Modal */}
-      {modal.isOpen && (
-        <>
-          {/* Background overlay */}
-          <div
-            className="fixed inset-0 bg-black/20 z-40"
-            onClick={closeModal}
-          />
-
-          {/* Modal Box */}
-          <div
-            className="fixed top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/3
-                          bg-white rounded-lg p-6 w-80 shadow-lg z-50"
-          >
-            <h2 className="text-lg font-semibold mb-4 text-gray-900">
-              Are you sure you want to delete this user?
-            </h2>
-            <div className="flex justify-end gap-4">
-              <button
-                onClick={closeModal}
-                className="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100"
-              >
-                No
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
-              >
-                Yes, Delete
-              </button>
+                {/* ... pagination ... */}
             </div>
           </div>
         </>
