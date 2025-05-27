@@ -18,7 +18,7 @@ export default function ContactSection() {
       <div className="relative container z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-16 xl:gap-20">
           {/* Left Column */}
-          <div className="lg:w-1/2 space-y-8 sm:space-y-10">
+          <div className="lg:w-1/2 space-y-8 px-4 sm:space-y-10">
             <h2
               className="font-felix text-4xl font-light leading-tight">
               Contact Us
@@ -26,11 +26,11 @@ export default function ContactSection() {
 
             <div>
               <h3
-                className="mb-4 sm:mb-6 border-b border-white border-opacity-30 pb-2">
+                className="mb-4 sm:mb-6 border-b font-monts border-white border-opacity-30 pb-2">
                 Contact Info
               </h3>
               <ul
-                className="space-y-4 sm:space-y-5 text-white"
+                className="space-y-4 font-monts sm:space-y-5 text-white"
                 style={{ fontSize: 'clamp(0.95rem, 1.15vw, 1.25rem)' }}
               >
                 {[
@@ -79,7 +79,7 @@ export default function ContactSection() {
           </div>
 
 {/* Right Column */}
-<div className="lg:w-1/2 w-full max-w-md mx-auto lg:mx-0 border border-white border-opacity-40 backdrop-blur-sm p-4 sm:p-5 md:p-6">
+<div className="lg:w-1/2 w-full max-w-md mx-auto lg:mx-4 border border-white font-monts border-opacity-40 backdrop-blur-sm p-4 sm:p-5 md:p-6">
   <form className="space-y-3 sm:space-y-4 text-white text-sm sm:text-base">
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
       <input

@@ -40,7 +40,7 @@ export default function Header() {
                 <div className="container mx-auto px-6 lg:px-10"> {/* added px-6 lg:px-10 for balanced padding */}
 <div className="flex items-center h-16 sm:h-18 md:h-20 relative">
     {/* Left: Logo */}
-    <div className="flex items-center flex-1 justify-start">
+    <div className="flex items-center flex-1 ml-2 justify-start">
         <Link href="/" className="flex-shrink-0 transition-transform duration-300 hover:scale-110">
             <img
                 src="/assets/logo.png"
@@ -58,7 +58,7 @@ export default function Header() {
                 <Link
                     key={link.name}
                     href={link.path}
-                    className={`relative text-white transition-all duration-300 text-sm uppercase tracking-wider group ${isActive ? 'font-medium' : ''}`}
+                    className={`relative text-white transition-all duration-300 text-sm font-monts  tracking-wider group ${isActive ? 'font-monts' : ''}`}
                 >
                     <span className="relative inline-block">
                         {link.name}
@@ -70,10 +70,10 @@ export default function Header() {
     </nav>
 
     {/* Right: Reservation only */}
-    <div className="flex items-center flex-1 justify-end">
+    <div className="flex items-center flex-1 justify-end mr-2">
         <Link
             href={route('reservation')}
-            className="hidden lg:inline-flex items-center px-6 xl:px-8 py-2 xl:py-3 border border-red-600 text-sm xl:text-base text-white transition-all duration-300 hover:bg-red-600 hover:scale-105 uppercase tracking-wider"
+            className="hidden lg:inline-flex items-center px-6 xl:px-6 py-2 xl:py-3 border border-red-600 text-sm xl:text-base text-white transition-all duration-300 hover:bg-red-600 hover:scale-105 uppercase tracking-wider"
         >
             Make a Reservation
         </Link>
