@@ -25,21 +25,18 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
 });
 
-// Shared Reservation Routes (can be public or protected depending on your use case)
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation');
 Route::post('/reservation', [ReservationController::class, 'store']);
 Route::post('/reservation/available-times', [ReservationController::class, 'getAvailableTimes']);
 Route::delete('/reservation/{reservationID}/cancel', [ReservationController::class, 'cancel']);
 Route::put('/reservation/{reservationID}/complete', [ReservationController::class, 'markAsCompleted'])->name('reservation.complete');
 
-// Checkout
 Route::get('/checkout/{reservationID}', [CheckoutController::class, 'index'])->name('checkout');
 
-// Transactions
 Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
 Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
 
-// Authenticated Routes
+
 Route::middleware('auth')->group(function () {
     // Logout for all authenticated users
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -54,7 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/booking', [AdminController::class, 'booking'])->name('booking'); 
-        Route::post('/reservation-action', [AdminController::class, 'handleReservationAction'])->name('reservation-action');
+        Route::post('/reservations/action', [AdminController::class, 'handleReservationAction'])->name('reservation-action');
         Route::get('/admin_users', [AdminController::class, 'userlist'])->name('userlist'); 
     });
 });

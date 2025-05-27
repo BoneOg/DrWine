@@ -55,41 +55,45 @@ class AdminController extends Controller
     }
 
     public function handleReservationAction(Request $request)
-    {
-        $request->validate([
-            'reservationID' => 'required|exists:reservation,reservationID',
-            'action' => 'required|in:confirm,cancel',
-        ]);
+{
+    $request->validate([
+        'reservationID' => 'required|exists:reservation,reservationID',
+        'action' => 'required|in:confirm,cancel',
+    ]);
 
-        $reservation = Reservation::with('transaction')->findOrFail($request->reservationID);
-        $transaction = $reservation->transaction;
+    $reservation = Reservation::with('transaction')->findOrFail($request->reservationID);
+    $transaction = $reservation->transaction;
 
-        switch ($request->action) {
-            case 'confirm':
-                $reservation->status = ($reservation->status === 'confirmed') ? 'completed' : 'confirmed';
+    switch ($request->action) {
+        case 'confirm':
+            // Update reservation status to 'confirmed' if pending
+            if ($reservation->status === 'pending') {
+                $reservation->status = 'confirmed';
+            }
 
-                if ($transaction) {
-                    if ($transaction->status === 'pending_payment') {
-                        $transaction->status = 'paid';
-                        $transaction->save();
-                    }
-                }
-                break;
+            // Update transaction status to 'completed' if currently 'confirmed'
+            if ($transaction && $transaction->status === 'confirmed') {
+                $transaction->status = 'completed';
+                $transaction->save();
+            }
+            break;
 
-            case 'cancel':
-                $reservation->status = 'cancelled';
+        case 'cancel':
+            // Update reservation status to 'cancelled'
+            $reservation->status = 'cancelled';
 
-                if ($transaction && $transaction->status !== 'failed' && $transaction->status !== 'refunded') {
-                    $transaction->status = 'cancelled';
-                    $transaction->save();
-                }
-                break;
-        }
-
-        $reservation->save();
-
-        return redirect()->back()->with('success', 'Status updated successfully.');
+            // Update transaction status to 'cancelled' if not failed/refunded
+            if ($transaction && !in_array($transaction->status, ['failed', 'refunded'])) {
+                $transaction->status = 'cancelled';
+                $transaction->save();
+            }
+            break;
     }
+
+    $reservation->save();
+
+    return redirect()->back()->with('success', 'Status updated successfully.');
+}
 
     public function userlist(Request $request)
     {
