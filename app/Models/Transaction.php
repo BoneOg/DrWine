@@ -18,7 +18,7 @@ class Transaction extends Model
         'amount',
         'transaction_type',
         'payment_method',
-        'status',
+        'status', // This confirms 'status' is intended to be on the transaction table
     ];
 
     public function reservation()

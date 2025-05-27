@@ -18,7 +18,7 @@ class Reservation extends Model
         'tableID',
         'date_time',
         'size',
-        'status',
+        'status', // This confirms 'status' is on the reservation table
         'preorder_food',
         'duration',
     ];
@@ -38,8 +38,9 @@ class Reservation extends Model
         return $this->belongsTo(RestaurantTable::class, 'tableID', 'tableID');
     }
 
+    // IMPORTANT CHANGE: Changed from hasMany to hasOne
     public function transaction()
     {
-        return $this->hasMany(Transaction::class, 'reservationID', 'reservationID');
+        return $this->hasOne(Transaction::class, 'reservationID', 'reservationID');
     }
 }
