@@ -71,8 +71,8 @@ export default function Reservation() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-black text-white flex items-center justify-center px-4 py-12">
-        <div className="scale-120 origin-top">
+        <div className="min-h-screen bg-black text-white flex items-center justify-center px-10 pt-32 pb-32">
+          <div className="transform scale-[1] sm:scale-[1.1] md:scale-[1.2] origin-top overflow-hidden">
           <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-[4fr_2fr] gap-15 items-stretch">
 
 
