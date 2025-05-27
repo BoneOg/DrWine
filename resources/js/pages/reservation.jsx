@@ -50,7 +50,7 @@ const Reservation = () => {
 
   return (
     <Layout>
-      <Head title="Reserve a Table" />
+      <Head />
 
       <div className="min-h-screen bg-[#000000] pt-32 pb-12 px-4 relative overflow-hidden">
         {/* Background Image with Overlay */}

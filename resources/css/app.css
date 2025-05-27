@@ -42,6 +42,13 @@
   font-style: normal;
 }
 
+@font-face {
+    font-family: 'Felix';
+    src: url('/assets/font/felix.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -99,6 +106,10 @@
 
 .font-fraunces {
     font-family: 'Fraunces', serif;
+}
+
+.font-felix {
+  font-family: 'Felix', serif;
 }
 
 .fraunces-regular {

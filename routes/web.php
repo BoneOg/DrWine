@@ -52,7 +52,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/booking', [AdminController::class, 'booking'])->name('booking'); 
         Route::post('/reservations/action', [AdminController::class, 'handleReservationAction'])->name('reservation-action');
-        Route::get('/admin_users', [AdminController::class, 'userlist'])->name('userlist'); 
+        Route::get('/users', [AdminController::class, 'userlist'])->name('userlist'); 
+        Route::delete('/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
     });
 });
 
