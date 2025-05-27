@@ -30,6 +30,11 @@ export default function Header() {
         { name: 'Contact', path: '/contact' },
     ];
 
+    // Determine dashboard route based on user role
+    const dashboardRoute = user
+        ? (user.role === 'admin' ? route('admin.dashboard') : route('user.dashboard'))
+        : route('login');
+
     return (
         <>
             <header className={`fixed w-full z-50 transition-all duration-300 overflow-hidden ${isScrolled ? 'bg-black/95' : 'bg-black/80'}`}>
@@ -75,7 +80,7 @@ export default function Header() {
                             </Link>
 
                             <Link
-                                href={user ? route('user.dashboard') : route('login')}
+                                href={dashboardRoute}
                                 className="p-1.5 sm:p-2 text-white transition-all duration-300 hover:text-red-500 hover:scale-110 header-element"
                                 aria-label="User Account"
                             >
@@ -134,7 +139,7 @@ export default function Header() {
                             </Link>
 
                             <Link
-                                href={user ? route('user.dashboard') : route('login')}
+                                href={dashboardRoute}
                                 className="block text-center text-white text-lg hover:text-red-500 transition header-element"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
