@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react';
 import { FaUser } from 'react-icons/fa';
 
 export default function Header() {
-    const { url } = usePage();
+    const { url, props } = usePage();
+    const user = props.auth?.user;
+
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -16,13 +18,8 @@ export default function Header() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Prevent body scroll when mobile menu is open
     useEffect(() => {
-        if (isMobileMenuOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'unset';
-        }
+        document.body.style.overflow = isMobileMenuOpen ? 'hidden' : 'unset';
     }, [isMobileMenuOpen]);
 
     const navLinks = [
@@ -33,6 +30,11 @@ export default function Header() {
         { name: 'Contact', path: '/contact' },
     ];
 
+    // Determine dashboard route based on user role
+    const dashboardRoute = user
+        ? (user.role === 'admin' ? route('admin.dashboard') : route('user.dashboard'))
+        : route('login');
+
     return (
         <>
             <header className={`fixed w-full z-50 transition-all duration-300 overflow-hidden ${isScrolled ? 'bg-black/95' : 'bg-black/80'}`}>
@@ -40,10 +42,7 @@ export default function Header() {
                     <div className="flex items-center h-16 sm:h-18 md:h-20 relative px-4 lg:px-6 header-element">
                         {/* Logo */}
                         <div className="pl-0 md:pl-40 header-element">
-                            <Link 
-                                href="/" 
-                                className="flex-shrink-0 block transition-transform duration-300 hover:scale-110"
-                            >
+                            <Link href="/" className="flex-shrink-0 block transition-transform duration-300 hover:scale-110">
                                 <img
                                     src="/assets/logo.png"
                                     alt="DrWine Logo"
@@ -52,19 +51,15 @@ export default function Header() {
                             </Link>
                         </div>
 
-                        {/* Navigation Links - Desktop */}
+                        {/* Desktop Nav */}
                         <nav className="hidden lg:flex absolute left-1/2 -translate-x-1/2 space-x-6 xl:space-x-8 header-element">
                             {navLinks.map((link) => {
-                                const isActive = url === link.path ||
-                                    (link.path.includes('reservation') && url.includes('reservation'));
-                                
+                                const isActive = url === link.path || (link.path.includes('reservation') && url.includes('reservation'));
                                 return (
                                     <Link
                                         key={link.name}
                                         href={link.path}
-                                        className={`relative text-white transition-all duration-300 text-sm xl:text-base uppercase tracking-wider group ${
-                                            isActive ? 'font-medium' : ''
-                                        }`}
+                                        className={`relative text-white transition-all duration-300 text-sm xl:text-base uppercase tracking-wider group ${isActive ? 'font-medium' : ''}`}
                                     >
                                         <span className="relative inline-block header-element">
                                             {link.name}
@@ -83,8 +78,9 @@ export default function Header() {
                             >
                                 Make a Reservation
                             </Link>
+
                             <Link
-                                href="/login"
+                                href={dashboardRoute}
                                 className="p-1.5 sm:p-2 text-white transition-all duration-300 hover:text-red-500 hover:scale-110 header-element"
                                 aria-label="User Account"
                             >
@@ -108,7 +104,7 @@ export default function Header() {
                 </div>
 
                 {/* Mobile Menu */}
-                <div 
+                <div
                     className={`fixed inset-0 bg-black/95 backdrop-blur-sm mobile-menu lg:hidden ${
                         isMobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full pointer-events-none'
                     }`}
@@ -117,9 +113,7 @@ export default function Header() {
                     <div className="flex flex-col h-full p-4 sm:p-6">
                         <nav className="flex flex-col space-y-4 sm:space-y-6 pt-4 sm:pt-6">
                             {navLinks.map((link) => {
-                                const isActive = url === link.path ||
-                                    (link.path.includes('reservation') && url.includes('reservation'));
-                                
+                                const isActive = url === link.path || (link.path.includes('reservation') && url.includes('reservation'));
                                 return (
                                     <Link
                                         key={link.name}
@@ -135,13 +129,21 @@ export default function Header() {
                             })}
                         </nav>
 
-                        <div className="mt-auto pb-6 sm:pb-8">
+                        <div className="mt-auto pb-6 sm:pb-8 space-y-4">
                             <Link
                                 href={route('reservation')}
                                 className="block w-full text-center px-4 sm:px-6 py-2.5 sm:py-3 border border-red-600 text-sm sm:text-base text-white transition-all duration-300 hover:bg-red-600 uppercase tracking-wider header-element"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Make a Reservation
+                            </Link>
+
+                            <Link
+                                href={dashboardRoute}
+                                className="block text-center text-white text-lg hover:text-red-500 transition header-element"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                {user ? 'My Account' : 'Login'}
                             </Link>
                         </div>
                     </div>

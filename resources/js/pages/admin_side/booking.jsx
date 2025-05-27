@@ -3,8 +3,16 @@ import { useState, useMemo } from "react";
 import AdminSidebar from "./admin_sidebar";
 
 export default function Booking() {
-  const { reservations = [], counts } = usePage().props;
+  const { reservations = [] } = usePage().props;
+  const counts = {
+  pending: reservations.filter(res => res.status === 'pending').length,
+  confirmed: reservations.filter(res => res.transaction?.status === 'confirmed').length,
+  cancelled: reservations.filter(res => res.transaction?.status === 'cancelled').length,
+  completed: reservations.filter(res => res.transaction?.status === 'completed').length,
+};
+
   const [expanded, setExpanded] = useState(null);
+
 
   // Modal state
   const [modal, setModal] = useState({
@@ -220,7 +228,7 @@ export default function Booking() {
                         </span>
                         <span>{new Date(res.date_time).toLocaleString()}</span>
                         <span className="flex gap-2">
-                          {!isCompletedOrCancelled && (
+                          {!isCompletedOrCancelled && res.status !== "pending" && (
                             <>
                               <button
                                 onClick={(e) => {
