@@ -20,19 +20,13 @@ export default function ContactSection() {
           {/* Left Column */}
           <div className="lg:w-1/2 space-y-8 sm:space-y-10">
             <h2
-              className="font-fraunces font-light leading-tight"
-              style={{
-                fontSize: 'clamp(2.5rem, 6vw, 5rem)',
-              }}
-            >
+              className="font-felix text-4xl font-light leading-tight">
               Contact Us
             </h2>
 
             <div>
               <h3
-                className="font-semibold mb-4 sm:mb-6 border-b border-white border-opacity-30 pb-2"
-                style={{ fontSize: 'clamp(1.25rem, 2.2vw, 1.75rem)' }}
-              >
+                className="mb-4 sm:mb-6 border-b border-white border-opacity-30 pb-2">
                 Contact Info
               </h3>
               <ul
@@ -84,39 +78,40 @@ export default function ContactSection() {
             </div>
           </div>
 
-          {/* Right Column */}
-          <div className="lg:w-1/2 w-full max-w-xl mx-auto lg:mx-0 border border-white border-opacity-40 backdrop-blur-sm p-5 sm:p-6 md:p-8">
-            <form className="space-y-4 sm:space-y-5 text-white">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                <input
-                  type="text"
-                  placeholder="Name"
-                  className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 sm:px-4 py-2 sm:py-2.5 placeholder-gray-300 focus:outline-none focus:border-red-500 transition-colors duration-300 text-sm sm:text-base"
-                />
-                <input
-                  type="text"
-                  placeholder="Phone number"
-                  className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 sm:px-4 py-2 sm:py-2.5 placeholder-gray-300 focus:outline-none focus:border-red-500 transition-colors duration-300 text-sm sm:text-base"
-                />
-              </div>
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 sm:px-4 py-2 sm:py-2.5 placeholder-gray-300 focus:outline-none focus:border-red-500 transition-colors duration-300 text-sm sm:text-base"
-              />
-              <textarea
-                rows="4"
-                placeholder="Please enter your message"
-                className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 sm:px-4 py-2 sm:py-2.5 placeholder-gray-300 resize-none focus:outline-none focus:border-red-500 transition-colors duration-300 text-sm sm:text-base"
-              />
-              <button
-                type="submit"
-                className="w-full bg-transparent border border-white border-opacity-60 py-2.5 sm:py-3 rounded-md hover:bg-red-700 transition-colors duration-300 uppercase tracking-wide text-sm sm:text-base"
-              >
-                Send Message
-              </button>
-            </form>
-          </div>
+{/* Right Column */}
+<div className="lg:w-1/2 w-full max-w-md mx-auto lg:mx-0 border border-white border-opacity-40 backdrop-blur-sm p-4 sm:p-5 md:p-6">
+  <form className="space-y-3 sm:space-y-4 text-white text-sm sm:text-base">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+      <input
+        type="text"
+        placeholder="Name"
+        className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-red-500 transition-colors"
+      />
+      <input
+        type="text"
+        placeholder="Phone number"
+        className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-red-500 transition-colors"
+      />
+    </div>
+    <input
+      type="email"
+      placeholder="Email"
+      className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-red-500 transition-colors"
+    />
+    <textarea
+      rows="4"
+      placeholder="Please enter your message"
+      className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 resize-none focus:outline-none focus:border-red-500 transition-colors"
+    />
+    <button
+      type="submit"
+      className="w-full bg-transparent border border-white border-opacity-60 py-2 rounded-md hover:bg-red-700 transition-colors uppercase tracking-wide text-sm"
+    >
+      Send Message
+    </button>
+  </form>
+</div>
+
         </div>
       </div>
     </section>
