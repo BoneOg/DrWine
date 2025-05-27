@@ -44,7 +44,7 @@ Route::middleware('auth')->group(function () {
     // USER-only routes
     Route::middleware('role:user')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('user.dashboard');
-        Route::delete('/user/delete', [UserController::class, 'deleteAccount'])->name('user.delete');
+        Route::post('/users/delete-account', [UserController::class, 'deleteAccount'])->name('user.delete');
     });
 
     // ADMIN-only routes
