@@ -49,6 +49,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Monts';
+    src: url('/assets/font/monts.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -110,6 +117,10 @@
 
 .font-felix {
   font-family: 'Felix', serif;
+}
+
+.font-monts {
+  font-family: 'Monts', serif;
 }
 
 .fraunces-regular {
@@ -198,4 +209,9 @@ h1, h2, h3, p, img {
 
 .hamburger-line {
   transition: all 0.3s ease-in-out;
+}
+
+select option {
+  background-color: rgba(13, 27, 42, 0.99);
+  color: white; 
 }

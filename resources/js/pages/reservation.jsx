@@ -1,223 +1,150 @@
-import React, { useState } from 'react';
-import { router, Head } from '@inertiajs/react';
-import axios from 'axios';
-import Layout from '../Components/layout';
+import React from 'react';
 
-const Reservation = () => {
-  const [form, setForm] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    date: '',
-    time: '',
-    size: '',
-  });
+export default function Reservation() {
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
 
-  const [availableTimes, setAvailableTimes] = useState([]);
-  const [errors, setErrors] = useState({});
+  const timeSlots = [
+    '9:00', '11:00', '13:00',
+    '15:00', '17:00', '19:00'
+  ];
 
-  const fixedTimes = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
+  const guests = Array.from({ length: 10 }, (_, i) => i + 1);
 
-  const handleDateChange = (e) => {
-    const selectedDate = e.target.value;
-    setForm({ ...form, date: selectedDate, time: '' });
-
-    axios.post('/reservation/available-times', { date: selectedDate })
-      .then(res => setAvailableTimes(res.data))
-      .catch(() => setAvailableTimes([]));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setErrors({});
-
-    const fullDateTime = `${form.date} ${form.time}`;
-
-    router.post('/reservation', {
-      ...form,
-      date_time: fullDateTime,
-    }, {
-      onError: setErrors,
-    });
-  };
-
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const minDate = tomorrow.toISOString().split('T')[0];
-
-  const isFormComplete = form.name && form.phone && form.email && form.date && form.time && form.size;
+  const emptyCellsCount = 2; 
 
   return (
-    <Layout>
-      <Head />
+    <div className="min-h-screen bg-[#0d1b2a] text-white flex items-center justify-center px-4 py-12">
+      <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12"> {/* Increased max-w to 6xl */}
+        {/* Left Column - Calendar */}
+        <div className="flex flex-col">
+          <h1 className="text-6xl font-felix mb-8 tracking-wide">RESERVATION</h1>
 
-      <div className="min-h-screen bg-[#000000] pt-32 pb-12 px-4 relative overflow-hidden">
-        {/* Background Image with Overlay */}
-        <div className="absolute inset-0">
-          <img 
-            src="/assets/reserve.png" 
-            alt="Background" 
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-[#000000] opacity-50"></div>
+          {/* Dropdowns with custom styling and increased width */}
+          <div className="flex gap-8 mb-6 max-w-lg w-full"> {/* Changed max-w to lg, increased gap */}
+            <div className="relative flex-1">
+              <label htmlFor="month-select" className="block text-sm font-monts text-gray-400 mb-1">Month</label>
+              <select
+                id="month-select"
+                className="w-full text-white text-left bg-transparent border-b border-gray-500 text-lg font-light font-monts  tracking-wide py-1.5 pr-6 appearance-none focus:outline-none focus:border-white"
+              >
+                {months.map((month) => (
+                  <option key={month}>{month}</option>
+                ))}
+              </select>
+              {/* Custom arrow icon for dropdown */}
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 mt-2 text-gray-400 pointer-events-none">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                  </svg>
+              </div>
+            </div>
+
+            <div className="relative flex-1">
+                <label htmlFor="time-select" className="block text-sm font-monts  text-gray-400 mb-1">Time</label>
+                <select
+                    id="time-select"
+                    className="w-full text-white text-left bg-transparent border-b border-gray-500 text-lg font-light font-monts  tracking-wide py-1.5 pr-6 appearance-none focus:outline-none focus:border-white"
+                >
+                    {timeSlots.map((slot) => (
+                        <option key={slot}>{slot}</option>
+                    ))}
+                </select>
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 mt-2 text-gray-400 pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </div>
+            </div>
+
+            <div className="relative flex-1">
+                <label htmlFor="guests-select" className="block text-sm font-monts  text-gray-400 mb-1">Guests</label>
+                <select
+                    id="guests-select"
+                    className="w-full text-white text-left bg-transparent border-b border-gray-500 text-lg font-light font-monts  tracking-wide py-1.5 pr-6 appearance-none focus:outline-none focus:border-white"
+                >
+                    {guests.map((num) => (
+                        <option key={num}>{num}</option>
+                    ))}
+                </select>
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 mt-2 text-gray-400 pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </div>
+            </div>
+          </div>
+
+          {/* Calendar Grid - now larger */}
+          <div className="grid grid-cols-7 font-monts  text-center gap-2 text-lg max-w-lg pt-4 flex-grow"> {/* Increased max-w to lg, added pt-4 */}
+            {['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'].map(day => (
+              <div key={day} className="font-extrabold">{day}</div>
+            ))}
+            {/* Empty divs for calendar start day alignment */}
+            {Array.from({ length: emptyCellsCount }, (_, i) => <div key={`empty-${i}`}></div>)}
+            {Array.from({ length: 31 }, (_, i) => ( // Display 31 days for March
+              <div
+                key={i}
+                className={`py-1 rounded-full ${
+                  i + 1 === 7 ? 'bg-green-600 text-white' : 'hover:bg-white hover:text-black'
+                }`}
+              >
+                {i + 1}
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="max-w-4xl mx-auto relative z-10">
-          {/* Header Section */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-6xl font-fraunces font-light text-white mb-4">
-              <span className="text-red-600">B</span>ook a Table
-            </h1>
-            <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">
-              Join us for an unforgettable dining experience. Reserve your table and let us prepare something special for you.
-            </p>
-          </div>
-
-          {/* Form Container */}
-          <div className="relative bg-white/5 backdrop-blur-xl rounded-none p-8 md:p-12 shadow-2xl 
-          border border-white/10 before:absolute before:inset-0 before:bg-gradient-to-b 
-          before:from-white/5 before:to-transparent before:rounded-none before:-z-10">
-            <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-8">
-              {/* Left Column */}
-              <div className="space-y-6">
-                {/* Name */}
-                <div className="space-y-2">
-                  <label className="block text-white/80 text-sm uppercase tracking-wider">Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={form.name}
-                    onChange={e => setForm({ ...form, name: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white 
-                    placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 
-                    focus:ring-red-500/50 transition-all duration-300 backdrop-blur-sm"
-                    placeholder="Your full name"
-                  />
-                  {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
+        {/* Right Column - Form */}
+        <div className="flex flex-col justify-between">
+            {/* The top-most 'div' for form content. Margin-top calculated to align 'When' with dropdown content. */}
+            {/* Fine-tune mt-[...] as needed */}
+            <div className="mt-[100.5px]"> {/* Removed space-y-6 from here */}
+                {/* Summary section */}
+                <div className="mb-6"> {/* Added mb-6 for spacing */}
+                    <label className="block text-sm font-monts  text-gray-400 mb-1">When</label>
+                    <div className="border-b border-gray-400 pb-1 font-monts  text-lg">
+                        April 7 (Sunday), 18:00, 2 guests
+                    </div>
                 </div>
 
-                {/* Phone */}
-                <div className="space-y-2">
-                  <label className="block text-white/80 text-sm uppercase tracking-wider">Phone</label>
-                  <input
-                    type="tel"
-                    required
-                    pattern="[0-9]+"
-                    value={form.phone}
-                    onChange={e => {
-                      const numbersOnly = e.target.value.replace(/\D/g, '');
-                      setForm({ ...form, phone: numbersOnly });
-                    }}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white 
-                    placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 
-                    focus:ring-red-500/50 transition-all duration-300 backdrop-blur-sm"
-                    placeholder="Your phone number"
-                  />
-                  {errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}
+                {/* Form fields - each with mb-6 */}
+                <div className="mb-6">
+                    <label className="block text-sm font-monts  text-gray-400 mb-1">Name</label>
+                    <input
+                        type="text"
+                        placeholder="Linda Martin"
+                        className="w-full bg-transparent border-b border-gray-400 pb-1 text-lg font-monts  outline-none"
+                    />
                 </div>
 
-                {/* Email */}
-                <div className="space-y-2">
-                  <label className="block text-white/80 text-sm uppercase tracking-wider">Email</label>
-                  <input
-                    type="email"
-                    required
-                    value={form.email}
-                    onChange={e => setForm({ ...form, email: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white 
-                    placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 
-                    focus:ring-red-500/50 transition-all duration-300 backdrop-blur-sm"
-                    placeholder="Your email address"
-                  />
-                  {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
-                </div>
-              </div>
-
-              {/* Right Column */}
-              <div className="space-y-6">
-                {/* Date */}
-                <div className="space-y-2">
-                  <label className="block text-white/80 text-sm uppercase tracking-wider">Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={form.date}
-                    onChange={handleDateChange}
-                    min={minDate}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white 
-                    placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 
-                    focus:ring-red-500/50 transition-all duration-300 backdrop-blur-sm [color-scheme:dark]"
-                  />
-                  {errors.date && <span className="text-red-500 text-sm">{errors.date}</span>}
+                <div className="mb-6">
+                    <label className="block text-sm font-monts  text-gray-400 mb-1">Email</label>
+                    <input
+                        type="email"
+                        placeholder="lindamartin@gmail.com"
+                        className="w-full bg-transparent border-b border-gray-400 pb-1 text-lg font-monts  outline-none"
+                    />
                 </div>
 
-                {/* Time */}
-                <div className="space-y-2">
-                  <label className="block text-white/80 text-sm uppercase tracking-wider">Time Slot</label>
-                  <select
-                    required
-                    value={form.time}
-                    onChange={e => setForm({ ...form, time: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white 
-                    placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 
-                    focus:ring-red-500/50 transition-all duration-300 backdrop-blur-sm"
-                  >
-                    <option value="" className="bg-[#0A121C]">Select Time</option>
-                    {fixedTimes.map(time => (
-                      <option
-                        key={time}
-                        value={time}
-                        disabled={availableTimes.length > 0 && !availableTimes.includes(time)}
-                        className="bg-[#0A121C]"
-                      >
-                        {time} - {String(Number(time.split(":")[0]) + 2).padStart(2, "0")}:00
-                      </option>
-                    ))}
-                  </select>
-                  {errors.time && <span className="text-red-500 text-sm">{errors.time}</span>}
+                <div className="mb-12"> {/* Increased margin-bottom for the last input */}
+                    <label className="block text-sm font-monts  text-gray-400 mb-1">Phone Number</label>
+                    <input
+                        type="text"
+                        placeholder="123"
+                        className="w-full bg-transparent border-b border-gray-400 pb-1 text-lg font-monts  outline-none"
+                    />
                 </div>
+            </div>
 
-                {/* Party Size */}
-                <div className="space-y-2">
-                  <label className="block text-white/80 text-sm uppercase tracking-wider">Party Size</label>
-                  <select
-                    required
-                    value={form.size}
-                    onChange={e => setForm({ ...form, size: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white 
-                    placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 
-                    focus:ring-red-500/50 transition-all duration-300 backdrop-blur-sm"
-                  >
-                    <option value="" className="bg-[#0A121C]">Select Size</option>
-                    {[...Array(10)].map((_, i) => (
-                      <option key={i + 1} value={i + 1} className="bg-[#0A121C]">
-                        {i + 1} {i === 0 ? 'Person' : 'People'}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.size && <span className="text-red-500 text-sm">{errors.size}</span>}
-                </div>
-              </div>
-
-              {/* Submit Button - Full Width */}
-              <div className="md:col-span-2 mt-6">
-                <button
-                  type="submit"
-                  disabled={!isFormComplete}
-                  className={`w-full bg-gradient-to-r from-red-600/80 to-red-700/80 hover:from-red-600 hover:to-red-700 
-                  text-white font-medium rounded-lg transition-all duration-300 py-4 uppercase tracking-wider
-                  shadow-lg hover:shadow-red-500/20 backdrop-blur-sm ${!isFormComplete && 'opacity-50 cursor-not-allowed'}`}
-                >
-                  {isFormComplete ? 'Confirm Reservation' : 'Please Fill All Fields'}
-                </button>
-              </div>
-            </form>
-          </div>
+            {/* Button - Reverted color, no rounding */}
+            <button className="px-6 py-3 bg-white text-black text-lg font-monts shadow hover:bg-gray-100"> {/* Removed 'rounded' class */}
+                Book a table
+            </button>
         </div>
       </div>
-    </Layout>
+    </div>
   );
-};
-
-export default Reservation;
+}
