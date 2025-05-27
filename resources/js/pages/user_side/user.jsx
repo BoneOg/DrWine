@@ -1,3 +1,5 @@
+// resources/js/pages/user_side/user.jsx
+
 import { Head, router } from '@inertiajs/react';
 import Layout from '@/components/layout';
 
@@ -7,12 +9,10 @@ export default function UserDashboard({ user, customer, transactions }) {
   };
 
   const handleDelete = () => {
-    if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-      router.delete('/user/delete', {
-        onSuccess: () => {
-          alert('Account successfully deleted.');
-        },
-      });
+    if (
+      confirm('Are you sure you want to delete your account? This action cannot be undone.')
+    ) {
+      router.post(route('user.delete'));
     }
   };
 
@@ -92,8 +92,7 @@ export default function UserDashboard({ user, customer, transactions }) {
             )}
           </div>
 
-          {/* Actions */}
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex space-x-4">
             <button
               onClick={handleDelete}
               className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
