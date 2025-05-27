@@ -1,17 +1,24 @@
-import { Head } from '@inertiajs/react';
-import AdminSidebar from './admin_sidebar';
+// resources/js/pages/admin_side/admin.jsx
+import React from 'react';
+import { Head, usePage } from '@inertiajs/react'; // Ensure usePage is imported if you use flash messages
+import AdminSidebar from './admin_sidebar'; // Assuming admin_sidebar.jsx is in the same directory
 
-export default function AdminDashboard() {
+export default function AdminLayout({ children }) {
+  const { flash } = usePage().props; // Keep this if you have flash messages
+
   return (
-    <>
-      <Head title="Admin Dashboard" />
-      <div className="flex min-h-screen bg-gray-100">
-        <AdminSidebar />
-        <main className="flex-1 p-10">
-          <h1 className="text-3xl font-bold mb-4">Welcome, Admin!</h1>
-          <p className="text-gray-600">Use the sidebar to manage your admin panel.</p>
-        </main>
-      </div>
-    </>
+    <div className="flex min-h-screen bg-gray-100"> {/* Removed the extra <> wrapper around Head, as Head goes inside the layout component's children */}
+      <AdminSidebar />
+      <main className="flex-1 p-10">
+        {/* Optional: Flash messages display here */}
+        {flash && flash.success && (
+            <div className="alert alert-success">{flash.success}</div>
+        )}
+        {flash && flash.error && (
+            <div className="alert alert-danger">{flash.error}</div>
+        )}
+        {children} {/* THIS IS WHERE THE SPECIFIC PAGE CONTENT (Dashboard, Users Index, etc.) WILL BE RENDERED */}
+      </main>
+    </div>
   );
 }
