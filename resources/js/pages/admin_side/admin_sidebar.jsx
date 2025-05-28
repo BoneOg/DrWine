@@ -3,11 +3,7 @@ import { motion } from 'framer-motion'; // Import motion for animations
 
 export default function AdminSidebar() {
   const handleLogout = () => {
-    router.post('/logout', {
-      onSuccess: () => {
-        window.location.href = '/login';
-      },
-    });
+    router.post('/logout');
   };
 
   const goHome = () => {
