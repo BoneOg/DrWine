@@ -1,8 +1,33 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { FaFacebookF, FaInstagram, FaPhone } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
+import emailjs from 'emailjs-com';
 
 export default function ContactSection() {
+  const form = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        'service_fhv9wyt',     
+        'template_p2wn5u1',   
+        form.current,
+        'FvPitcDCCMIJ1KzMO'   
+      )
+      .then(
+        (result) => {
+          alert('Message sent successfully!');
+          e.target.reset();
+        },
+        (error) => {
+          alert('Failed to send message. Please try again.');
+          console.error(error.text);
+        }
+      );
+  };
+
   return (
     <section
       className="relative py-16 md:py-20 lg:py-24 bg-cover bg-center text-white overflow-hidden"
@@ -19,14 +44,12 @@ export default function ContactSection() {
         <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-16 xl:gap-20">
           {/* Left Column */}
           <div className="lg:w-1/2 space-y-8 px-4 sm:space-y-10">
-            <h2
-              className="font-felix text-4xl font-light leading-tight">
+            <h2 className="font-felix text-4xl font-light leading-tight">
               Contact Us
             </h2>
 
             <div>
-              <h3
-                className="mb-4 sm:mb-6 border-b font-monts border-white border-opacity-30 pb-2">
+              <h3 className="mb-4 sm:mb-6 border-b font-monts border-white border-opacity-30 pb-2">
                 Contact Info
               </h3>
               <ul
@@ -78,40 +101,46 @@ export default function ContactSection() {
             </div>
           </div>
 
-{/* Right Column */}
-<div className="lg:w-1/2 w-full max-w-md mx-auto lg:mx-4 border border-white font-monts border-opacity-40 backdrop-blur-sm p-4 sm:p-5 md:p-6">
-  <form className="space-y-3 sm:space-y-4 text-white text-sm sm:text-base">
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-      <input
-        type="text"
-        placeholder="Name"
-        className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-[#CDAF7B] transition-colors"
-      />
-      <input
-        type="text"
-        placeholder="Phone number"
-        className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-[#CDAF7B] transition-colors"
-      />
-    </div>
-    <input
-      type="email"
-      placeholder="Email"
-      className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-[#CDAF7B] transition-colors"
-    />
-    <textarea
-      rows="4"
-      placeholder="Please enter your message"
-      className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 resize-none focus:outline-none focus:border-[#CDAF7B] transition-colors"
-    />
-    <button
-      type="submit"
-      className="w-full bg-transparent border border-white border-opacity-60 py-2 rounded-md hover:bg-[#CDAF7B] transition-colors uppercase tracking-wide text-sm"
-    >
-      Send Message
-    </button>
-  </form>
-</div>
-
+          {/* Right Column (Contact Form) */}
+          <div className="lg:w-1/2 w-full max-w-md mx-auto lg:mx-4 border border-white font-monts border-opacity-40 backdrop-blur-sm p-4 sm:p-5 md:p-6">
+            <form ref={form} onSubmit={sendEmail} className="space-y-3 sm:space-y-4 text-white text-sm sm:text-base">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <input
+                  type="text"
+                  name="user_name"
+                  placeholder="Name"
+                  required
+                  className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-[#CDAF7B] transition-colors"
+                />
+                <input
+                  type="text"
+                  name="user_phone"
+                  placeholder="Phone number"
+                  className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-[#CDAF7B] transition-colors"
+                />
+              </div>
+              <input
+                type="email"
+                name="user_email"
+                placeholder="Email"
+                required
+                className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-[#CDAF7B] transition-colors"
+              />
+              <textarea
+                name="message"
+                rows="4"
+                placeholder="Please enter your message"
+                required
+                className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 resize-none focus:outline-none focus:border-[#CDAF7B] transition-colors"
+              />
+              <button
+                type="submit"
+                className="w-full bg-transparent border border-white border-opacity-60 py-2 rounded-md hover:bg-[#CDAF7B] transition-colors uppercase tracking-wide text-sm"
+              >
+                Send Message
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </section>
