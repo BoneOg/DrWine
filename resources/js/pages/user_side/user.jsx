@@ -77,13 +77,41 @@ export default function UserDashboard({ user, customer, transactions }) {
                     transition={{ duration: 0.8, delay: 0.2 }}
                   />
                   <motion.p 
-                    className="text-[#CDAF7B] font-monts tracking-[0.3em] uppercase text-xs sm:text-sm"
+                    className="text-[#CDAF7B] font-monts tracking-[0.3em] uppercase text-xs sm:text-sm mb-8"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}
                   >
                     Member Dashboard
                   </motion.p>
+
+                  {/* Action Buttons */}
+                  <motion.div 
+                    className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                  >
+                    <button
+                      onClick={handleLogout}
+                      className="group relative px-6 sm:px-8 py-2 sm:py-3 font-monts text-sm tracking-wider overflow-hidden border border-[#CDAF7B]/30 min-w-[160px]"
+                    >
+                      <span className="relative z-10 text-black font-bold">
+                        SIGN OUT
+                      </span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#CDAF7B] to-[#E5C992]"></div>
+                      <div 
+                        className="absolute inset-0 bg-gradient-to-r from-[#E5C992] via-white/10 to-[#CDAF7B] opacity-0 
+                        group-hover:opacity-100 transition-all duration-500 scale-x-[102%] scale-y-[110%]"
+                      ></div>
+                    </button>
+                    <button
+                      onClick={handleDelete}
+                      className="group relative px-6 sm:px-8 py-2 sm:py-3 font-monts text-sm tracking-wider overflow-hidden border border-red-500/30 text-red-400 hover:text-red-300 transition-colors duration-300 min-w-[160px]"
+                    >
+                      DELETE ACCOUNT
+                    </button>
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
@@ -117,24 +145,6 @@ export default function UserDashboard({ user, customer, transactions }) {
                         <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Phone Number</p>
                         <p className="text-white/90 text-sm">{customer?.phone || 'Not Provided'}</p>
                       </div>
-                    </div>
-
-                    <div className="mt-8 md:mt-12 space-y-4">
-                      <button
-                        onClick={handleLogout}
-                        className="w-full group relative px-6 md:px-8 py-3 md:py-4 font-monts text-sm tracking-wider overflow-hidden"
-                      >
-                        <span className="relative z-10 text-black font-medium">
-                          SIGN OUT
-                        </span>
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#CDAF7B] to-[#E5C992] transform group-hover:scale-105 transition-transform duration-300"></div>
-                      </button>
-                      <button
-                        onClick={handleDelete}
-                        className="w-full group relative px-6 md:px-8 py-3 md:py-4 font-monts text-sm tracking-wider overflow-hidden border border-red-500/30 text-red-400 hover:text-red-300 transition-colors duration-300"
-                      >
-                        DELETE ACCOUNT
-                      </button>
                     </div>
                   </div>
                 </motion.div>
