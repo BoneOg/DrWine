@@ -20,7 +20,7 @@ export default function Welcome() {
                 className="relative min-h-screen pt-16 sm:pt-0 bg-center bg-cover text-white text-center"
                 style={{ backgroundImage: "url('/assets/herosection.png')" }}
             >
-                <div className="absolute inset-0 bg-black opacity-60 z-0"></div>
+                <div className="absolute inset-0 bg-[#000C1C] opacity-50 z-0"></div>
                 <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-center min-h-screen">
                     <div>
                         <h3 className="mt-16 text-4xl text-center sm:text-5xl md:text-7xl font-felix">
