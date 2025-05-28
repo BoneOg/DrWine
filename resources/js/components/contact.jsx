@@ -44,7 +44,7 @@ export default function ContactSection() {
         <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-16 xl:gap-20">
           {/* Left Column */}
           <div className="lg:w-1/2 space-y-8 px-4 sm:space-y-10">
-            <h2 className="font-felix text-4xl font-light leading-tight">
+            <h2 className="font-felix text-[1.50rem] md:text-[1.75rem] font-light leading-tight">
               Contact Us
             </h2>
 
@@ -116,6 +116,7 @@ export default function ContactSection() {
                   type="text"
                   name="user_phone"
                   placeholder="Phone number"
+                  required
                   className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-[#CDAF7B] transition-colors"
                 />
               </div>

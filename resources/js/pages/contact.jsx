@@ -1,48 +1,67 @@
 import Layout from '@/components/layout';
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { FaFacebookF, FaInstagram, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
+import { useRef } from 'react';
+import emailjs from '@emailjs/browser';
 
 export default function Contact() {
+  const formRef = useRef();
   const iconSize = "1.2em";
-  
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs.sendForm(
+      'service_xdu3624',
+      'template_2k3twwh',
+      formRef.current,
+      'FvPitcDCCMIJ1KzMO'
+    ).then(
+      (result) => {
+        console.log('Email sent:', result.text);
+        alert('Message sent successfully!');
+      },
+      (error) => {
+        console.error('Error sending email:', error.text);
+        alert('Failed to send message. Please try again.');
+      }
+    );
+
+    e.target.reset();
+  };
+
   return (
     <>
       <Head title="Contact Us" />
       <Layout>
-        {/* Map Section */}
-        <section className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
-          <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-transparent to-black pointer-events-none"></div>
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.8022644974257!2d121.04533147585727!3d14.55073908092726!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c8f8a749d3c3%3A0xc94c818043b55657!2sDr.%20Wine!5e0!3m2!1sen!2sph!4v1709697436044!5m2!1sen!2sph"
-            className="w-full h-full border-0"
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </section>
+        {/* Hero Section */}
+        <div className="relative h-[50vh] bg-[#000C1C] overflow-hidden">
+          <img
+            src="/assets/menu-section-background.png"
+            alt="Menu Hero"
+            className="w-full h-full object-cover opacity-30"
+          />
+          <div className="absolute inset-0 bg-/70 to-transparent"></div>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <h1 className="text-5xl md:text-7xl font-felix text-white tracking-wider pt-16 mb-4">
+              CONTACT US
+            </h1>
+            {/* Updated decorative line */}
+            <div className="w-16 md:w-20 h-[2px] bg-gradient-to-r from-transparent via-[#CDAF7B] to-transparent mb-4 md:mb-6"></div>
+          </div>
+        </div>
 
-        <section
-          className="relative flex flex-col justify-center items-center text-white py-10 md:py-14 lg:py-16 overflow-hidden bg-[#000C1C]"
-        >
+        {/* Contact Section */}
+        <section className="relative flex flex-col justify-center items-center text-white py-10 md:py-14 lg:py-16 overflow-hidden bg-[#000C1C]">
           <div className="relative z-10 w-full px-6 sm:px-8 md:px-12 lg:px-16 xl:px-24 2xl:px-32">
             <div className="max-w-[1400px] mx-auto">
-              {/* Main Heading */}
-              <div className="text-center mb-8 md:mb-10 lg:mb-12">
-                <h2 className="font-felix text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2">
-                  Contact Us
-                </h2>
-                <p className="text-gray-300 font-monts text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
-                  We'd love to hear from you. Get in touch with us for reservations, inquiries, or just to say hello.
-                </p>
-              </div>
-
               <div className="flex flex-col font-monts lg:flex-row mx-auto items-start justify-between gap-8 lg:gap-12 xl:gap-20">
                 {/* Left Column */}
                 <div className="w-full lg:w-1/4 flex flex-col items-start space-y-6 md:space-y-8">
                   {/* Contact Info Section */}
                   <div className="w-full">
-                    <h3 className="font-fraunces text-lg sm:text-xl mb-4 pb-2 border-b border-white/30">
+                    <h3 className="font-felix text-lg sm:text-xl mb-4 pb-2 border-b border-white/30">
                       Contact Info
                     </h3>
                     <ul className="space-y-3">
@@ -101,7 +120,7 @@ export default function Contact() {
 
                   {/* Opening Hours Section */}
                   <div className="w-full">
-                    <h3 className="font-fraunces text-lg sm:text-xl mb-4 pb-2 border-b border-white/30">
+                    <h3 className="font-felix text-lg sm:text-xl mb-4 pb-2 border-b border-white/30">
                       Opening Hours
                     </h3>
                     <ul className="space-y-2 font-monts text-sm">
@@ -122,8 +141,8 @@ export default function Contact() {
                 </div>
 
                 {/* Right Column (Contact Form) */}
-                <div className="w-full lg:w-[70%] backdrop-blur-md bg-black/20 p-5 sm:p-6 lg:p-8 rounded-2xl border border-white/10 shadow-2xl">
-                  <form className="space-y-6">
+                <div className="w-full lg:w-[70%] backdrop-blur-md bg-black/20 p-5 sm:p-6 lg:p-8 border border-white/10 shadow-2xl">
+                  <form className="space-y-6" ref={formRef} onSubmit={sendEmail}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1">
                         <label className="text-xs text-gray-300">Full Name</label>
@@ -131,6 +150,7 @@ export default function Contact() {
                           type="text"
                           placeholder="Enter your full name"
                           required
+                          name="user_name"
                           className="w-full bg-white/5 border border-white/20 rounded-none px-3 py-2 text-sm placeholder:text-gray-400 
                           focus:outline-none focus:border-[#CDAF7B] focus:ring-1 focus:ring-[#CDAF7B] transition-all duration-300"
                         />
@@ -141,6 +161,7 @@ export default function Contact() {
                           type="tel"
                           placeholder="Enter your phone number"
                           required
+                          name="user_phone"
                           className="w-full bg-white/5 border border-white/20 rounded-none px-3 py-2 text-sm placeholder:text-gray-400 
                           focus:outline-none focus:border-[#CDAF7B] focus:ring-1 focus:ring-[#CDAF7B] transition-all duration-300"
                         />
@@ -151,6 +172,7 @@ export default function Contact() {
                           type="email"
                           placeholder="Enter your email"
                           required
+                          name="user_email"
                           className="w-full bg-white/5 border border-white/20 rounded-none px-3 py-2 text-sm placeholder:text-gray-400 
                           focus:outline-none focus:border-[#CDAF7B] focus:ring-1 focus:ring-[#CDAF7B] transition-all duration-300"
                         />
@@ -158,7 +180,7 @@ export default function Contact() {
                       <div className="space-y-1">
                         <label className="text-xs text-gray-300">Preferred Contact Method</label>
                         <select
-                          className="w-full bg-white/5 border border-white/20 rounded-none px-3 py-2 text-sm text-gray-300
+                          name="preferred_method" required className="w-full bg-white/5 border border-white/20 rounded-none px-3 py-2 text-sm text-gray-300
                           focus:outline-none focus:border-[#CDAF7B] focus:ring-1 focus:ring-[#CDAF7B] transition-all duration-300"
                         >
                           <option value="" className="bg-gray-900">Select contact method</option>
@@ -168,7 +190,6 @@ export default function Contact() {
                       </div>
                     </div>
 
-                    {/* Message Section */}
                     <div className="space-y-4">
                       <div className="space-y-1">
                         <label className="text-xs text-gray-300">Subject</label>
@@ -176,6 +197,7 @@ export default function Contact() {
                           type="text"
                           placeholder="Enter message subject"
                           required
+                          name="subject"
                           className="w-full bg-white/5 border border-white/20 rounded-none px-3 py-2 text-sm placeholder:text-gray-400 
                           focus:outline-none focus:border-[#CDAF7B] focus:ring-1 focus:ring-[#CDAF7B] transition-all duration-300"
                         />
@@ -186,6 +208,7 @@ export default function Contact() {
                           placeholder="Please enter your message"
                           rows="4"
                           required
+                          name="message"
                           className="w-full bg-white/5 border border-white/20 rounded-none px-3 py-2 text-sm placeholder:text-gray-400 
                           focus:outline-none focus:border-[#CDAF7B] focus:ring-1 focus:ring-[#CDAF7B] transition-all duration-300 resize-none"
                         />
@@ -206,78 +229,16 @@ export default function Contact() {
           </div>
         </section>
 
-        {/* Book a Table Section */}
-        <section className="relative bg-[#0A121C] py-20 md:py-24 lg:py-28 overflow-hidden">
-          {/* Image Grid Background */}
-          <div className="absolute inset-0 grid grid-cols-4 gap-1 opacity-20">
-            <div className="relative h-full">
-              <img src="/assets/menu-item1.jpg" alt="" className="object-cover w-full h-full" />
-            </div>
-            <div className="relative h-full">
-              <img src="/assets/menu-item2.jpg" alt="" className="object-cover w-full h-full" />
-            </div>
-            <div className="relative h-full">
-              <img src="/assets/heroimage.jpg" alt="" className="object-cover w-full h-full" />
-            </div>
-            <div className="relative h-full">
-              <img src="/assets/about-food.jpg" alt="" className="object-cover w-full h-full" />
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="relative z-10 w-full px-6 sm:px-8 md:px-12 lg:px-16 xl:px-24 2xl:px-32">
-            <div className="max-w-[1600px] mx-auto">
-              <div className="flex flex-col items-center justify-center text-center">
-                <h2 className="font-fraunces font-light text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white mb-6">
-                  BOOK A TABLE
-                </h2>
-                <p className="text-gray-300 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-8">
-                  Simply fill out the reservation form on our website
-                  or give us a call to reserve your table today.
-                </p>
-                <Link
-                  href={route('reservation')}
-                  className="inline-flex items-center justify-center px-8 py-3 sm:px-10 sm:py-4 
-                  border-2 border-[#CDAF7B] text-[#CDAF7B] hover:bg-[#CDAF7B] hover:text-black 
-                  transition-all duration-300 text-sm sm:text-base uppercase tracking-wider font-medium group"
-                >
-                  <span className="group-hover:scale-105 transition-transform duration-300">Make a Reservation</span>
-                </Link>
-              </div>
-
-              {/* Image Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16">
-                <div className="relative aspect-[4/3] overflow-hidden group">
-                  <img 
-                    src="/assets/menu-item1.jpg" 
-                    alt="Restaurant Ambiance" 
-                    className="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-700"
-                  />
-                </div>
-                <div className="relative aspect-[4/3] overflow-hidden group">
-                  <img 
-                    src="/assets/menu-item2.jpg" 
-                    alt="Fine Dining" 
-                    className="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-700"
-                  />
-                </div>
-                <div className="relative aspect-[4/3] overflow-hidden group">
-                  <img 
-                    src="/assets/heroimage.jpg" 
-                    alt="Wine Selection" 
-                    className="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-700"
-                  />
-                </div>
-                <div className="relative aspect-[4/3] overflow-hidden group">
-                  <img 
-                    src="/assets/about-food.jpg" 
-                    alt="Signature Dish" 
-                    className="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-700"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Map Section */}
+        <section className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden">
+          <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-transparent to-black pointer-events-none"></div>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.8022644974257!2d121.04533147585727!3d14.55073908092726!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c8f8a749d3c3%3A0xc94c818043b55657!2sDr.%20Wine!5e0!3m2!1sen!2sph!4v1709697436044!5m2!1sen!2sph"
+            className="w-full h-full border-0"
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
         </section>
       </Layout>
     </>

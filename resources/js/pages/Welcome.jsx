@@ -54,7 +54,7 @@ export default function Welcome() {
                         <p className="text-sm uppercase font-monts tracking-widest text-[#CDAF7B] mb-2">
                             Story of Every Bite
                         </p>
-                        <h2 className="text-2xl mt-4 font-felix leading-relaxed">
+                        <h2 className="text-[1.50rem] md:text-[1.75rem] mt-4 font-felix leading-relaxed">
                             The language of love, spoken in sauces and vintages — curated for those who dine with soul.
                         </h2>
                         <p className="mt-6 font-monts text-sm">{aboutUsDescription}</p>
@@ -75,7 +75,7 @@ export default function Welcome() {
                 <div className="max-w-7xl mx-auto flex flex-col items-center">
                     <div className="text-center mb-12">
                         <p className="text-sm uppercase font-monts tracking-widest text-[#CDAF7B]">Dr. Wine’s Best</p>
-                        <h2 className="text-3xl mt-4 font-felix">Menu</h2>
+                        <h2 className="text-[1.50rem] md:text-[1.75rem] mt-4 font-felix">Menu</h2>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 w-full">
