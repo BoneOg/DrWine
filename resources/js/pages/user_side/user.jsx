@@ -9,6 +9,7 @@ export default function UserDashboard({ user, customer, transactions }) {
   const [isMobile, setIsMobile] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editForm, setEditForm] = useState({
+    username: user.username,
     name: customer?.name || user.username,
     email: customer?.email || user.email,
     phone: customer?.phone || '',
@@ -146,6 +147,10 @@ export default function UserDashboard({ user, customer, transactions }) {
                     
                     <div className="space-y-4 md:space-y-6 font-monts divide-y divide-white/10">
                       <div className="pb-4">
+                        <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Username</p>
+                        <p className="text-white/90 text-sm">{user.username}</p>
+                      </div>
+                      <div className="pb-4">
                         <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Full Name</p>
                         <p className="text-white/90 text-sm">{customer?.name || user.username}</p>
                       </div>
@@ -215,11 +220,32 @@ export default function UserDashboard({ user, customer, transactions }) {
                                 <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">₱{transaction.amount.toLocaleString()}</td>
                                 <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">{transaction.transaction_type}</td>
                                 <td className="py-3 md:py-4 px-3 md:px-4">
-                                  <span className={`inline-block px-2 md:px-3 py-1 text-xs tracking-wider uppercase
-                                    ${transaction.status === 'paid' ? 'text-green-300 border border-green-500/30' :
-                                      transaction.status === 'pending' ? 'text-yellow-300 border border-yellow-500/30' :
-                                      transaction.status === 'failed' ? 'text-red-300 border border-red-500/30' :
-                                      'text-gray-300 border border-gray-500/30'}`}>
+                                  <span className={`inline-flex items-center px-3 py-1 text-xs tracking-wider uppercase font-monts
+                                    ${transaction.status === 'paid' ? 
+                                      'text-emerald-300 border border-emerald-500/30 bg-emerald-500/10' : 
+                                    transaction.status === 'pending' ? 
+                                      'text-amber-300 border border-amber-500/30 bg-amber-500/10' : 
+                                    transaction.status === 'failed' ? 
+                                      'text-rose-300 border border-rose-500/30 bg-rose-500/10' :
+                                    transaction.status === 'cancelled' ?
+                                      'text-slate-300 border border-slate-500/30 bg-slate-500/10' :
+                                    transaction.status === 'confirmed' ?
+                                      'text-emerald-300 border border-emerald-500/30 bg-emerald-500/10' :
+                                    transaction.status === 'completed' ?
+                                      'text-sky-300 border border-sky-500/30 bg-sky-500/10' :
+                                      'text-gray-300 border border-gray-500/30 bg-gray-500/10'
+                                    }`}
+                                  >
+                                    <div className={`w-1.5 h-1.5 rounded-full mr-2
+                                      ${transaction.status === 'paid' ? 'bg-emerald-400' :
+                                        transaction.status === 'pending' ? 'bg-amber-400' :
+                                        transaction.status === 'failed' ? 'bg-rose-400' :
+                                        transaction.status === 'cancelled' ? 'bg-slate-400' :
+                                        transaction.status === 'confirmed' ? 'bg-emerald-400' :
+                                        transaction.status === 'completed' ? 'bg-sky-400' :
+                                        'bg-gray-400'
+                                      }`}
+                                    />
                                     {transaction.status}
                                   </span>
                                 </td>
@@ -270,6 +296,21 @@ export default function UserDashboard({ user, customer, transactions }) {
                   <div className="w-full">
                     <h3 className="text-2xl font-felix text-white mb-6">Edit Profile</h3>
                     <form onSubmit={handleEditSubmit} className="space-y-4">
+                      <div>
+                        <label htmlFor="username" className="block text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Username</label>
+                        <input
+                          type="text"
+                          id="username"
+                          name="username"
+                          value={editForm.username}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
+                          placeholder:text-[#CDAF7B]/60 focus:outline-none focus:border-[#CDAF7B] focus:ring-1 
+                          focus:ring-[#CDAF7B]/50 transition-all duration-300 font-monts text-sm"
+                        />
+                        {errors.username && <p className="text-[#CDAF7B] text-xs mt-1">{errors.username}</p>}
+                      </div>
+
                       <div>
                         <label htmlFor="name" className="block text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Full Name</label>
                         <input
