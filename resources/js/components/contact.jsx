@@ -13,7 +13,7 @@ export default function ContactSection() {
       }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-[#000C1C] opacity-50"></div>
+      <div className="absolute inset-0 bg-black opacity-50"></div>
 
       <div className="relative container z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-16 xl:gap-20">

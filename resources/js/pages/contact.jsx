@@ -4,6 +4,8 @@ import { FaFacebookF, FaInstagram, FaPhone, FaMapMarkerAlt } from 'react-icons/f
 import { MdEmail } from 'react-icons/md';
 
 export default function Contact() {
+  const iconSize = "1.2em";
+  
   return (
     <>
       <Head title="Contact Us" />
@@ -30,12 +32,12 @@ export default function Contact() {
                 <h2 className="font-felix text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2">
                   Contact Us
                 </h2>
-                <p className="text-gray-300 text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
+                <p className="text-gray-300 font-monts text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
                   We'd love to hear from you. Get in touch with us for reservations, inquiries, or just to say hello.
                 </p>
               </div>
 
-              <div className="flex flex-col lg:flex-row mx-auto items-start justify-between gap-8 lg:gap-12 xl:gap-20">
+              <div className="flex flex-col font-monts lg:flex-row mx-auto items-start justify-between gap-8 lg:gap-12 xl:gap-20">
                 {/* Left Column */}
                 <div className="w-full lg:w-1/4 flex flex-col items-start space-y-6 md:space-y-8">
                   {/* Contact Info Section */}
@@ -47,28 +49,28 @@ export default function Contact() {
                       {[
                         {
                           href: 'https://facebook.com/drwine.bgc',
-                          icon: <FaFacebookF />,
+                          icon: <FaFacebookF size={iconSize} />,
                           text: 'drwine.bgc',
                         },
                         {
                           href: 'https://instagram.com/drwine.bgc/',
-                          icon: <FaInstagram />,
+                          icon: <FaInstagram size={iconSize} />,
                           text: 'drwine.bgc',
                         },
                         {
                           href: 'tel:09177152807',
-                          icon: <FaPhone />,
+                          icon: <FaPhone size={iconSize} />,
                           text: '0917 715 2807',
                         },
                         {
                           href: 'mailto:reservation.drwinebgc@gmail.com',
-                          icon: <MdEmail />,
+                          icon: <MdEmail size={iconSize} />,
                           text: 'reservation.drwinebgc@gmail.com',
                           isEmail: true,
                         },
                         {
                           href: 'https://maps.google.com/?q=DrWine+BGC+Forbestown',
-                          icon: <FaMapMarkerAlt />,
+                          icon: <FaMapMarkerAlt size={iconSize} />,
                           text: 'Forbestown Road, BGC, Taguig',
                         },
                       ].map(({ href, icon, text, isEmail }) => {
@@ -82,12 +84,12 @@ export default function Contact() {
                               rel={href.startsWith('http') || isEmail ? 'noopener noreferrer' : undefined}
                               className="flex items-center group"
                             >
-                              <span className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/10 group-hover:bg-white/20 transition-all duration-300 mr-3">
-                                <span className="text-base group-hover:scale-110 transition-transform duration-300">
+                              <span className="flex items-center justify-center w-8 h-8 bg-white/10 group-hover:bg-[#CDAF7B] transition-all duration-300 mr-3">
+                                <span className="text-white group-hover:text-black group-hover:scale-110 transition-all duration-300">
                                   {icon}
                                 </span>
                               </span>
-                              <span className="text-sm group-hover:text-red-400 transition-colors duration-300">
+                              <span className="text-sm text-white group-hover:text-[#CDAF7B] transition-colors duration-300">
                                 {text}
                               </span>
                             </a>
@@ -102,7 +104,7 @@ export default function Contact() {
                     <h3 className="font-fraunces text-lg sm:text-xl mb-4 pb-2 border-b border-white/30">
                       Opening Hours
                     </h3>
-                    <ul className="space-y-2 text-sm">
+                    <ul className="space-y-2 font-monts text-sm">
                       <li className="flex justify-between items-center">
                         <span className="text-gray-300">Monday - Friday</span>
                         <span>7:00 am - 11:30 pm</span>
@@ -129,8 +131,8 @@ export default function Contact() {
                           type="text"
                           placeholder="Enter your full name"
                           required
-                          className="w-full bg-white/5 border border-white/20 rounded-lg px-3 py-2 text-sm placeholder:text-gray-400 
-                          focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all duration-300"
+                          className="w-full bg-white/5 border border-white/20 rounded-none px-3 py-2 text-sm placeholder:text-gray-400 
+                          focus:outline-none focus:border-[#CDAF7B] focus:ring-1 focus:ring-[#CDAF7B] transition-all duration-300"
                         />
                       </div>
                       <div className="space-y-1">
@@ -139,8 +141,8 @@ export default function Contact() {
                           type="tel"
                           placeholder="Enter your phone number"
                           required
-                          className="w-full bg-white/5 border border-white/20 rounded-lg px-3 py-2 text-sm placeholder:text-gray-400 
-                          focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all duration-300"
+                          className="w-full bg-white/5 border border-white/20 rounded-none px-3 py-2 text-sm placeholder:text-gray-400 
+                          focus:outline-none focus:border-[#CDAF7B] focus:ring-1 focus:ring-[#CDAF7B] transition-all duration-300"
                         />
                       </div>
                       <div className="space-y-1">
@@ -149,15 +151,15 @@ export default function Contact() {
                           type="email"
                           placeholder="Enter your email"
                           required
-                          className="w-full bg-white/5 border border-white/20 rounded-lg px-3 py-2 text-sm placeholder:text-gray-400 
-                          focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all duration-300"
+                          className="w-full bg-white/5 border border-white/20 rounded-none px-3 py-2 text-sm placeholder:text-gray-400 
+                          focus:outline-none focus:border-[#CDAF7B] focus:ring-1 focus:ring-[#CDAF7B] transition-all duration-300"
                         />
                       </div>
                       <div className="space-y-1">
                         <label className="text-xs text-gray-300">Preferred Contact Method</label>
                         <select
-                          className="w-full bg-white/5 border border-white/20 rounded-lg px-3 py-2 text-sm text-gray-300
-                          focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all duration-300"
+                          className="w-full bg-white/5 border border-white/20 rounded-none px-3 py-2 text-sm text-gray-300
+                          focus:outline-none focus:border-[#CDAF7B] focus:ring-1 focus:ring-[#CDAF7B] transition-all duration-300"
                         >
                           <option value="" className="bg-gray-900">Select contact method</option>
                           <option value="email" className="bg-gray-900">Email</option>
@@ -174,8 +176,8 @@ export default function Contact() {
                           type="text"
                           placeholder="Enter message subject"
                           required
-                          className="w-full bg-white/5 border border-white/20 rounded-lg px-3 py-2 text-sm placeholder:text-gray-400 
-                          focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all duration-300"
+                          className="w-full bg-white/5 border border-white/20 rounded-none px-3 py-2 text-sm placeholder:text-gray-400 
+                          focus:outline-none focus:border-[#CDAF7B] focus:ring-1 focus:ring-[#CDAF7B] transition-all duration-300"
                         />
                       </div>
                       <div className="space-y-1">
@@ -184,17 +186,16 @@ export default function Contact() {
                           placeholder="Please enter your message"
                           rows="4"
                           required
-                          className="w-full bg-white/5 border border-white/20 rounded-lg px-3 py-2 text-sm placeholder:text-gray-400 
-                          focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all duration-300 resize-none"
+                          className="w-full bg-white/5 border border-white/20 rounded-none px-3 py-2 text-sm placeholder:text-gray-400 
+                          focus:outline-none focus:border-[#CDAF7B] focus:ring-1 focus:ring-[#CDAF7B] transition-all duration-300 resize-none"
                         />
                       </div>
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 
-                      text-white font-semibold rounded-lg transition-all duration-300 py-2.5 text-sm uppercase tracking-wider
-                      shadow-lg hover:shadow-red-500/20"
+                      className="w-full bg-[#CDAF7B] hover:bg-[#B69A6B] text-black font-monts rounded-none 
+                      transition-all duration-300 py-3 text-md font-bold uppercase tracking-wider"
                     >
                       Send Message
                     </button>
@@ -237,10 +238,10 @@ export default function Contact() {
                 <Link
                   href={route('reservation')}
                   className="inline-flex items-center justify-center px-8 py-3 sm:px-10 sm:py-4 
-                  border-2 border-white text-white hover:bg-white hover:text-[#0A121C] 
-                  transition-all duration-300 text-sm sm:text-base uppercase tracking-wider font-medium"
+                  border-2 border-[#CDAF7B] text-[#CDAF7B] hover:bg-[#CDAF7B] hover:text-black 
+                  transition-all duration-300 text-sm sm:text-base uppercase tracking-wider font-medium group"
                 >
-                  Make a Reservation
+                  <span className="group-hover:scale-105 transition-transform duration-300">Make a Reservation</span>
                 </Link>
               </div>
 

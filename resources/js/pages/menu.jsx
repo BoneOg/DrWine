@@ -334,7 +334,7 @@ export default function Menu() {
                                 <button
                                     key={category.key}
                                     onClick={() => setActiveCategory(category.key)}
-                                    className={`px-6 py-3 text-lg font-felix tracking-wide rounded-none transition-all duration-300
+                                    className={`px-6 py-3 text-lg font-felix tracking-wide rounded- transition-all duration-300
                                         ${activeCategory === category.key
                                             ? 'bg-[#CDAF7B] shadow-lg'
                                             : 'text-white hover:text-white hover:bg-white/5'
