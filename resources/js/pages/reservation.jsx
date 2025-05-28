@@ -122,7 +122,7 @@ export default function reservation() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-black text-white flex items-center justify-center px-10 pt-32 pb-32">
+      <div className="min-h-screen bg-[#000C1C] text-white flex items-center justify-center px-10 pt-32 pb-32">
         <div className="transform scale-[1] sm:scale-[1.1] md:scale-[1.2] origin-top overflow-hidden">
           <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-[4fr_2fr] gap-15 items-stretch">
 
@@ -142,7 +142,7 @@ export default function reservation() {
                     }}
                     onFocus={() => setIsMonthOpen(true)}
                     onBlur={() => setIsMonthOpen(false)}
-                    className="w-full text-white bg-transparent border-b border-gray-500 text-base font-light font-monts tracking-wide py-1 pr-6 appearance-none focus:outline-none focus:border-white"
+                    className="w-full text-white bg-transparent border-b border-gray-500 text-base font-light font-monts tracking-wide py-1 pr-6 appearance-none focus:outline-none focus:border-[#CDAF7B]"
                   >
                     {months.map((month, index) => (
                       <option key={month} value={index}>{month}</option>
@@ -159,7 +159,7 @@ export default function reservation() {
                     onChange={(e) => setSelectedTime(e.target.value)}
                     onFocus={() => setIsTimeOpen(true)}
                     onBlur={() => setIsTimeOpen(false)}
-                    className="w-full text-white bg-transparent border-b border-gray-500 text-base font-light font-monts tracking-wide py-1 pr-6 appearance-none focus:outline-none focus:border-white"
+                    className="w-full text-white bg-transparent border-b border-gray-500 text-base font-light font-monts tracking-wide py-1 pr-6 appearance-none focus:outline-none focus:border-[#CDAF7B]"
                   >
                     {timeSlots.map((slot) => {
                       const isAvailable = availableTimes.includes(slot); // availableTimes should be in your component state
@@ -186,7 +186,7 @@ export default function reservation() {
                     onChange={(e) => setSelectedGuests(Number(e.target.value))}
                     onFocus={() => setIsGuestsOpen(true)}
                     onBlur={() => setIsGuestsOpen(false)}
-                    className="w-full text-white bg-transparent border-b border-gray-500 text-base font-light font-monts tracking-wide py-1 pr-6 appearance-none focus:outline-none focus:border-white"
+                    className="w-full text-white bg-transparent border-b border-gray-500 text-base font-light font-monts tracking-wide py-1 pr-6 appearance-none focus:outline-none focus:border-[#CDAF7B]"
                   >
                     {guests.map((num) => (
                       <option key={num} value={num}>{num}</option>
@@ -217,8 +217,8 @@ export default function reservation() {
                         past
                           ? 'text-gray-600 cursor-not-allowed'
                           : isSelected
-                          ? 'bg-red-700 text-white'
-                          : 'hover:bg-white hover:text-black'
+                          ? 'bg-[#CDAF7B] text-white'
+                          : 'hover:bg-[#CDAF7B] hover:text-white'
                       }`}
                     >
                       {day}
@@ -245,7 +245,7 @@ export default function reservation() {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
-                    className="w-full bg-transparent border-b border-gray-400 pb-1 text-xs font-monts outline-none"
+                    className="w-full bg-transparent border-b border-gray-400 pb-1 text-xs font-monts outline-none focus:border-[#CDAF7B]"
                   />
                 </div>
 
@@ -256,7 +256,7 @@ export default function reservation() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-400 pb-1 text-xs font-monts outline-none"
+                    className="w-full bg-transparent border-b border-gray-400 pb-1 text-xs font-monts outline-none focus:border-[#CDAF7B]"
                   />
                 </div>
 
@@ -267,7 +267,7 @@ export default function reservation() {
                     type="text"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-                    className="w-full bg-transparent border-b border-gray-400 pb-1 text-xs font-monts outline-none"
+                    className="w-full bg-transparent border-b border-gray-400 pb-1 text-xs font-monts outline-none focus:border-[#CDAF7B]"
                   />
                 </div>
 
@@ -279,7 +279,7 @@ export default function reservation() {
               <button
                 onClick={handleSubmit}
                 disabled={!formValid}
-                className="px-4 py-2 min-w-[250px] text-base font-monts shadow bg-white text-black hover:bg-gray-500 transition cursor-pointer"
+                className="px-4 py-2 min-w-[250px] text-base font-monts shadow bg-white text-black hover:bg-[#CDAF7B] transition cursor-pointer"
                 style={{
                   opacity: formValid ? 1 : 0.5,
                   pointerEvents: formValid ? 'auto' : 'none',
