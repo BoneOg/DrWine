@@ -1,11 +1,23 @@
 import Layout from '@/components/layout'; 
 import { Head, router } from '@inertiajs/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 export default function Checkout({ reservation }) {
   const [selectedMethod, setSelectedMethod] = useState(null);
   const [paymentInfo, setPaymentInfo] = useState({});
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
@@ -157,7 +169,7 @@ export default function Checkout({ reservation }) {
       <Layout>
         <div className="min-h-screen bg-gradient-to-b from-[#000C1C] to-[#000C1C] text-white">
           {/* Hero Section */}
-          <div className="relative h-[50vh] pt-20 flex items-center overflow-hidden">
+          <div className="relative h-[40vh] md:h-[50vh] pt-16 md:pt-20 flex items-center overflow-hidden">
             <div className="absolute inset-0">
               <img 
                 src="/assets/reserve.png" 
@@ -173,25 +185,25 @@ export default function Checkout({ reservation }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <div className="max-w-7xl mx-auto px-6 md:px-8">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                 <div className="flex flex-col items-center text-center">
                   <motion.div 
-                    className="w-20 h-[2px] bg-gradient-to-r from-transparent via-[#CDAF7B] to-transparent mb-8"
+                    className="w-16 md:w-20 h-[2px] bg-gradient-to-r from-transparent via-[#CDAF7B] to-transparent mb-6 md:mb-8"
                     initial={{ width: 0 }}
-                    animate={{ width: 80 }}
+                    animate={{ width: isMobile ? 64 : 80 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                   />
-                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-felix mb-8 tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-[#CDAF7B] via-white to-[#CDAF7B]">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-felix mb-6 md:mb-8 tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-[#CDAF7B] via-white to-[#CDAF7B]">
                     COMPLETE YOUR RESERVATION
                   </h1>
                   <motion.div 
-                    className="w-20 h-[2px] bg-gradient-to-r from-transparent via-[#CDAF7B] to-transparent mb-6"
+                    className="w-16 md:w-20 h-[2px] bg-gradient-to-r from-transparent via-[#CDAF7B] to-transparent mb-4 md:mb-6"
                     initial={{ width: 0 }}
-                    animate={{ width: 80 }}
+                    animate={{ width: isMobile ? 64 : 80 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                   />
                   <motion.p 
-                    className="text-[#CDAF7B] font-monts tracking-[0.3em] uppercase text-sm"
+                    className="text-[#CDAF7B] font-monts tracking-[0.3em] uppercase text-xs sm:text-sm"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}
@@ -204,77 +216,77 @@ export default function Checkout({ reservation }) {
           </div>
 
           {/* Content Section */}
-          <div className="relative pt-20 -mt-20 z-20 pb-20">
-            <div className="max-w-5xl mx-auto px-4 md:px-8">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="relative pt-12 md:pt-20 -mt-20 z-20 pb-12 md:pb-20">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
                 {/* Left Column - Summary */}
                 <motion.div 
-                  className="lg:col-span-5 space-y-6"
+                  className="lg:col-span-5 space-y-4 md:space-y-6"
                   {...fadeIn}
                 >
-                  <div className="backdrop-blur-xl bg-white/[0.02] border border-white/10 rounded-none p-8 hover:bg-white/[0.04] transition-all duration-300">
-                    <div className="flex items-center gap-4 mb-8">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#CDAF7B] to-[#E5C992] flex items-center justify-center transform hover:rotate-12 transition-transform duration-300">
-                        <span className="text-black text-lg font-medium">1</span>
+                  <div className="backdrop-blur-xl bg-white/[0.02] border border-white/10 rounded-none p-6 md:p-8 hover:bg-white/[0.04] transition-all duration-300">
+                    <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-[#CDAF7B] to-[#E5C992] flex items-center justify-center transform hover:rotate-12 transition-transform duration-300">
+                        <span className="text-black text-base md:text-lg font-medium">1</span>
                       </div>
-                      <h2 className="text-2xl font-felix text-white">Reservation Details</h2>
+                      <h2 className="text-xl md:text-2xl font-felix text-white">Reservation Details</h2>
                     </div>
 
-                    <div className="space-y-6">
-                      <div className="bg-white/[0.02] p-6 backdrop-blur-sm border border-white/10">
+                    <div className="space-y-4 md:space-y-6">
+                      <div className="bg-white/[0.02] p-4 md:p-6 backdrop-blur-sm border border-white/10">
                         <div className="flex items-center gap-3 mb-4">
                           <span className="text-[#CDAF7B]">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5" viewBox="0 0 20 20" fill="currentColor">
                               <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                             </svg>
                           </span>
-                          <span className="text-sm font-monts tracking-wider uppercase text-[#CDAF7B]">Guest Info</span>
+                          <span className="text-xs md:text-sm font-monts tracking-wider uppercase text-[#CDAF7B]">Guest Info</span>
                         </div>
-                        <div className="space-y-3 font-monts divide-y divide-white/10">
-                          <div className="flex justify-between items-center py-3">
-                            <span className="text-[#CDAF7B]">Name</span>
-                            <span className="text-white/90">{reservation.customer?.name}</span>
+                        <div className="space-y-2 md:space-y-3 font-monts divide-y divide-white/10">
+                          <div className="flex justify-between items-center py-2 md:py-3">
+                            <span className="text-[#CDAF7B] text-sm">Name</span>
+                            <span className="text-white/90 text-sm">{reservation.customer?.name}</span>
                           </div>
-                          <div className="flex justify-between items-center py-3">
-                            <span className="text-[#CDAF7B]">Phone</span>
-                            <span className="text-white/90">{reservation.customer?.phone}</span>
+                          <div className="flex justify-between items-center py-2 md:py-3">
+                            <span className="text-[#CDAF7B] text-sm">Phone</span>
+                            <span className="text-white/90 text-sm">{reservation.customer?.phone}</span>
                           </div>
-                          <div className="flex justify-between items-center py-3">
-                            <span className="text-[#CDAF7B]">Email</span>
-                            <span className="text-white/90">{reservation.customer?.email}</span>
+                          <div className="flex justify-between items-center py-2 md:py-3">
+                            <span className="text-[#CDAF7B] text-sm">Email</span>
+                            <span className="text-white/90 text-sm">{reservation.customer?.email}</span>
                           </div>
                         </div>
                       </div>
 
-                      <div className="bg-white/[0.02] p-6 backdrop-blur-sm border border-white/10">
+                      <div className="bg-white/[0.02] p-4 md:p-6 backdrop-blur-sm border border-white/10">
                         <div className="flex items-center gap-3 mb-4">
                           <span className="text-[#CDAF7B]">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5" viewBox="0 0 20 20" fill="currentColor">
                               <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                             </svg>
                           </span>
-                          <span className="text-sm font-monts tracking-wider uppercase text-[#CDAF7B]">Date & Time</span>
+                          <span className="text-xs md:text-sm font-monts tracking-wider uppercase text-[#CDAF7B]">Date & Time</span>
                         </div>
-                        <div className="space-y-3 font-monts divide-y divide-white/10">
-                          <div className="flex justify-between items-center py-3">
-                            <span className="text-[#CDAF7B]">Date</span>
-                            <span className="text-white/90">{dateStr}</span>
+                        <div className="space-y-2 md:space-y-3 font-monts divide-y divide-white/10">
+                          <div className="flex justify-between items-center py-2 md:py-3">
+                            <span className="text-[#CDAF7B] text-sm">Date</span>
+                            <span className="text-white/90 text-sm">{dateStr}</span>
                           </div>
-                          <div className="flex justify-between items-center py-3">
-                            <span className="text-[#CDAF7B]">Time</span>
-                            <span className="text-white/90">{timeStr}</span>
+                          <div className="flex justify-between items-center py-2 md:py-3">
+                            <span className="text-[#CDAF7B] text-sm">Time</span>
+                            <span className="text-white/90 text-sm">{timeStr}</span>
                           </div>
-                          <div className="flex justify-between items-center py-3">
-                            <span className="text-[#CDAF7B]">Party Size</span>
-                            <span className="text-white/90">{reservation.size} {reservation.size > 1 ? 'guests' : 'guest'}</span>
+                          <div className="flex justify-between items-center py-2 md:py-3">
+                            <span className="text-[#CDAF7B] text-sm">Party Size</span>
+                            <span className="text-white/90 text-sm">{reservation.size} {reservation.size > 1 ? 'guests' : 'guest'}</span>
                           </div>
                         </div>
                       </div>
 
-                      <div className="bg-gradient-to-r from-[#CDAF7B]/10 to-[#E5C992]/10 p-6 border border-white/10">
+                      <div className="bg-gradient-to-r from-[#CDAF7B]/10 to-[#E5C992]/10 p-4 md:p-6 border border-white/10">
                         <div className="flex justify-between items-center font-monts">
                           <span className="text-sm text-[#CDAF7B]">Reservation Fee</span>
-                          <span className="text-xl font-felix text-white/90">$20.00</span>
+                          <span className="text-lg md:text-xl font-felix text-white/90">$20.00</span>
                         </div>
                       </div>
                     </div>
@@ -287,15 +299,15 @@ export default function Checkout({ reservation }) {
                   {...fadeIn}
                   transition={{ delay: 0.2 }}
                 >
-                  <div className="backdrop-blur-xl bg-white/[0.02] border border-white/10 rounded-none p-8 hover:bg-white/[0.04] transition-all duration-300">
-                    <div className="flex items-center gap-4 mb-8">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#CDAF7B] to-[#E5C992] flex items-center justify-center transform hover:rotate-12 transition-transform duration-300">
-                        <span className="text-black text-lg font-medium">2</span>
+                  <div className="backdrop-blur-xl bg-white/[0.02] border border-white/10 rounded-none p-6 md:p-8 hover:bg-white/[0.04] transition-all duration-300">
+                    <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-[#CDAF7B] to-[#E5C992] flex items-center justify-center transform hover:rotate-12 transition-transform duration-300">
+                        <span className="text-black text-base md:text-lg font-medium">2</span>
                       </div>
-                      <h2 className="text-2xl font-felix text-white">Payment Method</h2>
+                      <h2 className="text-xl md:text-2xl font-felix text-white">Payment Method</h2>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
                       {paymentMethods.map(({ name, icon }) => (
                         <label
                           key={name}
@@ -316,9 +328,9 @@ export default function Checkout({ reservation }) {
                               setPaymentInfo({});
                             }}
                           />
-                          <div className="p-6 flex flex-col items-center gap-3">
-                            <span className="text-3xl mb-2 transition-transform duration-300 group-hover:scale-110">{icon}</span>
-                            <span className="font-monts text-sm text-center">{name}</span>
+                          <div className="p-4 md:p-6 flex flex-col items-center gap-2 md:gap-3">
+                            <span className="text-2xl md:text-3xl mb-1 md:mb-2 transition-transform duration-300 group-hover:scale-110">{icon}</span>
+                            <span className="font-monts text-xs md:text-sm text-center">{name}</span>
                           </div>
                         </label>
                       ))}
@@ -326,7 +338,7 @@ export default function Checkout({ reservation }) {
 
                     {selectedMethod && (
                       <motion.div 
-                        className="mt-8 bg-white/[0.02] p-8 border border-white/10"
+                        className="mt-6 md:mt-8 bg-white/[0.02] p-6 md:p-8 border border-white/10"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
@@ -337,14 +349,14 @@ export default function Checkout({ reservation }) {
 
                     {/* Action Buttons */}
                     <motion.div 
-                      className="flex flex-col sm:flex-row justify-end gap-4 mt-8 pt-8 border-t border-white/10"
+                      className="flex flex-col sm:flex-row justify-end gap-4 mt-6 md:mt-8 pt-6 md:pt-8 border-t border-white/10"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.6 }}
                     >
                       <button
                         onClick={handleCancel}
-                        className="group relative px-8 py-4 font-monts text-sm tracking-wider overflow-hidden text-white/90 hover:text-white transition-colors duration-300"
+                        className="group relative px-6 md:px-8 py-3 md:py-4 font-monts text-sm tracking-wider overflow-hidden text-white/90 hover:text-white transition-colors duration-300"
                       >
                         Cancel Reservation
                       </button>
@@ -352,7 +364,7 @@ export default function Checkout({ reservation }) {
                       <button
                         onClick={handlePayment}
                         disabled={!selectedMethod}
-                        className={`group relative px-8 py-4 font-monts text-sm tracking-wider overflow-hidden
+                        className={`group relative px-6 md:px-8 py-3 md:py-4 font-monts text-sm tracking-wider overflow-hidden
                           ${selectedMethod
                             ? 'cursor-pointer'
                             : 'cursor-not-allowed opacity-50'}
