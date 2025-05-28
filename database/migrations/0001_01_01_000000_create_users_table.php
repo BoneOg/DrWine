@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id('userID'); // Renamed from 'id' to 'userID' as per your schema
             $table->enum('role', ['admin', 'user', 'guest'])->default('guest');
             $table->string('username')->unique(); // username is unique for login
-            $table->string('name')->nullable(); // Full name
-            $table->string('phone', 20)->nullable(); // Phone number
             $table->string('email')->nullable(); // removed unique() to allow duplicates and made nullable
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

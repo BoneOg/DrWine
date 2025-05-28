@@ -10,8 +10,8 @@ export default function UserDashboard({ user, customer, transactions }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editForm, setEditForm] = useState({
     username: user.username,
-    name: customer?.name || user.username,
-    email: customer?.email || user.email,
+    name: customer?.name || '',
+    email: customer?.email || '',
     phone: customer?.phone || '',
   });
   const [errors, setErrors] = useState({});

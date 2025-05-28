@@ -57,7 +57,7 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-        
+
         $request->validate([
             'username' => ['required', 'string', 'max:255', Rule::unique('users', 'username')->ignore($user->userID, 'userID')],
             'name' => 'required|string|max:255',
@@ -65,15 +65,12 @@ class UserController extends Controller
             'phone' => 'nullable|string|max:20',
         ]);
 
-        // Update user information
+        // Update username only in users table
         $user->update([
             'username' => $request->username,
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone
         ]);
 
-        // Update customer information
+        // Update customer info
         $customer = Customer::where('userID', $user->userID)->first();
         if ($customer) {
             $customer->update([

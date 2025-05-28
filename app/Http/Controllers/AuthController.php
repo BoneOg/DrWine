@@ -16,32 +16,31 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'username' => 'required|string|max:255|unique:users,username',
-            'name' => 'nullable|string|max:100',
-            'email' => 'required|string|email|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|confirmed|min:6',
+            'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
         ]);
 
+        // Create user (stores email in users table)
         $user = User::create([
             'username' => $validated['username'],
-            'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'phone' => $validated['phone'] ?? null,
             'role' => 'user',
         ]);
 
-        // Create corresponding customer record
+        // Create customer (copies email from request and stores name/phone)
         Customer::create([
-            'userID' => $user->userID,
-            'name' => $validated['name'] ?? null,
-            'phone' => $validated['phone'] ?? null,
-            'email' => $validated['email']
+            'userID' => $user->userID, // or use $user->id if your PK is "id"
+            'name' => $validated['name'],
+            'phone' => $validated['phone'],
+            'email' => $validated['email'], // copy from request
         ]);
 
         return redirect('/login')->with('success', 'Account created successfully!');
     }
-
+    
     public function login(Request $request)
     {
         $credentials = $request->only('usernameOrEmail', 'password');

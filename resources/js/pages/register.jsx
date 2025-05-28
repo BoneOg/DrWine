@@ -1,10 +1,8 @@
-import { Head, Link } from '@inertiajs/react';
-import { useState } from 'react';
-import axios from 'axios';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 
 export default function Register() {
-    const [form, setForm] = useState({
+    const { data, setData, post, processing, errors } = useForm({
         username: '',
         name: '',
         email: '',
@@ -13,26 +11,13 @@ export default function Register() {
         password_confirmation: '',
     });
 
-    const [errors, setErrors] = useState({});
-
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        setData(e.target.name, e.target.value);
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-
-        try {
-            await axios.post('/register', form);
-            window.location.href = '/login';
-        } catch (error) {
-            if (error.response && error.response.status === 422) {
-                setErrors(error.response.data.errors || {});
-            } else {
-                console.error('Registration error:', error);
-                setErrors({ general: 'An unexpected error occurred. Please try again.' });
-            }
-        }
+        post('/register');
     };
 
     return (
@@ -111,7 +96,7 @@ export default function Register() {
                                 <input
                                     type="text"
                                     name="username"
-                                    value={form.username}
+                                    value={data.username}
                                     onChange={handleChange}
                                     placeholder="Username"
                                     className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
@@ -128,7 +113,7 @@ export default function Register() {
                                 <input
                                     type="text"
                                     name="name"
-                                    value={form.name}
+                                    value={data.name}
                                     onChange={handleChange}
                                     placeholder="Full Name"
                                     className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
@@ -144,7 +129,7 @@ export default function Register() {
                                 <input
                                     type="email"
                                     name="email"
-                                    value={form.email}
+                                    value={data.email}
                                     onChange={handleChange}
                                     placeholder="Email Address"
                                     className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
@@ -161,7 +146,7 @@ export default function Register() {
                                 <input
                                     type="tel"
                                     name="phone"
-                                    value={form.phone}
+                                    value={data.phone}
                                     onChange={handleChange}
                                     placeholder="Phone Number (Optional)"
                                     className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
@@ -177,7 +162,7 @@ export default function Register() {
                                 <input
                                     type="password"
                                     name="password"
-                                    value={form.password}
+                                    value={data.password}
                                     onChange={handleChange}
                                     placeholder="Password"
                                     className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
@@ -194,7 +179,7 @@ export default function Register() {
                                 <input
                                     type="password"
                                     name="password_confirmation"
-                                    value={form.password_confirmation}
+                                    value={data.password_confirmation}
                                     onChange={handleChange}
                                     placeholder="Confirm Password"
                                     className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
