@@ -279,7 +279,7 @@ export default function reservation() {
               <button
                 onClick={handleSubmit}
                 disabled={!formValid}
-                className="px-4 py-2 min-w-[250px] text-base font-monts shadow bg-white text-black hover:bg-gray-500 transition cursor-pointer"
+                className="px-4 py-2 min-w-[250px] text-base font-monts shadow bg-[#CDAF7B] text-black hover:bg-gray-500 transition cursor-pointer"
                 style={{
                   opacity: formValid ? 1 : 0.5,
                   pointerEvents: formValid ? 'auto' : 'none',

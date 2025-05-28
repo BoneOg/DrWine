@@ -21,13 +21,13 @@ export default function Contact() {
         </section>
 
         <section
-          className="relative flex flex-col justify-center items-center text-white py-10 md:py-14 lg:py-16 overflow-hidden bg-[#0A121C]"
+          className="relative flex flex-col justify-center items-center text-white py-10 md:py-14 lg:py-16 overflow-hidden bg-[#000C1C]"
         >
           <div className="relative z-10 w-full px-6 sm:px-8 md:px-12 lg:px-16 xl:px-24 2xl:px-32">
             <div className="max-w-[1400px] mx-auto">
               {/* Main Heading */}
               <div className="text-center mb-8 md:mb-10 lg:mb-12">
-                <h2 className="font-fraunces font-light text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2">
+                <h2 className="font-felix text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2">
                   Contact Us
                 </h2>
                 <p className="text-gray-300 text-sm sm:text-base md:text-lg max-w-2xl mx-auto">

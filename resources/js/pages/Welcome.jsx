@@ -41,7 +41,7 @@ export default function Welcome() {
             </div>
 
             {/* ===== ABOUT US SECTION ===== */}
-            <div className="bg-black pt-16">
+            <div className="bg-[#000C1C] pt-16">
                 <div className="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row items-center gap-12 text-white">
                     <div className="w-full md:w-1/2">
                         <img
@@ -71,7 +71,7 @@ export default function Welcome() {
             </div>
 
             {/* ===== MENU SECTION ===== */}
-            <div className="bg-black py-16 text-white">
+            <div className="bg-[#000C1C] py-16 text-white">
                 <div className="max-w-7xl mx-auto flex flex-col items-center">
                     <div className="text-center mb-12">
                         <p className="text-sm uppercase font-monts tracking-widest text-[#CDAF7B]">Dr. Wine’s Best</p>
@@ -97,11 +97,7 @@ export default function Welcome() {
             </div>
 
             {/* ===== CONTACT US SECTION ===== */}
-            <div className="bg-black">
-                <div className="max-w-7xl mx-auto ">
-                    <ContactSection />
-                </div>
-            </div>
+            <ContactSection />
         </Layout>
     );
 }

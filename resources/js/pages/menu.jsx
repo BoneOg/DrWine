@@ -252,7 +252,7 @@ export default function Menu() {
             }`}>
                 {/* Menu Items */}
                 <div className="space-y-8 pl-10 lg:pl-10">
-                    <div className="bg-black/40 backdrop-blur-sm p-8 rounded-lg border border-[#CDAF7B]/20">
+                    <div className="bg-black/40 backdrop-blur-sm p-8 rounded-none border border-[#CDAF7B]/20">
                         {section.items.map((item, itemIndex) => (
                             <div key={itemIndex} className="mb-8 last:mb-0 group">
                                 <div className="flex items-baseline justify-between">
@@ -289,8 +289,8 @@ export default function Menu() {
                 {section.image && (
                     <div className={`${section.imagePosition === 'right' ? 'lg:order-last' : 'lg:order-first'}`}>
                         <div className="relative group">
-                            <div className="absolute inset-0 bg-[#CDAF7B]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
-                            <div className="overflow-hidden rounded-lg shadow-xl">
+                            <div className="absolute inset-0 bg-[#CDAF7B]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-none"></div>
+                            <div className="overflow-hidden rounded-none shadow-xl">
                                 <img
                                     src={section.image}
                                     alt={section.name}
@@ -329,12 +329,12 @@ export default function Menu() {
                 <div className="max-w-7xl mx-auto px-4 py-16">
                     {/* Category Navigation */}
                     <nav className="flex justify-center mb-16">
-                        <div className="inline-flex items-center space-x-1 p-1 bg-black/50 backdrop-blur-sm rounded-lg border border-[#CDAF7B]/20">
+                        <div className="inline-flex items-center space-x-1 p-1 bg-black/50 backdrop-blur-sm rounded-none border border-[#CDAF7B]/20">
                             {menuData.categories.map((category) => (
                                 <button
                                     key={category.key}
                                     onClick={() => setActiveCategory(category.key)}
-                                    className={`px-6 py-3 text-lg font-felix tracking-wide rounded-md transition-all duration-300
+                                    className={`px-6 py-3 text-lg font-felix tracking-wide rounded-none transition-all duration-300
                                         ${activeCategory === category.key
                                             ? 'bg-[#CDAF7B] shadow-lg'
                                             : 'text-white hover:text-white hover:bg-white/5'

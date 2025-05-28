@@ -7,12 +7,12 @@ export default function Footer() {
 
     return (
         <>
-            <footer className="bg-[#0A121C] text-white py-8 sm:py-10 md:py-12 px-4 footer-element overflow-hidden"> 
+            <footer className="bg-[#000C1C] text-white py-8 sm:py-10 md:py-12 px-4 footer-element overflow-hidden"> 
                 <div className="max-w-6xl mx-auto">
                     {/* Top Section: Logo with horizontal lines */}
                     <div className="relative flex items-center justify-center mb-6 sm:mb-8 md:mb-10 footer-element">
                         <hr className="absolute left-0 right-0 border-t border-gray-700 w-full" />
-                        <div className="relative z-10 bg-[#0A121C] p-2">
+                        <div className="relative z-10 bg-[#000C1C] p-2">
                             <img
                                 src="/assets/logo.png"
                                 alt="DrWine Logo"
