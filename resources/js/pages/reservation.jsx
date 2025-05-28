@@ -4,7 +4,7 @@ import { router } from '@inertiajs/react';
 import { useEffect } from 'react';
 
 
-export default function reservation() {
+export default function Reservation() { // Renamed to Reservation to follow common React component naming conventions
   const today = new Date();
   const months = ['January', 'February', 'March', 'April', 'May', 'June',
                   'July', 'August', 'September', 'October', 'November', 'December'];
@@ -67,7 +67,7 @@ export default function reservation() {
 
     fetchAvailableTimes();
   }, [selectedMonth, selectedDay, selectedGuests]);
-  
+
 
   const handleSubmit = async () => {
     if (!formValid) return;
@@ -97,12 +97,32 @@ export default function reservation() {
       }
 
       setError(null); // Clear any existing error
+
+      // Modified Inertia.js post request to include onFinish callback
       router.post('/reservation', {
         name,
         email,
         phone,
         size: selectedGuests,
         date_time: dateTime
+      }, {
+        onSuccess: (page) => {
+          // Assuming your store method in ReservationController returns the reservation ID
+          // in a prop called 'reservationID' or similar after successful creation.
+          // You'll need to check your Laravel controller's response structure.
+          const reservationId = page.props.reservationID; // Adjust based on your actual prop name
+          if (reservationId) {
+            router.get(`/checkout/${reservationId}`); // Redirect to checkout page
+          } else {
+            // Handle case where reservation ID is not returned, e.g., redirect to a confirmation page
+            console.warn('Reservation ID not found in response, redirecting to generic success page.');
+            router.get('/reservation/success'); // Example: A generic success page
+          }
+        },
+        onError: (errors) => {
+          // Handle validation errors from the server
+          setError(Object.values(errors).flat().join(', '));
+        }
       });
 
     } catch (err) {
@@ -162,7 +182,7 @@ export default function reservation() {
                     className="w-full text-white bg-transparent border-b border-gray-500 text-base font-light font-monts tracking-wide py-1 pr-6 appearance-none focus:outline-none focus:border-[#CDAF7B]"
                   >
                     {timeSlots.map((slot) => {
-                      const isAvailable = availableTimes.includes(slot); // availableTimes should be in your component state
+                      const isAvailable = availableTimes.includes(slot);
                       return (
                         <option
                           key={slot}
