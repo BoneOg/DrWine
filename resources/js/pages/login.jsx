@@ -89,15 +89,23 @@ export default function Login() {
               </button>
             </form>
 
-            <p className="mt-6 text-center text-gray-400 text-sm">
-              Don't have an account?{' '}
+            <div className="mt-6 text-sm text-gray-400 flex justify-between max-w-md mx-auto">
               <Link
-                href="/register"
+                href="/"
                 className="text-red-500 hover:text-red-400 transition-colors duration-300"
               >
-                Register now!
+                Back to Home
               </Link>
-            </p>
+
+              <span>
+                <Link
+                  href="/register"
+                  className="text-red-500 hover:text-red-400 transition-colors duration-300"
+                >
+                  Register Here
+                </Link>
+              </span>
+            </div>
           </div>
         </div>
       </div>
