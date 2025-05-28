@@ -81,7 +81,7 @@ export default function UserDashboard({ user, customer, transactions }) {
               />
               <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-[#000C1C]/80 to-[#000C1C]"></div>
             </div>
-            
+
             <motion.div 
               className="relative z-10 w-full"
               initial={{ opacity: 0, y: 30 }}
@@ -113,6 +113,30 @@ export default function UserDashboard({ user, customer, transactions }) {
                   >
                     Member Dashboard
                   </motion.p>
+                  
+                  {/* User Action Buttons */}
+                  <motion.div 
+                    className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                  >
+                    
+                    <button
+                      onClick={handleDelete}
+                      className="px-6 py-2 border border-red-500/50 text-red-500 font-monts text-xs md:text-sm tracking-wider
+                      hover:bg-red-500/10 transition-all duration-300 min-w-[120px] sm:min-w-[140px]"
+                    >
+                      DELETE ACCOUNT
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="px-6 py-2 bg-[#CDAF7B] text-black font-monts text-xs md:text-sm tracking-wider hover:bg-[#B69A6B] 
+                      transition-all duration-300 min-w-[120px] sm:min-w-[140px]"
+                    >
+                      SIGN OUT
+                    </button>
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
@@ -161,22 +185,6 @@ export default function UserDashboard({ user, customer, transactions }) {
                       <div className="py-4">
                         <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Phone Number</p>
                         <p className="text-white/90 text-sm">{customer?.phone || 'Not Provided'}</p>
-                      </div>
-                      <div className="mt-12 space-y-4">
-                        <button
-                          onClick={handleLogout}
-                          className="w-full bg-[#CDAF7B] text-black font-monts px-6 py-3 hover:bg-[#B69A6B] 
-                          transition-all duration-300 text-sm uppercase tracking-widest"
-                        >
-                          Sign Out
-                        </button>
-                        <button
-                          onClick={handleDelete}
-                          className="w-full bg-transparent border border-red-500/50 text-red-500 font-monts px-6 py-3
-                          hover:bg-red-500/10 transition-all duration-300 text-sm uppercase tracking-widest"
-                        >
-                          Delete Account
-                        </button>
                       </div>
                     </div>
                   </div>

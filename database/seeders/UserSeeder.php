@@ -15,6 +15,8 @@ class UserSeeder extends Seeder
     {
         User::create([
             'username' => 'admin',
+            'name' => 'Administrator',
+            'phone' => '09123456789',
             'password' => Hash::make('123123'), // Always hash passwords for security!
             'role' => 'admin',
             'email' => 'admin@example.com', // Add if you have an email field
@@ -24,6 +26,8 @@ class UserSeeder extends Seeder
 
         User::create([
             'username' => 'user',
+            'name' => 'Sample User',
+            'phone' => '09987654321',
             'password' => Hash::make('123123'),
             'role' => 'user',
             'email' => 'user@example.com', // Add if you have an email field
