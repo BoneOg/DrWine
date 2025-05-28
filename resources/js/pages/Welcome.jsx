@@ -45,7 +45,7 @@ export default function Welcome() {
                 <div className="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row items-center gap-12 text-white">
                     <div className="w-full md:w-1/2">
                         <img
-                            src="/assets/people2.jpg"
+                            src="/assets/people2.png"
                             alt="About Us"
                             className="w-full h-full object-cover"
                         />
