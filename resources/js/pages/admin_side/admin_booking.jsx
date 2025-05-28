@@ -1,18 +1,20 @@
 import { usePage, router } from "@inertiajs/react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import AdminSidebar from "./admin_sidebar";
+import { motion } from 'framer-motion';
+import { Head } from '@inertiajs/react';
 
 export default function Booking() {
-  const { reservations = [] } = usePage().props;
+  const { reservations = [], flash = {} } = usePage().props;
+
   const counts = {
-  pending: reservations.filter(res => res.status === 'pending').length,
-  confirmed: reservations.filter(res => res.transaction?.status === 'confirmed').length,
-  cancelled: reservations.filter(res => res.transaction?.status === 'cancelled').length,
-  completed: reservations.filter(res => res.transaction?.status === 'completed').length,
-};
+    pending: reservations.filter(res => res.status === 'pending').length,
+    confirmed: reservations.filter(res => res.transaction?.status === 'confirmed').length,
+    cancelled: reservations.filter(res => res.transaction?.status === 'cancelled').length,
+    completed: reservations.filter(res => res.transaction?.status === 'completed').length,
+  };
 
   const [expanded, setExpanded] = useState(null);
-
 
   // Modal state
   const [modal, setModal] = useState({
@@ -24,6 +26,18 @@ export default function Booking() {
   // Search and sort state
   const [searchTerm, setSearchTerm] = useState("");
   const [sort, setSort] = useState({ field: null, order: "asc" });
+  const [isMobile, setIsMobile] = useState(false); // State for mobile detection
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const toggleExpand = (id) => {
     setExpanded((prev) => (prev === id ? null : id));
@@ -80,12 +94,8 @@ export default function Booking() {
               bVal = (b.transaction?.status || b.status || "").toLowerCase();
               break;
             case "date":
-              aVal = a.transaction?.created_at
-                ? new Date(a.transaction.created_at).getTime()
-                : 0;
-              bVal = b.transaction?.created_at
-                ? new Date(b.transaction.created_at).getTime()
-                : 0;
+              aVal = a.date_time ? new Date(a.date_time).getTime() : 0; // Sort by reservation date_time
+              bVal = b.date_time ? new Date(b.date_time).getTime() : 0;
               break;
             default:
               aVal = "";
@@ -115,161 +125,194 @@ export default function Booking() {
     setSort({ field, order });
   };
 
-  return (
-    <div className="flex min-h-screen bg-[#f9f9f9] text-gray-800 font-sans relative">
-      <AdminSidebar />
+  const fadeIn = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6 }
+  };
 
-      <main className="flex-1 px-12 py-10">
-        {/* Header Section */}
-        <section className="mb-12">
-          <h1 className="text-3xl font-semibold tracking-tight text-gray-900 mb-6">
-            Booking Overview
-          </h1>
-          <div className="px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+  return (
+    <>
+      <Head title="Admin Bookings" />
+      <div className="min-h-screen bg-gradient-to-b from-[#000C1C] to-[#000C1C] text-white flex">
+        <AdminSidebar />
+
+        <main className="flex-1 px-6 sm:px-10 pt-16 md:pt-20">
+          {/* Header Section */}
+          <motion.div
+            className="mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="flex flex-col items-center text-center">
+              <motion.div
+                className="w-16 md:w-20 h-[2px] bg-gradient-to-r from-transparent via-[#CDAF7B] to-transparent mb-6"
+                initial={{ width: 0 }}
+                animate={{ width: isMobile ? 64 : 80 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              />
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-felix text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#CDAF7B] via-white to-[#CDAF7B]">
+                Booking Overview
+              </h1>
+              <motion.div
+                className="w-16 md:w-20 h-[2px] bg-gradient-to-r from-transparent via-[#CDAF7B] to-transparent mb-4"
+                initial={{ width: 0 }}
+                animate={{ width: isMobile ? 64 : 80 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              />
+              <motion.p
+                className="text-[#CDAF7B] font-monts tracking-[0.3em] uppercase text-xs sm:text-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                Reservation Statuses
+              </motion.p>
+            </div>
+          </motion.div>
+
+          {/* Stats Cards */}
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 font-monts mb-12"
+            {...fadeIn}
+          >
             <StatusCard color="yellow" label="Pending" count={counts.pending} />
             <StatusCard color="green" label="Confirmed" count={counts.confirmed} />
             <StatusCard color="red" label="Cancelled" count={counts.cancelled} />
             <StatusCard color="blue" label="Completed" count={counts.completed} />
-          </div>
-        </section>
+          </motion.div>
 
-        {/* Parent container */}
-        <div className="mx-6 bg-white rounded-2xl shadow-md border border-gray-100">
-          {/* Filter Bar */}
-          <div className="flex mb-4 flex-wrap justify-between items-center gap-4 px-6 pt-6">
-            {/* Sort dropdown first (swapped) */}
-            <select
-              className="py-2 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300"
-              value={sort.field ? `${sort.field}-${sort.order}` : ""}
-              onChange={handleSortChange}
-            >
-              <option value="">Sort by...</option>
-              <option value="name-asc">Alphabet Name ↑</option>
-              <option value="name-desc">Alphabet Name ↓</option>
-              <option value="guests-asc">Guests ↑</option>
-              <option value="guests-desc">Guests ↓</option>
-              <option value="status-asc">Status ↑</option>
-              <option value="status-desc">Status ↓</option>
-              <option value="date-asc">Date Created ↑</option>
-              <option value="date-desc">Date Created ↓</option>
-            </select>
+          {/* Parent container for table */}
+          <motion.div
+            className="backdrop-blur-xl bg-white/[0.02] border border-white/10 shadow-md rounded-lg mb-8"
+            {...fadeIn}
+          >
+            {/* Filter Bar */}
+            <div className="flex mb-4 flex-wrap justify-between items-center gap-4 px-6 pt-6">
+              {/* Sort dropdown */}
+              <select
+                className="py-2 px-3 text-sm border border-white/10 rounded-lg bg-white/[0.02] text-white placeholder-[#CDAF7B] focus:outline-none focus:ring-2 focus:ring-[#CDAF7B]"
+                value={sort.field ? `${sort.field}-${sort.order}` : ""}
+                onChange={handleSortChange}
+              >
+                <option value="">Sort by...</option>
+                <option value="name-asc">Alphabet Name ↑</option>
+                <option value="name-desc">Alphabet Name ↓</option>
+                <option value="guests-asc">Guests ↑</option>
+                <option value="guests-desc">Guests ↓</option>
+                <option value="status-asc">Status ↑</option>
+                <option value="status-desc">Status ↓</option>
+                <option value="date-asc">Date & Time ↑</option>
+                <option value="date-desc">Date & Time ↓</option>
+              </select>
 
-            {/* Search input second */}
-            <div className="relative w-full sm:w-1/2 lg:w-1/3">
-              <input
-                type="text"
-                placeholder="Search by name..."
-                className="w-full py-2 pl-10 pr-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
+              {/* Search input */}
+              <div className="relative w-full sm:w-1/2 lg:w-1/3">
+                <input
+                  type="text"
+                  placeholder="Search by name..."
+                  className="w-full py-2 pl-10 pr-4 text-sm border border-white/10 rounded-lg bg-white/[0.02] text-white placeholder-[#CDAF7B] focus:outline-none focus:ring-2 focus:ring-[#CDAF7B]"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg
+                    className="w-4 h-4 text-[#CDAF7B]"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                    />
+                  </svg>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Header Row */}
-          <div className="grid grid-cols-6 text-sm font-semibold text-gray-500 border-b border-gray-200 px-6 py-4 mr-6 ml-6 bg-gray-50">
-            <span>Name</span>
-            <span>Guests</span>
-            <span>Table Number</span>
-            <span>Status</span>
-            <span>Date & Time</span>
-            <span>Actions</span>
-          </div>
+            {/* Header Row */}
+            <div className="grid grid-cols-6 text-sm font-semibold text-[#CDAF7B] border-b border-white/10 px-6 py-4 bg-white/[0.01]">
+              <span>Name</span>
+              <span>Guests</span>
+              <span>Table Number</span>
+              <span>Status</span>
+              <span>Date & Time</span>
+              <span>Actions</span>
+            </div>
 
-          {/* Booking Rows */}
-          <div className="relative max-h-[500px] overflow-y-auto my-0 rounded-b-2xl mr-6 ml-6 mb-4">
-            <div className="pointer-events-none absolute top-0 left-0 h-full w-8 bg-gradient-to-r from-white to-transparent z-10" />
-            <div className="pointer-events-none absolute top-0 right-0 h-full w-8 bg-gradient-to-l from-white to-transparent z-10" />
+            {/* Booking Rows */}
+            <div className="relative max-h-[500px] overflow-y-auto rounded-b-lg">
+              <div className="overflow-x-auto divide-y divide-white/10">
+                {filteredAndSortedReservations.length === 0 ? (
+                  <p className="text-center text-[#CDAF7B] py-20">
+                    No reservations found.
+                  </p>
+                ) : (
+                  filteredAndSortedReservations.map((res) => {
+                    const isOpen = expanded === res.reservationID;
+                    const isCompletedOrCancelled =
+                      res.transaction?.status === "completed" ||
+                      res.transaction?.status === "cancelled" ||
+                      res.status === "completed" ||
+                      res.status === "cancelled"; // Check both direct status and transaction status
+                    return (
+                      <div
+                        key={res.reservationID}
+                        className="px-6 py-4 hover:bg-white/[0.03] transition duration-150 cursor-pointer"
+                        onClick={() => toggleExpand(res.reservationID)}
+                      >
+                        {/* Row with 6 columns */}
+                        <div className="grid grid-cols-6 text-sm text-white min-w-[800px] items-center">
+                          <span>{res.customer?.name || "N/A"}</span>
+                          <span>{res.size || "N/A"}</span>
+                          <span>{res.table?.table_number || "N/A"}</span>
+                          <span>
+                            <StatusBadge
+                              status={res.transaction?.status || res.status}
+                            />
+                          </span>
+                          <span>{new Date(res.date_time).toLocaleString()}</span>
+                          <span className="flex gap-2">
+                            {!isCompletedOrCancelled && (
+                              <>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    openModal(res.reservationID, "confirm");
+                                  }}
+                                  className="bg-green-800/20 text-green-400 border border-green-800 hover:bg-green-700 text-xs px-3 py-1 rounded transition duration-150"
+                                >
+                                  Confirm
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    openModal(res.reservationID, "cancel");
+                                  }}
+                                  className="bg-red-800/20 text-red-400 border border-red-800 hover:bg-red-700 text-xs px-3 py-1 rounded transition duration-150"
+                                >
+                                  Cancel
+                                </button>
+                              </>
+                            )}
+                          </span>
+                        </div>
 
-            <div className="overflow-x-auto divide-y divide-gray-200">
-              {filteredAndSortedReservations.length === 0 ? (
-                <p className="text-center text-gray-400 py-20">
-                  No reservations found.
-                </p>
-              ) : (
-                filteredAndSortedReservations.map((res) => {
-                  const isOpen = expanded === res.reservationID;
-                  const isCompletedOrCancelled =
-                    res.transaction?.status === "completed" ||
-                    res.transaction?.status === "cancelled" ||
-                    res.status === "completed" ||
-                    res.status === "cancelled";
-                  return (
-                    <div
-                      key={res.reservationID}
-                      className="px-6 py-4 hover:bg-gray-50 transition duration-150 cursor-pointer"
-                      onClick={() => toggleExpand(res.reservationID)}
-                    >
-                      {/* Row with 6 columns */}
-                      <div className="grid grid-cols-6 text-sm text-gray-800 min-w-[800px]">
-                        <span>{res.customer?.name || "N/A"}</span>
-                        <span>{res.size || "N/A"}</span>
-                        <span>{res.table?.table_number || "N/A"}</span>
-                        <span>
-                          <StatusBadge
-                            status={res.transaction?.status || res.status}
-                          />
-                        </span>
-                        <span>{new Date(res.date_time).toLocaleString()}</span>
-                        <span className="flex gap-2">
-                          {!isCompletedOrCancelled && res.status !== "pending" && (
-                            <>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  openModal(res.reservationID, "confirm");
-                                }}
-                                className="bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1 rounded"
-                              >
-                                Confirm
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  openModal(res.reservationID, "cancel");
-                                }}
-                                className="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded"
-                              >
-                                Cancel
-                              </button>
-                            </>
-                          )}
-                        </span>
-                      </div>
-
-                      {/* Expanded Details */}
-                      {isOpen && (
-                        <div className="mt-4 rounded-xl px-4 py-4">
-                          <div className="grid grid-cols-6 text-sm text-gray-700 gap-y-4">
-                            <div className="col-span-1 -ml-4">
+                        {/* Expanded Details */}
+                        {isOpen && (
+                          <div className="mt-4 rounded-xl px-4 py-4 bg-white/[0.01]">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 text-sm text-[#CDAF7B] gap-y-4 gap-x-6">
                               <Detail label="Phone" value={res.customer?.phone} />
-                            </div>
-                            <div className="col-span-1 -ml-2">
                               <Detail label="Email" value={res.customer?.email} />
-                            </div>
-                            <div className="col-span-1 -ml-1.5">
                               <Detail
                                 label="Payment"
                                 value={res.transaction?.payment_method}
                               />
-                            </div>
-                            <div className="col-span-2">
                               <Detail
                                 label="Date Created"
                                 value={
@@ -278,72 +321,95 @@ export default function Booking() {
                                     : "N/A"
                                 }
                               />
+                              {/* Add more details here if needed */}
                             </div>
-                            <div className="col-span-1" />
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })
-              )}
+                        )}
+                      </div>
+                    );
+                  })
+                )}
+              </div>
             </div>
-          </div>
-        </div>
-      </main>
+          </motion.div>
 
-      {/* Custom Confirmation Modal */}
-      {modal.isOpen && (
-        <>
-          {/* Background overlay with 10% black opacity */}
-          <div
-            className="fixed inset-0 bg-black/20 z-40"
-            onClick={closeModal} // Close modal if clicked outside popup
-          />
+          {/* Flash Message */}
+          {flash.success && (
+            <motion.div
+              className="mt-8 flex justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <div className="px-4 py-3 rounded-lg bg-[#CDAF7B]/20 text-[#CDAF7B] max-w-xs w-full text-center border border-[#CDAF7B]/30">
+                {flash.success}
+              </div>
+            </motion.div>
+          )}
+        </main>
 
-          {/* Popup box */}
-          <div
-            className="fixed top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/3
-                          bg-white rounded-lg p-6 w-80 shadow-lg z-50"
-          >
-            <h2 className="text-lg font-semibold mb-4 text-gray-900">
-              Are you sure you want to {modal.action} this reservation?
-            </h2>
-            <div className="flex justify-end gap-4">
-              <button
-                onClick={closeModal}
-                className="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100"
-              >
-                No
-              </button>
-              <button
-                onClick={confirmAction}
-                className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600"
-              >
-                Yes
-              </button>
-            </div>
-          </div>
-        </>
-      )}
-    </div>
+        {/* Custom Confirmation Modal */}
+        {modal.isOpen && (
+          <>
+            {/* Background overlay */}
+            <div
+              className="fixed inset-0 bg-black/50 z-40"
+              onClick={closeModal}
+            />
+
+            {/* Popup box */}
+            <motion.div
+              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#0D1B2A] rounded-lg p-6 w-80 shadow-lg z-50 border border-[#CDAF7B]"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.2 }}
+            >
+              <h2 className="text-lg font-semibold mb-4 text-[#CDAF7B]">
+                Are you sure you want to {modal.action} this reservation?
+              </h2>
+              <div className="flex justify-end gap-4">
+                <button
+                  onClick={closeModal}
+                  className="px-4 py-2 rounded-md border border-[#CDAF7B] text-[#CDAF7B] hover:bg-[#CDAF7B]/10 transition duration-150"
+                >
+                  No
+                </button>
+                <button
+                  onClick={confirmAction}
+                  className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 transition duration-150"
+                >
+                  Yes, {modal.action === 'confirm' ? 'Confirm' : 'Cancel'}
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </div>
+    </>
   );
 }
 
+// ---
+// ## Helper Components (moved outside main component for clarity)
+// ---
+
 function StatusCard({ color, label, count }) {
+  // Define color mapping for different statuses, but use fixed styles for the card itself
   const colorMap = {
-    yellow: "bg-yellow-50 text-yellow-800",
-    green: "bg-green-50 text-green-800",
-    red: "bg-red-50 text-red-800",
-    blue: "bg-blue-50 text-blue-800",
+    yellow: "text-yellow-400", // For text color inside the card
+    green: "text-green-400",
+    red: "text-red-400",
+    blue: "text-blue-400",
   };
 
   return (
     <div
-      className={`rounded-xl p-6 shadow-sm ${colorMap[color]} border border-gray-100`}
+      className="backdrop-blur-xl bg-white/[0.02] border border-white/10 p-6 md:p-8 hover:bg-white/[0.04] transition-all duration-300"
     >
-      <h3 className="text-sm font-medium mb-2 tracking-wide">{label} Reservations</h3>
-      <p className="text-3xl font-semibold">{count || 0}</p>
+      <h3 className={`text-lg font-semibold ${colorMap[color]} mb-2`}>
+        {label} Bookings
+      </h3>
+      <p className="text-4xl font-lmonts text-white">{count || 0}</p>
     </div>
   );
 }
@@ -351,28 +417,30 @@ function StatusCard({ color, label, count }) {
 function Detail({ label, value }) {
   return (
     <div>
-      <p className="text-xs text-gray-500 uppercase font-medium mb-1 tracking-wide">
+      <p className="text-xs text-[#CDAF7B] uppercase font-medium mb-1 tracking-wide">
         {label}
       </p>
-      <p className="text-gray-900">{value || "N/A"}</p>
+      <p className="text-white">{value || "N/A"}</p>
     </div>
   );
 }
 
 function StatusBadge({ status }) {
   const statusMap = {
-    pending: "bg-yellow-100 text-yellow-800",
-    confirmed: "bg-green-100 text-green-800",
-    cancelled: "bg-red-100 text-red-800",
-    completed: "bg-blue-100 text-blue-800",
+    pending: "bg-yellow-800/20 text-yellow-400 border border-yellow-800",
+    confirmed: "bg-green-800/20 text-green-400 border border-green-800",
+    cancelled: "bg-red-800/20 text-red-400 border border-red-800",
+    completed: "bg-blue-800/20 text-blue-400 border border-blue-800",
+    // Fallback for any unknown status
+    unknown: "bg-gray-800/20 text-gray-400 border border-gray-800",
   };
 
   const normalizedStatus = status?.toLowerCase() || "unknown";
-  const classes = statusMap[normalizedStatus] || "bg-gray-100 text-gray-800";
+  const classes = statusMap[normalizedStatus] || statusMap.unknown;
 
   return (
     <span
-      className={`px-2 py-1 rounded text-xs font-medium capitalize inline-block ${classes}`}
+      className={`px-2 py-1 rounded-full text-xs font-medium capitalize inline-block ${classes}`}
     >
       {normalizedStatus}
     </span>
