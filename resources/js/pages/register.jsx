@@ -8,6 +8,7 @@ export default function Register() {
         username: '',
         name: '',
         email: '',
+        phone: '',
         password: '',
         password_confirmation: '',
     });
@@ -153,6 +154,22 @@ export default function Register() {
                                 />
                                 {errors.email && (
                                     <p className="text-[#CDAF7B] text-xs mt-2">{errors.email}</p>
+                                )}
+                            </div>
+
+                            <div>
+                                <input
+                                    type="tel"
+                                    name="phone"
+                                    value={form.phone}
+                                    onChange={handleChange}
+                                    placeholder="Phone Number (Optional)"
+                                    className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
+                                    placeholder:text-[#CDAF7B]/60 focus:outline-none focus:border-[#CDAF7B] focus:ring-1 
+                                    focus:ring-[#CDAF7B]/50 transition-all duration-300 font-monts text-sm"
+                                />
+                                {errors.phone && (
+                                    <p className="text-[#CDAF7B] text-xs mt-2">{errors.phone}</p>
                                 )}
                             </div>
 

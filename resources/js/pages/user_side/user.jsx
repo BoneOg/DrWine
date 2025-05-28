@@ -121,14 +121,6 @@ export default function UserDashboard({ user, customer, transactions }) {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
                   >
-                    
-                    <button
-                      onClick={handleDelete}
-                      className="px-6 py-2 border border-red-500/50 text-red-500 font-monts text-xs md:text-sm tracking-wider
-                      hover:bg-red-500/10 transition-all duration-300 min-w-[120px] sm:min-w-[140px]"
-                    >
-                      DELETE ACCOUNT
-                    </button>
                     <button
                       onClick={handleLogout}
                       className="px-6 py-2 bg-[#CDAF7B] text-black font-monts text-xs md:text-sm tracking-wider hover:bg-[#B69A6B] 
@@ -185,6 +177,17 @@ export default function UserDashboard({ user, customer, transactions }) {
                       <div className="py-4">
                         <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Phone Number</p>
                         <p className="text-white/90 text-sm">{customer?.phone || 'Not Provided'}</p>
+                      </div>
+                      
+                      {/* Delete Account Button */}
+                      <div className="pt-6">
+                        <button
+                          onClick={handleDelete}
+                          className="w-full px-6 py-2 border border-red-500/50 text-red-500 font-monts text-xs tracking-wider
+                          hover:bg-red-500/10 transition-all duration-300"
+                        >
+                          DELETE ACCOUNT
+                        </button>
                       </div>
                     </div>
                   </div>
