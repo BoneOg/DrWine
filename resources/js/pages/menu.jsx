@@ -311,13 +311,13 @@ export default function Menu() {
             {/* Hero Section */}
             <div className="relative h-[50vh] bg-black overflow-hidden">
                 <img
-                    src="/assets/menu-section-background.jpg"
+                    src="/assets/menu-section-background.png"
                     alt="Menu Hero"
                     className="w-full h-full object-cover opacity-30"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-transparent"></div>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <h1 className="text-7xl font-felix text-white tracking-wider mb-4">
+                    <h1 className="text-7xl font-felix text-white tracking-wider pt-16 mb-4">
                         Our Menu
                     </h1>
                     <div className="w-24 h-[1px] bg-[#CDAF7B]"></div>

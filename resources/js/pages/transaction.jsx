@@ -1,107 +1,222 @@
-    import React from 'react';
-    import { Head } from '@inertiajs/react';
+import React from 'react';
+import { Head } from '@inertiajs/react';
+import Layout from '@/components/layout';
+import { motion } from 'framer-motion';
 
-    export default function Transaction({ transaction }) { // Renamed to Transaction to match file for clarity
-        // Destructure nested data for easier access
-        const { reservation } = transaction;
-        const customer = reservation?.customer; // Optional chaining in case reservation or customer is null
+export default function Transaction({ transaction }) {
+    const { reservation } = transaction;
+    const customer = reservation?.customer;
 
-        return (
-            <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans">
-                <Head title="Transaction Details" />
+    const fadeIn = {
+        initial: { opacity: 0, y: 20 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.6 }
+    };
 
-                <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 md:p-10 w-full max-w-2xl border border-gray-200">
-                    <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-6 text-center">
-                        Transaction Details
-                    </h1>
-
-                    {transaction ? (
-                        <div className="space-y-5">
-                            {/* Customer Information Section */}
-                            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                                <h2 className="text-xl font-semibold text-blue-700 mb-3">Customer Information</h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-gray-700">
-                                    <p>
-                                        <strong className="font-medium text-gray-800">Name:</strong> {customer?.name || 'N/A'}
-                                    </p>
-                                    <p>
-                                        <strong className="font-medium text-gray-800">Phone:</strong> {customer?.phone || 'N/A'}
-                                    </p>
-                                    <p className="col-span-1 sm:col-span-2">
-                                        <strong className="font-medium text-gray-800">Email:</strong> {customer?.email || 'N/A'}
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Reservation Details Section */}
-                            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                                <h2 className="text-xl font-semibold text-green-700 mb-3">Reservation Details</h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-gray-700">
-                                    {(() => {
-                                    const dateTime = new Date(reservation?.date_time);
-                                    const dateStr = dateTime.toLocaleDateString('en-US', { timeZone: 'UTC' });
-                                    const timeStr = dateTime.toLocaleTimeString('en-US', {
-                                        timeZone: 'UTC',
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                    });
-
-                                    return (
-                                        <>
-                                        <p>
-                                            <strong className="font-medium text-gray-800">Date:</strong> {dateStr}
-                                        </p>
-                                        <p>
-                                            <strong className="font-medium text-gray-800">Time Slot:</strong> {timeStr}
-                                        </p>
-                                        </>
-                                    );
-                                    })()}
-                                    <p>
-                                        <strong className="font-medium text-gray-800">Guest Size:</strong> {reservation?.size || 'N/A'}
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Payment and Status Section */}
-                            <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                                <h2 className="text-xl font-semibold text-purple-700 mb-3">Payment & Status</h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-gray-700">
-                                    <p>
-                                        <strong className="font-medium text-gray-800">Payment Method:</strong> {transaction.payment_method || 'N/A'}
-                                    </p>
-                                    <p>
-                                        <strong className="font-medium text-gray-800">Reservation Fee:</strong> ${parseFloat(transaction.amount).toFixed(2) || '0.00'}
-                                    </p>
-                                    <p className="col-span-1 sm:col-span-2">
-                                        <strong className="font-medium text-gray-800">Status:</strong>
-                                        <span className="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                            Confirmed
-                                        </span>
-                                    </p>
-                                    <p className="col-span-1 sm:col-span-2 text-sm text-gray-500">
-                                        <strong className="font-medium text-gray-800">Transaction ID:</strong> {transaction.transactionID || transaction.id || 'N/A'}
-                                    </p>
-                                    <p className="col-span-1 sm:col-span-2 text-sm text-gray-500">
-                                        <strong className="font-medium text-gray-800">Date & Time:</strong> {new Date(transaction.created_at).toLocaleString() || 'N/A'}
-                                    </p>
-                                </div>
-                            </div>
+    return (
+        <>
+            <Head title="Transaction Details" />
+            <Layout>
+                <div className="min-h-screen bg-gradient-to-b from-[#000C1C] to-[#000C1C] text-white">
+                    {/* Hero Section */}
+                    <div className="relative h-[50vh] pt-20 flex items-center overflow-hidden">
+                        <div className="absolute inset-0">
+                            <img 
+                                src="/assets/reserve.png" 
+                                alt="Background" 
+                                className="w-full h-full object-cover opacity-90 scale-105 transform hover:scale-100 transition-transform duration-[2s]"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-[#000C1C]/80 to-[#000C1C]"></div>
                         </div>
-                    ) : (
-                        <p className="text-center text-gray-600 text-lg">No transaction details found.</p>
-                    )}
-
-                    <div className="mt-8 text-center">
-                        <a
-                            href="/" // Link back to home or another relevant page
-                            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+                        
+                        <motion.div 
+                            className="relative z-10 w-full"
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8 }}
                         >
-                            Go to Home
-                        </a>
+                            <div className="max-w-7xl mx-auto px-6 md:px-8">
+                                <div className="flex flex-col items-center text-center">
+                                    <motion.div 
+                                        className="w-20 h-[2px] bg-gradient-to-r from-transparent via-[#CDAF7B] to-transparent mb-8"
+                                        initial={{ width: 0 }}
+                                        animate={{ width: 80 }}
+                                        transition={{ duration: 0.8, delay: 0.2 }}
+                                    />
+                                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-felix mb-8 tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-[#CDAF7B] via-white to-[#CDAF7B]">
+                                        TRANSACTION DETAILS
+                                    </h1>
+                                    <motion.div 
+                                        className="w-20 h-[2px] bg-gradient-to-r from-transparent via-[#CDAF7B] to-transparent mb-6"
+                                        initial={{ width: 0 }}
+                                        animate={{ width: 80 }}
+                                        transition={{ duration: 0.8, delay: 0.2 }}
+                                    />
+                                    <motion.p 
+                                        className="text-[#CDAF7B] font-monts tracking-[0.3em] uppercase text-sm"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: 0.4 }}
+                                    >
+                                        RESERVATION CONFIRMED
+                                    </motion.p>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    {/* Content Section */}
+                    <div className="relative pt-20 -mt-20 z-20 pb-20">
+                        <div className="max-w-4xl mx-auto px-4 md:px-8">
+                            {transaction ? (
+                                <div className="space-y-8">
+                                    {/* Customer Information */}
+                                    <motion.div 
+                                        className="backdrop-blur-xl bg-white/[0.02] border border-white/10 rounded-none p-8 hover:bg-white/[0.04] transition-all duration-300"
+                                        {...fadeIn}
+                                    >
+                                        <div className="flex items-center gap-4 mb-6">
+                                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#CDAF7B] to-[#E5C992] flex items-center justify-center transform hover:rotate-12 transition-transform duration-300">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-black" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                                                </svg>
+                                            </div>
+                                            <h2 className="text-2xl font-felix text-white">Guest Information</h2>
+                                        </div>
+                                        <div className="space-y-4 font-monts divide-y divide-white/10">
+                                            <div className="flex justify-between items-center py-3">
+                                                <span className="text-[#CDAF7B]">Name</span>
+                                                <span className="text-white/90">{customer?.name || 'N/A'}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center py-3">
+                                                <span className="text-[#CDAF7B]">Phone</span>
+                                                <span className="text-white/90">{customer?.phone || 'N/A'}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center py-3">
+                                                <span className="text-[#CDAF7B]">Email</span>
+                                                <span className="text-white/90">{customer?.email || 'N/A'}</span>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+
+                                    {/* Reservation Details */}
+                                    <motion.div 
+                                        className="backdrop-blur-xl bg-white/[0.02] border border-white/10 rounded-none p-8 hover:bg-white/[0.04] transition-all duration-300"
+                                        {...fadeIn}
+                                        transition={{ delay: 0.2 }}
+                                    >
+                                        <div className="flex items-center gap-4 mb-6">
+                                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#CDAF7B] to-[#E5C992] flex items-center justify-center transform hover:rotate-12 transition-transform duration-300">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-black" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                                                </svg>
+                                            </div>
+                                            <h2 className="text-2xl font-felix text-white">Reservation Details</h2>
+                                        </div>
+                                        <div className="space-y-4 font-monts divide-y divide-white/10">
+                                            {(() => {
+                                                const dateTime = new Date(reservation?.date_time);
+                                                const dateStr = dateTime.toLocaleDateString('en-US', { 
+                                                    timeZone: 'UTC',
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                    year: 'numeric'
+                                                });
+                                                const timeStr = dateTime.toLocaleTimeString('en-US', {
+                                                    timeZone: 'UTC',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
+                                                });
+
+                                                return (
+                                                    <>
+                                                        <div className="flex justify-between items-center py-3">
+                                                            <span className="text-[#CDAF7B]">Date</span>
+                                                            <span className="text-white/90">{dateStr}</span>
+                                                        </div>
+                                                        <div className="flex justify-between items-center py-3">
+                                                            <span className="text-[#CDAF7B]">Time</span>
+                                                            <span className="text-white/90">{timeStr}</span>
+                                                        </div>
+                                                    </>
+                                                );
+                                            })()}
+                                            <div className="flex justify-between items-center py-3">
+                                                <span className="text-[#CDAF7B]">Party Size</span>
+                                                <span className="text-white/90">{reservation?.size || 'N/A'} {reservation?.size > 1 ? 'guests' : 'guest'}</span>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+
+                                    {/* Payment Details */}
+                                    <motion.div 
+                                        className="backdrop-blur-xl bg-white/[0.02] border border-white/10 rounded-none p-8 hover:bg-white/[0.04] transition-all duration-300"
+                                        {...fadeIn}
+                                        transition={{ delay: 0.4 }}
+                                    >
+                                        <div className="flex items-center gap-4 mb-6">
+                                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#CDAF7B] to-[#E5C992] flex items-center justify-center transform hover:rotate-12 transition-transform duration-300">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-black" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+                                                    <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
+                                                </svg>
+                                            </div>
+                                            <h2 className="text-2xl font-felix text-white">Payment Details</h2>
+                                        </div>
+                                        <div className="space-y-4 font-monts divide-y divide-white/10">
+                                            <div className="flex justify-between items-center py-3">
+                                                <span className="text-[#CDAF7B]">Payment Method</span>
+                                                <span className="text-white/90">{transaction.payment_method || 'N/A'}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center py-3">
+                                                <span className="text-[#CDAF7B]">Amount</span>
+                                                <span className="text-white/90 text-lg">₱{parseFloat(transaction.amount).toFixed(2)}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center py-3">
+                                                <span className="text-[#CDAF7B]">Status</span>
+                                                <span className="px-4 py-1.5 bg-gradient-to-r from-[#CDAF7B] to-[#E5C992] text-black rounded-full font-medium">
+                                                    Confirmed
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between items-center py-3">
+                                                <span className="text-[#CDAF7B]">Transaction ID</span>
+                                                <span className="font-mono text-white/90">{transaction.transactionID || transaction.id}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center py-3">
+                                                <span className="text-[#CDAF7B]">Date & Time</span>
+                                                <span className="text-white/90">{new Date(transaction.created_at).toLocaleString()}</span>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+
+                                    {/* Action Button */}
+                                    <motion.div 
+                                        className="flex justify-center pt-12"
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.6 }}
+                                    >
+                                        <a
+                                            href="/"
+                                            className="group relative px-8 py-4 font-monts text-sm tracking-wider overflow-hidden"
+                                        >
+                                            <span className="relative z-10 text-black font-medium">
+                                                RETURN TO HOME
+                                            </span>
+                                            <div className="absolute inset-0 bg-gradient-to-r from-[#CDAF7B] to-[#E5C992] transform group-hover:scale-105 transition-transform duration-300"></div>
+                                        </a>
+                                    </motion.div>
+                                </div>
+                            ) : (
+                                <div className="text-center py-20">
+                                    <p className="text-[#CDAF7B] font-monts">No transaction details found.</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
-    }
+            </Layout>
+        </>
+    );
+}
     

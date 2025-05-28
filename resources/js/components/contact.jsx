@@ -7,13 +7,13 @@ export default function ContactSection() {
     <section
       className="relative py-16 md:py-20 lg:py-24 bg-cover bg-center text-white overflow-hidden"
       style={{
-        backgroundImage: `url('/assets/contactsection.jpg')`,
+        backgroundImage: `url('/assets/contact.png')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <div className="absolute inset-0 bg-[#000C1C] opacity-60"></div>
 
       <div className="relative container z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-16 xl:gap-20">
