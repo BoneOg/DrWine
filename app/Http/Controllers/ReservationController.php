@@ -20,32 +20,40 @@ class ReservationController extends Controller
 
     public function getAvailableTimes(Request $request)
     {
-        $date = $request->input('date');
-        $fixedSlots = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
+        $request->validate([
+            'date' => 'required|date_format:Y-m-d',
+            'size' => 'required|integer|min:1|max:10',
+        ]);
 
+        $date = $request->input('date');
+        $size = $request->input('size');
+        $fixedSlots = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
         $availableSlots = [];
 
         foreach ($fixedSlots as $slot) {
             $dateTime = Carbon::createFromFormat('Y-m-d H:i', "$date $slot");
 
-            $availableTable = RestaurantTable::where('table_status', 'available')
-                ->get()
-                ->filter(function ($table) use ($dateTime) {
-                    return !Reservation::where('tableID', $table->tableID)
-                        ->whereBetween('date_time', [
-                            $dateTime,
-                            $dateTime->copy()->addMinutes(120)
-                        ])
-                        ->exists();
-                })
-                ->count();
-
-            if ($availableTable > 0) {
+            if ($this->isTimeSlotAvailable($dateTime, $size)) {
                 $availableSlots[] = $slot;
             }
         }
 
         return response()->json($availableSlots);
+    }
+
+    public function checkAvailability(Request $request)
+    {
+        $request->validate([
+            'date_time' => 'required|date_format:Y-m-d H:i',
+            'size' => 'required|integer|min:1|max:10',
+        ]);
+
+        $dateTime = Carbon::createFromFormat('Y-m-d H:i', $request->date_time);
+        $size = $request->size;
+
+        $isAvailable = $this->isTimeSlotAvailable($dateTime, $size);
+
+        return response()->json(['available' => $isAvailable]);
     }
 
     public function store(Request $request)
@@ -58,17 +66,16 @@ class ReservationController extends Controller
             'size' => 'required|integer|min:1|max:10',
         ]);
 
-        // Determine if the request is from an authenticated user
         $user = auth()->user();
 
         $customer = Customer::create([
-            'userID' => $user?->userID, // Set to null if guest
+            'userID' => $user?->userID,
             'name' => $request->name,
             'phone' => $request->phone,
             'email' => $request->email,
         ]);
 
-        $dateTime = Carbon::createFromFormat('Y-m-d H:i', $request->date_time, config('app.timezone'));
+        $dateTime = Carbon::createFromFormat('Y-m-d H:i', $request->date_time);
 
         $table = RestaurantTable::where('capacity', '>=', $request->size)
             ->where('table_status', 'available')
@@ -103,11 +110,10 @@ class ReservationController extends Controller
     public function cancel(Request $request, $reservationID)
     {
         $reservation = Reservation::findOrFail($reservationID);
-        
-        // Check if the user has permission to cancel this reservation
+
         if (auth()->check()) {
             $customer = Customer::where('userID', auth()->id())->first();
-            if ($reservation->customerID !== $customer->customerID) {
+            if ($reservation->customerID !== $customer?->customerID) {
                 return redirect()->route('reservation')->with('error', 'You are not authorized to cancel this reservation.');
             }
         }
@@ -116,5 +122,21 @@ class ReservationController extends Controller
         $reservation->save();
 
         return redirect()->route('reservation')->with('success', 'Reservation cancelled successfully');
+    }
+
+    private function isTimeSlotAvailable($dateTime, $guestCount)
+    {
+        return RestaurantTable::where('capacity', '>=', $guestCount)
+            ->where('table_status', 'available')
+            ->get()
+            ->filter(function ($table) use ($dateTime) {
+                return !Reservation::where('tableID', $table->tableID)
+                    ->whereBetween('date_time', [
+                        $dateTime,
+                        $dateTime->copy()->addMinutes(120)
+                    ])
+                    ->exists();
+            })
+            ->isNotEmpty();
     }
 }

@@ -26,11 +26,10 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation');
-Route::post('/reservation', [ReservationController::class, 'store']);
-
-Route::post('/reservation/available-times', [ReservationController::class, 'getAvailableTimes']);
-Route::delete('/reservation/{reservationID}/cancel', [ReservationController::class, 'cancel']);
-Route::put('/reservation/{reservationID}/complete', [ReservationController::class, 'markAsCompleted'])->name('reservation.complete');
+Route::post('/reservation', [ReservationController::class, 'store'])->name('reservation.store');
+Route::post('/reservation/available-times', [ReservationController::class, 'getAvailableTimes'])->name('reservation.times');
+Route::post('/reservation/check', [ReservationController::class, 'checkAvailability'])->name('reservation.check');
+Route::delete('/reservation/{reservationID}/cancel', [ReservationController::class, 'cancel'])->name('reservation.cancel');
 
 Route::get('/checkout/{reservationID}', [CheckoutController::class, 'index'])->name('checkout');
 
