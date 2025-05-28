@@ -1,12 +1,33 @@
 // resources/js/pages/user_side/user.jsx
 
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import Layout from '@/components/layout';
+import { useEffect } from "react";
 
-export default function UserDashboard({ user, customer, transactions }) {
-  const handleLogout = () => {
-    router.post('/logout');
-  };
+export default function UserDashboard({ user, customer, transactions }) { 
+    const { auth } = usePage().props;
+
+    useEffect(() => {
+        // Prevent cached version from loading
+        window.history.replaceState(null, null, window.location.href);
+        
+        // If user is not authenticated, redirect to login
+        if (!auth.user) {
+            router.visit('/login');
+        }
+    }, [auth]);
+
+    const handleLogout = () => {
+        router.post('/logout', {
+            onSuccess: () => {
+                page.reset();
+                window.history.replaceState(null, null, "/login");
+                window.location.replace('/login');
+            },
+        });
+    };
+
+    
 
   const handleDelete = () => {
     if (

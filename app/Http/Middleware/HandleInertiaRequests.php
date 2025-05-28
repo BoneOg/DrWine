@@ -26,7 +26,7 @@ class HandleInertiaRequests extends Middleware
      *
      * @return array<string, \Closure|mixed>
      */
-    public function share(Request $request): array
+   public function share(Request $request): array
     {
         return [
             ...parent::share($request),
@@ -47,6 +47,13 @@ class HandleInertiaRequests extends Middleware
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
+            ],
+
+            // Cache-Control Headers (Prevents Back Navigation after Logout)
+            'cacheHeaders' => [
+                'Cache-Control' => 'private, max-age=0, no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0'
             ],
         ];
     }

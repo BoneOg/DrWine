@@ -12,6 +12,10 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user();
+        
+        if (!$user) {
+            return redirect('/login');
+        }
 
         $customers = Customer::where('userID', $user->userID)->pluck('customerID');
 
@@ -21,7 +25,7 @@ class UserController extends Controller
             })
             ->get();
 
-        // If you still want to show the first customer’s info (e.g. for profile section)
+        // Optionally show first customer info
         $primaryCustomer = Customer::where('userID', $user->userID)->first();
 
         return Inertia::render('user_side/user', [
@@ -46,9 +50,4 @@ class UserController extends Controller
         ]);
     }
 
-    public function logout()
-    {
-        Auth::logout();
-        return redirect('/login');
-    }
 }

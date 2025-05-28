@@ -2,7 +2,11 @@ import { Link, router } from '@inertiajs/react';
 
 export default function AdminSidebar() {
   const handleLogout = () => {
-    router.post('/logout');
+    router.post('/logout', {
+      onSuccess: () => {
+        window.location.href = '/login';
+      },
+    });
   };
 
   const goHome = () => {
@@ -29,39 +33,42 @@ export default function AdminSidebar() {
       <nav className="flex flex-col font-monts text-xl space-y-4">
         <Link
           href="/admin"
-          className="px-2 py-3 rounded text-white hover:bg-[#CDAF7B] hover:text-black transition text-left"
+          className="px-2 py-3 text-white hover:bg-[#CDAF7B] hover:text-black transition text-left"
         >
           Dashboard
         </Link>
         <Link
           href="/admin/users"
-          className="px-2 py-3 rounded text-white hover:bg-[#CDAF7B] hover:text-black transition text-left"
+          className="px-2 py-3  text-white hover:bg-[#CDAF7B] hover:text-black transition text-left"
         >
           Users
         </Link>
         <Link
           href="/admin/booking"
-          className="px-2 py-3 rounded text-white hover:bg-[#CDAF7B] hover:text-black transition text-left"
+          className="px-2 py-3  text-white hover:bg-[#CDAF7B] hover:text-black transition text-left"
         >
           Booking
         </Link>
       </nav>
 
       {/* Action Buttons */}
-      <div className="mt-auto flex flex-col space-y-3 font-monts text-xl">
-        <button
-          onClick={goHome}
-          className="w-full text-white px-2 py-3 rounded hover:bg-[#CDAF7B] hover:text-black transition text-left"
-        >
-          Home
-        </button>
-        <button
-          onClick={handleLogout}
-          className="w-full text-white px-2 py-3 rounded hover:bg-[#CDAF7B] hover:text-black transition text-left"
-        >
-          Logout
-        </button>
-      </div>
+      <div className="mt-auto flex flex-col space-y-3 font-monts text-xl px-2">
+      {/* Home Button (like SIGN OUT) */}
+      <button
+        onClick={goHome}
+        className="w-full bg-[#CDAF7B] text-black py-3 font-semibold tracking-wide hover:opacity-50 transition"
+      >
+        HOME
+      </button>
+
+      {/* Logout Button (like DELETE ACCOUNT) */}
+      <button
+        onClick={handleLogout}
+        className="w-full border border-red-600 text-red-600 py-3 font-semibold tracking-wide hover:bg-red-600 hover:text-white transition"
+      >
+        LOGOUT
+      </button>
+    </div>
     </aside>
   );
 }
