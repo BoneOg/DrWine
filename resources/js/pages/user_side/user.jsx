@@ -242,7 +242,7 @@ export default function UserDashboard({ user, customer, transactions }) {
                                     transaction.status === 'cancelled' ?
                                       'text-slate-300 border border-slate-500/30 bg-slate-500/10' :
                                     transaction.status === 'confirmed' ?
-                                      'text-[#CDAF7B] border border-[#CDAF7B]/30 bg-[#CDAF7B]/10' :
+                                      'text-emerald-300 border border-emerald-500/30 bg-emerald-500/10' :
                                     transaction.status === 'completed' ?
                                       'text-sky-300 border border-sky-500/30 bg-sky-500/10' :
                                       'text-gray-300 border border-gray-500/30 bg-gray-500/10'
@@ -253,7 +253,7 @@ export default function UserDashboard({ user, customer, transactions }) {
                                         transaction.status === 'pending' ? 'bg-amber-400' :
                                         transaction.status === 'failed' ? 'bg-rose-400' :
                                         transaction.status === 'cancelled' ? 'bg-slate-400' :
-                                        transaction.status === 'confirmed' ? 'bg-[#CDAF7B]' :
+                                        transaction.status === 'confirmed' ? 'bg-emerald-400' :
                                         transaction.status === 'completed' ? 'bg-sky-400' :
                                         'bg-gray-400'
                                       }`}
