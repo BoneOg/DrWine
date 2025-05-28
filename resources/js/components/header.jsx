@@ -36,7 +36,7 @@ export default function Header() {
 
     return (
         <>
-            <header className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-black/80 backdrop-blur' : 'bg-transparent'}`}>
+            <header className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-[#000C1C]/80 backdrop-blur' : 'bg-transparent'}`}>
                 <div className="container mx-auto px-6 lg:px-10"> {/* added px-6 lg:px-10 for balanced padding */}
 <div className="flex items-center h-16 sm:h-18 md:h-20 relative">
     {/* Left: Logo */}

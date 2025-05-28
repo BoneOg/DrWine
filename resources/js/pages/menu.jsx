@@ -99,7 +99,7 @@ const menuData = {
                         { name: 'Domaine De Mauperthuis, Petit Chablis, Chardonnay', description: 'Crisp and dry with mineral notes and a hint of green apple.', price: 550.00 },
                         { name: 'E. Guigal, Viognier | Roussanne | Marsanne | Clairette', description: 'Full-bodied with stone fruit aromas and a creamy finish.', price: 520.00 },
                     ],
-                    image: '/assets/white-wine.png',
+                    image: '/images/menu-wine-white.jpg',
                     imagePosition: 'right',
                 },
                 {
@@ -109,7 +109,7 @@ const menuData = {
                         { name: 'Finca El Origen Single Vineyard Grand Reserva, Malbec', description: 'Deep and intense with plum and chocolate notes.', price: 550.00 },
                         { name: 'Map Maker, Pinot Noir', description: 'Elegant and earthy with red berry fruit and subtle spice.', price: 490.00 },
                     ],
-                    image: '/assets/red-wine.png',
+                    image: '/images/menu-wine-red.jpg',
                     imagePosition: 'left',
                 },
                 {
@@ -121,7 +121,7 @@ const menuData = {
                         { name: 'Ruinart Blanc De Blancs, Chardonnay', description: 'Pure and luminous, made exclusively from Chardonnay grapes.', price: 18000.00 },
                         { name: 'Dom Pérignon, Pinot Noir | Chardonnay | Pinot Meunier', description: 'Prestigious vintage champagne known for complexity and longevity.', price: { '750ml (Vintage 2013)': 29000.00, '1500ml (Vintage 2012)': 55000.00 } },
                     ],
-                    image: '/assets/champagne.png',
+                    image: '/images/menu-wine-champagne.jpg',
                     imagePosition: 'right',
                 },
             ],
