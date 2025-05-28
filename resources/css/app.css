@@ -55,6 +55,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'LMonts';
+    src: url('/assets/font/lmonts.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -120,6 +127,10 @@
 
 .font-monts {
   font-family: 'Monts', serif;
+}
+
+.font-lmonts {
+  font-family: 'LMonts', serif;
 }
 
 .fraunces-regular {
