@@ -76,6 +76,7 @@ export default function Reservation() { // Renamed to Reservation to follow comm
     const dateTime = `${formattedDate} ${selectedTime}`;
 
     try {
+      // First availability check
       const response = await fetch('/reservation/check', {
         method: 'POST',
         headers: {
@@ -96,38 +97,21 @@ export default function Reservation() { // Renamed to Reservation to follow comm
         return;
       }
 
-      setError(null); // Clear any existing error
+      setError(null); // Clear any existing error if availability is confirmed
 
-      // Modified Inertia.js post request to include onFinish callback
+      // Perform the Inertia POST request.
+      // Inertia will automatically handle the redirect returned by the Laravel controller.
       router.post('/reservation', {
         name,
         email,
         phone,
         size: selectedGuests,
         date_time: dateTime
-      }, {
-        onSuccess: (page) => {
-          // Assuming your store method in ReservationController returns the reservation ID
-          // in a prop called 'reservationID' or similar after successful creation.
-          // You'll need to check your Laravel controller's response structure.
-          const reservationId = page.props.reservationID; // Adjust based on your actual prop name
-          if (reservationId) {
-            router.get(`/checkout/${reservationId}`); // Redirect to checkout page
-          } else {
-            // Handle case where reservation ID is not returned, e.g., redirect to a confirmation page
-            console.warn('Reservation ID not found in response, redirecting to generic success page.');
-            router.get('/reservation/success'); // Example: A generic success page
-          }
-        },
-        onError: (errors) => {
-          // Handle validation errors from the server
-          setError(Object.values(errors).flat().join(', '));
-        }
       });
 
     } catch (err) {
-      console.error('Availability check failed:', err);
-      setError('An error occurred while checking availability. Please try again.');
+      console.error('Reservation process failed:', err); // More generic error message
+      setError('An error occurred during the reservation process. Please try again.');
     }
   };
 

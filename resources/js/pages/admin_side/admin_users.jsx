@@ -89,7 +89,7 @@ export default function AdminUsers() {
       <main className="flex-1 px-12 py-10">
         {/* Header Section */}
         <section className="mb-12">
-          <h1 className="text-5xl font-bold tracking-tight text-[#CDAF7B] font-felix mb-6">
+          <h1 className="text-5xl tracking-tight text-[#CDAF7B] font-felix mb-6">
             User Management
           </h1>
 
@@ -99,12 +99,12 @@ export default function AdminUsers() {
         </section>
 
         {/* Users Table Container */}
-        <div className="mx-6 bg-transparent rounded-2xl shadow-md border border-[#CDAF7B]">
+        <div className="mx-6 bg-transparent -2xl shadow-md border border-[#CDAF7B]">
           {/* Filter Bar */}
           <div className="flex mb-4 flex-wrap justify-between items-center gap-4 px-6 pt-6">
             {/* Sort dropdown */}
             <select
-              className="py-2 px-3 text-sm border border-[#CDAF7B] rounded-lg bg-transparent text-white placeholder-[#CDAF7B] focus:outline-none focus:ring-2 focus:ring-[#CDAF7B]"
+              className="py-2 px-3 text-sm border border-[#CDAF7B] -lg bg-transparent text-white placeholder-[#CDAF7B] focus:outline-none focus:ring-2 focus:ring-[#CDAF7B]"
               value={sort.field ? `${sort.field}-${sort.order}` : ""}
               onChange={handleSortChange}
             >
@@ -124,7 +124,7 @@ export default function AdminUsers() {
               <input
                 type="text"
                 placeholder="Search by username or email..."
-                className="w-full py-2 pl-10 pr-4 text-sm border border-[#CDAF7B] rounded-lg bg-transparent text-white placeholder-[#CDAF7B] focus:outline-none focus:ring-2 focus:ring-[#CDAF7B]"
+                className="w-full py-2 pl-10 pr-4 text-sm border border-[#CDAF7B] -lg bg-transparent text-white placeholder-[#CDAF7B] focus:outline-none focus:ring-2 focus:ring-[#CDAF7B]"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -157,7 +157,7 @@ export default function AdminUsers() {
           </div>
 
           {/* User Rows */}
-          <div className="relative max-h-[500px] overflow-y-auto my-0 rounded-b-2xl mr-6 ml-6 mb-4">
+          <div className="relative max-h-[500px] overflow-y-auto my-0 -b-2xl mr-6 ml-6 mb-4">
             <div className="overflow-x-auto divide-y divide-[#CDAF7B]/30">
               {filteredAndSortedUsers.length === 0 ? (
                 <p className="text-center text-[#CDAF7B] py-20">
@@ -181,7 +181,7 @@ export default function AdminUsers() {
                       <span>
                         <button
                           onClick={() => openModal(user.userID)}
-                          className="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded"
+                          className="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 "
                         >
                           Delete
                         </button>
@@ -197,7 +197,7 @@ export default function AdminUsers() {
         {/* Flash Message */}
         {flash.success && (
           <div className="mt-4 flex justify-center">
-            <div className="px-4 py-3 rounded bg-[#CDAF7B]/20 text-[#CDAF7B] max-w-xs w-full text-center">
+            <div className="px-4 py-3  bg-[#CDAF7B]/20 text-[#CDAF7B] max-w-xs w-full text-center">
               {flash.success}
             </div>
           </div>
@@ -212,20 +212,20 @@ export default function AdminUsers() {
             onClick={closeModal}
           />
 
-          <div className="fixed top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/3 bg-[#0D1B2A] rounded-lg p-6 w-80 shadow-lg z-50 border border-[#CDAF7B]">
+          <div className="fixed top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/3 bg-[#0D1B2A] -lg p-6 w-80 shadow-lg z-50 border border-[#CDAF7B]">
             <h2 className="text-lg font-semibold mb-4 text-[#CDAF7B]">
               Are you sure you want to delete this user?
             </h2>
             <div className="flex justify-end gap-4">
               <button
                 onClick={closeModal}
-                className="px-4 py-2 rounded border border-[#CDAF7B] text-[#CDAF7B] hover:bg-[#CDAF7B]/10"
+                className="px-4 py-2  border border-[#CDAF7B] text-[#CDAF7B] hover:bg-[#CDAF7B]/10"
               >
                 No
               </button>
               <button
                 onClick={confirmDelete}
-                className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
+                className="px-4 py-2  bg-red-500 text-white hover:bg-red-600"
               >
                 Yes, Delete
               </button>
@@ -240,7 +240,7 @@ export default function AdminUsers() {
 // Updated StatusCard Component
 function StatusCard({ label, count }) {
   return (
-    <div className="rounded-xl p-6 border border-[#CDAF7B] bg-transparent text-[#CDAF7B] font-monts">
+    <div className="-xl p-6 border border-[#CDAF7B] bg-transparent text-[#CDAF7B] font-monts">
       <h3 className="text-sm font-medium mb-2 tracking-wide uppercase">{label}</h3>
       <p className="text-3xl font-semibold text-white">{count || 0}</p>
     </div>
