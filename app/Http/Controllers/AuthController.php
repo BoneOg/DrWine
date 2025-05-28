@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -15,15 +16,26 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'username' => 'required|string|max:255|unique:users,username',
+            'name' => 'nullable|string|max:100',
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|confirmed|min:6',
+            'phone' => 'nullable|string|max:20',
         ]);
 
         $user = User::create([
             'username' => $validated['username'],
+            'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => 'user',
+        ]);
+
+        // Create corresponding customer record
+        Customer::create([
+            'userID' => $user->userID,
+            'name' => $validated['name'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'email' => $validated['email']
         ]);
 
         return redirect('/login')->with('success', 'Account created successfully!');

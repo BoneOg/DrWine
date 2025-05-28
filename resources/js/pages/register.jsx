@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 export default function Register() {
     const [form, setForm] = useState({
         username: '',
+        name: '',
         email: '',
         password: '',
         password_confirmation: '',
@@ -119,6 +120,22 @@ export default function Register() {
                                 />
                                 {errors.username && (
                                     <p className="text-[#CDAF7B] text-xs mt-2">{errors.username}</p>
+                                )}
+                            </div>
+
+                            <div>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={form.name}
+                                    onChange={handleChange}
+                                    placeholder="Full Name"
+                                    className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
+                                    placeholder:text-[#CDAF7B]/60 focus:outline-none focus:border-[#CDAF7B] focus:ring-1 
+                                    focus:ring-[#CDAF7B]/50 transition-all duration-300 font-monts text-sm"
+                                />
+                                {errors.name && (
+                                    <p className="text-[#CDAF7B] text-xs mt-2">{errors.name}</p>
                                 )}
                             </div>
 

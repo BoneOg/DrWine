@@ -65,9 +65,11 @@ class UserController extends Controller
             'phone' => 'nullable|string|max:20',
         ]);
 
-        // Update user's username
+        // Update user information
         $user->update([
-            'username' => $request->username
+            'username' => $request->username,
+            'name' => $request->name,
+            'phone' => $request->phone
         ]);
 
         // Update customer information
