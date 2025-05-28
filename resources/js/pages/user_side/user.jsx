@@ -7,6 +7,13 @@ import { useState, useEffect } from 'react';
 
 export default function UserDashboard({ user, customer, transactions }) {
   const [isMobile, setIsMobile] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: customer?.name || user.username,
+    email: customer?.email || user.email,
+    phone: customer?.phone || '',
+  });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,6 +42,27 @@ export default function UserDashboard({ user, customer, transactions }) {
     ) {
       router.post(route('user.delete'));
     }
+  };
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    router.post('/user/profile/update', editForm, {
+      onSuccess: () => {
+        setIsEditModalOpen(false);
+        setErrors({});
+      },
+      onError: (errors) => {
+        setErrors(errors);
+      },
+    });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   return (
@@ -129,7 +157,19 @@ export default function UserDashboard({ user, customer, transactions }) {
                   <div className="backdrop-blur-xl bg-white/[0.02] border border-white/10 rounded-none p-6 md:p-8 hover:bg-white/[0.04] transition-all duration-300">
                     <div className="flex items-center justify-between mb-6 md:mb-8">
                       <h2 className="text-xl md:text-2xl font-felix text-white">Profile</h2>
-                      <div className="w-12 h-[1px] bg-gradient-to-r from-[#CDAF7B] to-transparent"></div>
+                      <button
+                        onClick={() => setIsEditModalOpen(true)}
+                        className="group relative px-4 py-2 font-monts text-xs tracking-wider overflow-hidden border border-[#CDAF7B]/30"
+                      >
+                        <span className="relative z-10 text-black font-bold">
+                          EDIT
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#CDAF7B] to-[#E5C992]"></div>
+                        <div 
+                          className="absolute inset-0 bg-gradient-to-r from-[#E5C992] via-white/10 to-[#CDAF7B] opacity-0 
+                          group-hover:opacity-100 transition-all duration-500 scale-x-[102%] scale-y-[110%]"
+                        ></div>
+                      </button>
                     </div>
                     
                     <div className="space-y-4 md:space-y-6 font-monts divide-y divide-white/10">
@@ -226,6 +266,96 @@ export default function UserDashboard({ user, customer, transactions }) {
             </div>
           </div>
         </div>
+
+        {/* Edit Profile Modal */}
+        {isEditModalOpen && (
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+              <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div className="absolute inset-0 bg-black opacity-75"></div>
+              </div>
+
+              <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+              <div className="inline-block align-bottom backdrop-blur-xl bg-[#000C1C]/90 border border-[#CDAF7B]/20 rounded-none px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                <div className="sm:flex sm:items-start">
+                  <div className="w-full">
+                    <h3 className="text-2xl font-felix text-white mb-6">Edit Profile</h3>
+                    <form onSubmit={handleEditSubmit} className="space-y-4">
+                      <div>
+                        <label htmlFor="name" className="block text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Full Name</label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          value={editForm.name}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
+                          placeholder:text-[#CDAF7B]/60 focus:outline-none focus:border-[#CDAF7B] focus:ring-1 
+                          focus:ring-[#CDAF7B]/50 transition-all duration-300 font-monts text-sm"
+                        />
+                        {errors.name && <p className="text-[#CDAF7B] text-xs mt-1">{errors.name}</p>}
+                      </div>
+
+                      <div>
+                        <label htmlFor="email" className="block text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Email Address</label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={editForm.email}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
+                          placeholder:text-[#CDAF7B]/60 focus:outline-none focus:border-[#CDAF7B] focus:ring-1 
+                          focus:ring-[#CDAF7B]/50 transition-all duration-300 font-monts text-sm"
+                        />
+                        {errors.email && <p className="text-[#CDAF7B] text-xs mt-1">{errors.email}</p>}
+                      </div>
+
+                      <div>
+                        <label htmlFor="phone" className="block text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Phone Number</label>
+                        <input
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          value={editForm.phone}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
+                          placeholder:text-[#CDAF7B]/60 focus:outline-none focus:border-[#CDAF7B] focus:ring-1 
+                          focus:ring-[#CDAF7B]/50 transition-all duration-300 font-monts text-sm"
+                        />
+                        {errors.phone && <p className="text-[#CDAF7B] text-xs mt-1">{errors.phone}</p>}
+                      </div>
+
+                      <div className="mt-8 flex justify-end space-x-4">
+                        <button
+                          type="button"
+                          onClick={() => setIsEditModalOpen(false)}
+                          className="px-4 py-2 font-monts text-sm tracking-wider text-[#CDAF7B] border border-[#CDAF7B]/30 hover:bg-[#CDAF7B]/10 transition-colors duration-300"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          className="group relative px-6 py-2 overflow-hidden border border-[#CDAF7B]/30"
+                        >
+                          <span className="relative z-10 text-black font-monts font-bold text-sm tracking-wider">
+                            Save Changes
+                          </span>
+                          <div className="absolute inset-0 bg-gradient-to-r from-[#CDAF7B] to-[#E5C992]"></div>
+                          <div 
+                            className="absolute inset-0 bg-gradient-to-r from-[#E5C992] via-white/10 to-[#CDAF7B] opacity-0 
+                            group-hover:opacity-100 transition-all duration-500 scale-x-[102%] scale-y-[110%]"
+                          ></div>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </Layout>
     </>
   );

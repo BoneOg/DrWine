@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:user')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('user.dashboard');
         Route::post('/users/delete-account', [UserController::class, 'deleteAccount'])->name('user.delete');
+        Route::post('/user/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
     });
 
     // ADMIN-only routes
