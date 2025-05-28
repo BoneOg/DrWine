@@ -67,7 +67,7 @@ export default function ContactSection() {
                         href={isEmail ? gmailHref : href}
                         target={href.startsWith('http') || isEmail ? '_blank' : undefined}
                         rel={href.startsWith('http') || isEmail ? 'noopener noreferrer' : undefined}
-                        className="hover:text-red-500 break-all transition-colors duration-300"
+                        className="hover:text-[#CDAF7B] break-all transition-colors duration-300"
                       >
                         {text}
                       </a>
@@ -85,27 +85,27 @@ export default function ContactSection() {
       <input
         type="text"
         placeholder="Name"
-        className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-red-500 transition-colors"
+        className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-[#CDAF7B] transition-colors"
       />
       <input
         type="text"
         placeholder="Phone number"
-        className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-red-500 transition-colors"
+        className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-[#CDAF7B] transition-colors"
       />
     </div>
     <input
       type="email"
       placeholder="Email"
-      className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-red-500 transition-colors"
+      className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 focus:outline-none focus:border-[#CDAF7B] transition-colors"
     />
     <textarea
       rows="4"
       placeholder="Please enter your message"
-      className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 resize-none focus:outline-none focus:border-red-500 transition-colors"
+      className="w-full bg-transparent border border-white border-opacity-60 rounded-md px-3 py-2 placeholder-gray-300 resize-none focus:outline-none focus:border-[#CDAF7B] transition-colors"
     />
     <button
       type="submit"
-      className="w-full bg-transparent border border-white border-opacity-60 py-2 rounded-md hover:bg-red-700 transition-colors uppercase tracking-wide text-sm"
+      className="w-full bg-transparent border border-white border-opacity-60 py-2 rounded-md hover:bg-[#CDAF7B] transition-colors uppercase tracking-wide text-sm"
     >
       Send Message
     </button>

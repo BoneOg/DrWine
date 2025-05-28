@@ -241,7 +241,7 @@ export default function Menu() {
             {/* Section Title */}
             {section.name && (
                 <div className="absolute -left-8 top-8 transform -translate-x-full -rotate-90 origin-top-right">
-                    <h2 className="text-3xl font-fraunces font-light text-[#CDAF7B] whitespace-nowrap tracking-wider">
+                    <h2 className="text-3xl font-felix text-[#CDAF7B] whitespace-nowrap tracking-wider">
                         {section.name}
                     </h2>
                 </div>
@@ -256,12 +256,12 @@ export default function Menu() {
                         {section.items.map((item, itemIndex) => (
                             <div key={itemIndex} className="mb-8 last:mb-0 group">
                                 <div className="flex items-baseline justify-between">
-                                    <h3 className="text-white text-xl font-fraunces tracking-wide group-hover:text-[#CDAF7B] transition-colors duration-300">
+                                    <h3 className="text-white text-xl font-felix tracking-wide group-hover:text-[#CDAF7B] transition-colors duration-300">
                                         {item.name}
                                     </h3>
                                     <div className="flex-1 mx-4 border-b border-dotted border-[#CDAF7B]/30 group-hover:border-[#CDAF7B] transition-colors duration-300"></div>
                                     {item.price && (
-                                        <span className="text-[#CDAF7B] text-lg font-serif whitespace-nowrap">
+                                        <span className="text-[#CDAF7B] text-lg font-felix whitespace-nowrap">
                                             {typeof item.price === 'object' ? (
                                                 Object.entries(item.price).map(([key, value], idx) => (
                                                     <div key={idx} className="text-right">
@@ -276,7 +276,7 @@ export default function Menu() {
                                     )}
                                 </div>
                                 {item.description && (
-                                    <p className="text-gray-400 text-sm mt-2 leading-relaxed font-light">
+                                    <p className="text-gray-400 text-sm mt-2 leading-relaxed font-monts">
                                         {item.description}
                                     </p>
                                 )}
@@ -317,7 +317,7 @@ export default function Menu() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-transparent"></div>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <h1 className="text-7xl font-fraunces font-light text-white tracking-wider mb-4">
+                    <h1 className="text-7xl font-felix text-white tracking-wider mb-4">
                         Our Menu
                     </h1>
                     <div className="w-24 h-[1px] bg-[#CDAF7B]"></div>
@@ -334,10 +334,10 @@ export default function Menu() {
                                 <button
                                     key={category.key}
                                     onClick={() => setActiveCategory(category.key)}
-                                    className={`px-6 py-3 text-lg font-fraunces tracking-wide rounded-md transition-all duration-300
+                                    className={`px-6 py-3 text-lg font-felix tracking-wide rounded-md transition-all duration-300
                                         ${activeCategory === category.key
-                                            ? 'bg-[#CDAF7B] text-black shadow-lg'
-                                            : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                            ? 'bg-[#CDAF7B] shadow-lg'
+                                            : 'text-white hover:text-white hover:bg-white/5'
                                         }`}
                                 >
                                     {category.name}

@@ -31,7 +31,7 @@ export default function Welcome() {
                         <div className="pt-10">
                             <Link
                                 href="/reservation"
-                                className="sm:px-10 sm:py-2 text-base font-monts border-t border-b border-white bg-transparent text-red/80 transition-colors duration-300 hover:bg-red-500 hover:text-white hover:border-transparent"
+                                className="sm:px-10 sm:py-2 text-base font-monts border-t border-b border-white bg-transparent text-white transition-colors duration-300 hover:bg-[#CDAF7B] hover:text-white hover:border-transparent"
                             >
                                 Book a Table
                             </Link>
@@ -41,7 +41,7 @@ export default function Welcome() {
             </div>
 
             {/* ===== ABOUT US SECTION ===== */}
-            <div className="bg-black py-10 md:py-16">
+            <div className="bg-black pt-16">
                 <div className="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row items-center gap-12 text-white">
                     <div className="w-full md:w-1/2">
                         <img
@@ -51,7 +51,7 @@ export default function Welcome() {
                         />
                     </div>
                     <div className="w-full md:w-1/2">
-                        <p className="text-sm uppercase font-monts tracking-widest text-gray-300 mb-2">
+                        <p className="text-sm uppercase font-monts tracking-widest text-[#CDAF7B] mb-2">
                             Story of Every Bite
                         </p>
                         <h2 className="text-2xl mt-4 font-felix leading-relaxed">
@@ -61,7 +61,7 @@ export default function Welcome() {
                         <div className="mt-10">
                             <Link
                                 href="/about"
-                                className="px-6 py-2 border-white font-monts text-white border-t border-b text-sm transition duration-300 hover:bg-white hover:text-black"
+                                className="px-6 py-2 font-monts text-white border-t border-b border-white text-sm transition duration-300 hover:bg-white hover:text-black"
                             >
                                 Learn More
                             </Link>
@@ -74,7 +74,7 @@ export default function Welcome() {
             <div className="bg-black py-16 text-white">
                 <div className="max-w-7xl mx-auto flex flex-col items-center">
                     <div className="text-center mb-12">
-                        <p className="text-sm uppercase font-monts tracking-widest text-gray-300">Dr. Wine’s Best</p>
+                        <p className="text-sm uppercase font-monts tracking-widest text-[#CDAF7B]">Dr. Wine’s Best</p>
                         <h2 className="text-3xl mt-4 font-felix">Menu</h2>
                     </div>
 

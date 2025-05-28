@@ -45,7 +45,7 @@ export default function Header() {
             <img
                 src="/assets/logo.png"
                 alt="DrWine Logo"
-                className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 lg:h-14 lg:w-14 rounded-full object-cover border border-white transition-all duration-300 hover:border-red-500 hover:border-2"
+                className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 lg:h-14 lg:w-14 rounded-full object-cover border border-[#CDAF7B] transition-all duration-300 hover:[#CDAF7B] hover:border-2"
             />
         </Link>
     </div>
@@ -62,7 +62,7 @@ export default function Header() {
                 >
                     <span className="relative inline-block">
                         {link.name}
-                        <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-red-600 nav-link-underline ${isActive ? 'w-full' : 'group-hover:w-full'}`} />
+                        <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-[#CDAF7B] nav-link-underline ${isActive ? 'w-full' : 'group-hover:w-full'}`} />
                     </span>
                 </Link>
             );
@@ -73,7 +73,7 @@ export default function Header() {
     <div className="flex items-center flex-1 justify-end mr-2">
         <Link
             href={route('reservation')}
-            className="hidden lg:inline-flex items-center px-6 xl:px-6 py-2 xl:py-3 border border-red-600 text-sm xl:text-base text-white transition-all duration-300 hover:bg-red-600 hover:scale-105 uppercase tracking-wider"
+            className="hidden lg:inline-flex items-center px-6 xl:px-6 py-2 xl:py-3 border border-[#CDAF7B] text-sm xl:text-base text-white transition-all duration-300 hover:bg-[#CDAF7B] hover:scale-105 uppercase tracking-wider"
         >
             Make a Reservation
         </Link>
@@ -110,7 +110,7 @@ export default function Header() {
                                         key={link.name}
                                         href={link.path}
 className={`text-white text-xl sm:text-2xl md:text-3xl font-light tracking-wider transition-colors duration-300 header-element ${
-    isActive ? 'text-red-500' : 'hover:text-red-500'
+    isActive ? 'text-[#CDAF7B]' : 'hover:text-[#CDAF7B]'
 }`}
 
                                         onClick={() => setIsMobileMenuOpen(false)}
@@ -124,7 +124,7 @@ className={`text-white text-xl sm:text-2xl md:text-3xl font-light tracking-wider
                         <div className="mt-auto pb-6 sm:pb-8 space-y-4">
                             <Link
                                 href={route('reservation')}
-                                className="block w-full text-center px-4 sm:px-6 py-2.5 sm:py-3 border border-red-600 text-sm sm:text-base text-white transition-all duration-300 hover:bg-red-600 uppercase tracking-wider header-element"
+                                className="block w-full text-center px-4 sm:px-6 py-2.5 sm:py-3 border border-[#CDAF7B] text-sm sm:text-base text-white transition-all duration-300 hover:bg-[#CDAF7B] uppercase tracking-wider header-element"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Make a Reservation
@@ -132,7 +132,7 @@ className={`text-white text-xl sm:text-2xl md:text-3xl font-light tracking-wider
 
                             <Link
                                 href={dashboardRoute}
-                                className="block text-center text-white text-lg hover:text-red-500 transition header-element"
+                                className="block text-center text-white text-lg hover:text-[#CDAF7B] transition header-element"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 {user ? 'My Account' : 'Login'}
