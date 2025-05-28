@@ -42,6 +42,7 @@ class UserController extends Controller
 
         // Delete user and related data as needed
         $user->delete();
+        Inertia::clearHistory();
 
         Auth::logout();
 
