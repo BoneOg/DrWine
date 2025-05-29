@@ -126,15 +126,16 @@ class ReservationController extends Controller
 
     private function isTimeSlotAvailable($dateTime, $guestCount)
     {
+        $reservationEnd = $dateTime->copy()->addMinutes(120);
+
         return RestaurantTable::where('capacity', '>=', $guestCount)
             ->where('table_status', 'available')
             ->get()
-            ->filter(function ($table) use ($dateTime) {
+            ->filter(function ($table) use ($dateTime, $reservationEnd) {
+                // Check if any reservation overlaps this slot time:
                 return !Reservation::where('tableID', $table->tableID)
-                    ->whereBetween('date_time', [
-                        $dateTime,
-                        $dateTime->copy()->addMinutes(120)
-                    ])
+                    ->where('date_time', '<', $reservationEnd)  // reservation starts before slot ends
+                    ->whereRaw('DATE_ADD(date_time, INTERVAL duration MINUTE) > ?', [$dateTime])  // reservation ends after slot starts
                     ->exists();
             })
             ->isNotEmpty();

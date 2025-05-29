@@ -226,7 +226,7 @@ export default function UserDashboard({ user, customer, transactions }) {
                                 className="border-b border-white/10 hover:bg-white/[0.02] transition-colors duration-300"
                               >
                                 <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">{transaction.transactionID}</td>
-                                <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">₱{transaction.amount.toLocaleString()}</td>
+                                <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">${transaction.amount.toLocaleString()}</td>
                                 <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">{transaction.transaction_type}</td>
                                 <td className="py-3 md:py-4 px-3 md:px-4">
                                   <span className={`inline-flex items-center px-3 py-1 text-xs tracking-wider uppercase font-monts
