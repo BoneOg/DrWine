@@ -225,3 +225,47 @@ select option {
   background-color: rgba(13, 27, 42, 0.99);
   color: white; 
 }
+
+.animated-gold-border {
+  position: relative;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  overflow: hidden;
+}
+
+.animated-gold-border::before,
+.animated-gold-border::after {
+  content: '';
+  position: absolute;
+  height: 1px;
+  width: 0;
+  background-color: #CDAF7B;
+  transition: width 0.8s ease, left 0.8s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.animated-gold-border::before {
+  top: 0;
+  left: 50%;
+}
+
+.animated-gold-border::after {
+  bottom: 0;
+  left: 50%;
+}
+
+.animated-gold-border:hover {
+  border-color: transparent;
+}
+
+.animated-gold-border:hover::before,
+.animated-gold-border:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+section, div {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}

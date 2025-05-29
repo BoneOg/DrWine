@@ -28,20 +28,20 @@ export default function Welcome() {
                             <br />
                             <span className="mt-6 inline-block">{heroSloganPart2}</span>
                         </h3>
-                        <div className="pt-10">
-                            <Link
-                                href="/reservation"
-                                className="sm:px-10 sm:py-2 text-base font-monts border-t border-b border-white bg-transparent text-white transition-colors duration-300 hover:bg-[#CDAF7B] hover:text-white hover:border-transparent"
-                            >
-                                Book a Table
-                            </Link>
+                        <div className="pt-10 text-center">
+                        <Link
+                            href="/reservation"
+                            className="animated-gold-border inline-block px-6 py-2 sm:px-8 sm:py-2 md:px-10 text-sm sm:text-base font-monts bg-transparent text-white transition-colors duration-500 hover:text-[#CDAF7B]"
+                        >
+                            Book a Table
+                        </Link>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* ===== ABOUT US SECTION ===== */}
-            <div className="bg-[#000C1C] pt-16">
+            <div className="bg-[#000C1C] pt-16 pb-0">
                 <div className="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row items-center gap-12 text-white">
                     <div className="w-full md:w-1/2">
                         <img
@@ -58,12 +58,12 @@ export default function Welcome() {
                             The language of love, spoken in sauces and vintages — curated for those who dine with soul.
                         </h2>
                         <p className="mt-6 font-monts text-sm">{aboutUsDescription}</p>
-                        <div className="mt-10">
+                        <div className="mt-5 mb-10">
                             <Link
-                                href="/about"
-                                className="px-6 py-2 font-monts text-white border-t border-b border-white text-sm transition duration-300 hover:bg-white hover:text-black"
+                            href="/about"
+                            className="animated-gold-border relative px-6 py-2 font-monts text-white text-sm bg-transparent transition-colors duration-500 hover:text-[#CDAF7B]"
                             >
-                                Learn More
+                            Learn More
                             </Link>
                         </div>
                     </div>
@@ -87,10 +87,10 @@ export default function Welcome() {
 
                     <div className="mt-16 mb-6">
                         <Link
-                            href="/menu"
-                            className="px-6 py-2 border-white font-monts text-white border-t border-b text-sm transition duration-300 hover:bg-white hover:text-black"
+                        href="/menu"
+                        className="animated-gold-border relative px-6 py-2 sm:px-8 sm:py-2 md:px-10 text-sm sm:text-base font-monts bg-transparent text-white transition-colors duration-500 hover:text-[#CDAF7B]"
                         >
-                            View Menu
+                        View Menu
                         </Link>
                     </div>
                 </div>

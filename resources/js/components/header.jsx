@@ -124,7 +124,7 @@ className={`text-white text-xl sm:text-2xl md:text-3xl font-light tracking-wider
                         <div className="mt-auto pb-6 sm:pb-8 space-y-4">
                             <Link
                                 href={route('reservation')}
-                                className="block w-full text-center px-4 sm:px-6 py-2.5 sm:py-3 border border-[#CDAF7B] text-sm sm:text-base text-white transition-all duration-300 hover:bg-[#CDAF7B] uppercase tracking-wider header-element"
+                                className="block w-full text-center px-4 sm:px-6 py-2.5 sm:py-3 border font-monts border-[#CDAF7B] text-sm sm:text-base text-white transition-all duration-300 hover:bg-[#CDAF7B] uppercase tracking-wider header-element"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Make a Reservation
