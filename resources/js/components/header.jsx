@@ -43,10 +43,10 @@ export default function Header() {
     <div className="flex items-center flex-1 ml-2 justify-start">
         <Link href="/" className="flex-shrink-0 transition-transform duration-300 hover:scale-110">
             <img
-                src="/assets/logo.png"
+                src="/assets/logo2.png"
                 alt="DrWine Logo"
-                className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 lg:h-14 lg:w-14 rounded-full object-cover border border-[#CDAF7B] transition-all duration-300 hover:[#CDAF7B] hover:border-2"
-            />
+                className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto object-contain transition-all duration-300"
+                />
         </Link>
     </div>
 
@@ -62,7 +62,7 @@ export default function Header() {
                 >
                     <span className="relative inline-block">
                         {link.name}
-                        <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-[#CDAF7B] nav-link-underline ${isActive ? 'w-full' : 'group-hover:w-full'}`} />
+                        <span className={`absolute -bottom-1 left-0 w-0 h-[1px] bg-[#CDAF7B] nav-link-underline ${isActive ? 'w-full' : 'group-hover:w-full'}`} />
                     </span>
                 </Link>
             );
@@ -73,7 +73,7 @@ export default function Header() {
     <div className="flex items-center flex-1 justify-end mr-2">
         <Link
             href={route('reservation')}
-            className="hidden lg:inline-flex items-center px-6 xl:px-6 py-2 xl:py-3 border border-[#CDAF7B] text-sm xl:text-base text-white transition-all duration-300 hover:bg-[#CDAF7B] hover:scale-105 uppercase tracking-wider"
+            className="hidden lg:inline-flex items-center px-6 xl:px-6 py-2 xl:py-3 border-[0.5px] border-[#CDAF7B] text-sm xl:text-base text-white transition-all duration-300 hover:bg-[#CDAF7B] hover:scale-105 uppercase tracking-wider"
         >
             Make a Reservation
         </Link>
