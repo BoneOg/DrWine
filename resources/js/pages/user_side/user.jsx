@@ -10,9 +10,9 @@ export default function UserDashboard({ user, customer, transactions }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editForm, setEditForm] = useState({
     username: user.username,
-    name: customer?.name || '',
-    email: customer?.email || '',
-    phone: customer?.phone || '',
+    name: user.name || customer?.name || '',
+    email: user.email || customer?.email || '',
+    phone: user.phone || customer?.phone || '',
   });
   const [errors, setErrors] = useState({});
 
@@ -161,15 +161,15 @@ export default function UserDashboard({ user, customer, transactions }) {
                       </div>
                       <div className="py-3">
                         <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-1">Full Name</p>
-                        <p className="text-white/90 text-sm">{customer?.name || user.username}</p>
+                        <p className="text-white/90 text-sm">{user.name || customer?.name || user.username}</p>
                       </div>
                       <div className="py-3">
                         <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-1">Email Address</p>
-                        <p className="text-white/90 text-sm">{customer?.email || user.email}</p>
+                        <p className="text-white/90 text-sm">{user.email}</p>
                       </div>
                       <div className="py-3">
                         <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-1">Phone Number</p>
-                        <p className="text-white/90 text-sm">{customer?.phone || 'Not Provided'}</p>
+                        <p className="text-white/90 text-sm">{user.phone || customer?.phone || 'Not Provided'}</p>
                       </div>
                       <div className="mt-12 space-y-4">
                         <button

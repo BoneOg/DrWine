@@ -22,20 +22,22 @@ class AuthController extends Controller
             'phone' => 'nullable|string|max:20',
         ]);
 
-        // Create user (stores email in users table)
+        // Create user with all profile information
         $user = User::create([
             'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => 'user',
-        ]);
-
-        // Create customer (copies email from request and stores name/phone)
-        Customer::create([
-            'userID' => $user->userID, // or use $user->id if your PK is "id"
             'name' => $validated['name'],
             'phone' => $validated['phone'],
-            'email' => $validated['email'], // copy from request
+        ]);
+
+        // Create customer record
+        Customer::create([
+            'userID' => $user->userID,
+            'name' => $validated['name'],
+            'phone' => $validated['phone'],
+            'email' => $validated['email'],
         ]);
 
         return redirect('/login')->with('success', 'Account created successfully!');
