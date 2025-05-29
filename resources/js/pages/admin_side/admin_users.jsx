@@ -242,7 +242,7 @@ export default function AdminUsers() {
                         <span>
                           <button
                             onClick={() => openModal(user.userID)}
-                            className="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1 rounded transition duration-150"
+                            className="bg-red-800/20 text-red-400 border border-red-800  hover:bg-red-900 text-white text-xs px-3 py-1 rounded transition duration-150"
                           >
                             Delete
                           </button>
@@ -284,19 +284,19 @@ export default function AdminUsers() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.2 }}
             >
-              <h2 className="text-lg font-semibold mb-4 text-[#CDAF7B]">
+              <h2 className="text-lg font-monts mb-4 text-white">
                 Are you sure you want to delete this user?
               </h2>
               <div className="flex justify-end gap-4">
                 <button
                   onClick={closeModal}
-                  className="px-4 py-2 rounded-md border border-[#CDAF7B] text-[#CDAF7B] hover:bg-[#CDAF7B]/10 transition duration-150"
+                  className="px-4 py-2 rounded-md bg-green-800/20 text-green-400 border border-green-800 hover:bg-green-900 transition duration-150"
                 >
                   No
                 </button>
                 <button
                   onClick={confirmDelete}
-                  className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 transition duration-150"
+                  className="px-4 py-2 rounded-md g-red-800/20 text-red-400 border border-red-800 hover:bg-red-900 transition duration-150"
                 >
                   Yes, Delete
                 </button>

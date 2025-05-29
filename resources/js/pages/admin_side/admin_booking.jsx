@@ -364,19 +364,19 @@ export default function Booking() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.2 }}
             >
-              <h2 className="text-lg font-semibold mb-4 text-[#CDAF7B]">
+              <h2 className="text-lg font-monts mb-4 text-white">
                 Are you sure you want to {modal.action} this reservation?
               </h2>
               <div className="flex justify-end gap-4">
                 <button
                   onClick={closeModal}
-                  className="px-4 py-2 rounded-md border border-[#CDAF7B] text-[#CDAF7B] hover:bg-[#CDAF7B]/10 transition duration-150"
+                  className="px-4 py-2 rounded-md bg-red-800/20 text-red-400 border border-red-800 hover:bg-red-900 transition duration-150"
                 >
                   No
                 </button>
                 <button
                   onClick={confirmAction}
-                  className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 transition duration-150"
+                  className="px-4 py-2 rounded-md bg-green-800/20 text-green-400 border border-green-800 hover:bg-green-900 transition duration-150"
                 >
                   Yes, {modal.action === 'confirm' ? 'Confirm' : 'Cancel'}
                 </button>

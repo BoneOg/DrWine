@@ -14,14 +14,9 @@ class AdminController extends Controller
     public function dashboard()
     {
         $totalPendingReservations = Reservation::where('status', 'pending')->count();
-        $totalConfirmedReservations = Reservation::where('status', 'confirmed')->count();
-        $totalCancelledReservations = Reservation::where('status', 'cancelled')->count();
-        $totalCompletedReservations = Reservation::where('status', 'completed')->count();
-
-        $totalPendingTransactions = Transaction::where('status', 'pending_payment')->count();
-        $totalPaidTransactions = Transaction::where('status', 'paid')->count();
-        $totalFailedTransactions = Transaction::where('status', 'failed')->count();
-        $totalRefundedTransactions = Transaction::where('status', 'refunded')->count();
+        $totalConfirmedReservations = Transaction::where('status', 'confirmed')->count();
+        $totalCancelledReservations = Transaction::where('status', 'cancelled')->count();
+        $totalCompletedReservations = Transaction::where('status', 'completed')->count();
 
         // IMPORTANT CHANGE HERE: Render 'admin_side/Dashboard' (note capital D)
         return Inertia::render('admin_side/admin_dashboard', [
@@ -29,10 +24,6 @@ class AdminController extends Controller
             'totalConfirmedReservations' => $totalConfirmedReservations,
             'totalCancelledReservations' => $totalCancelledReservations,
             'totalCompletedReservations' => $totalCompletedReservations,
-            'totalPendingTransactions' => $totalPendingTransactions,
-            'totalPaidTransactions' => $totalPaidTransactions,
-            'totalFailedTransactions' => $totalFailedTransactions,
-            'totalRefundedTransactions' => $totalRefundedTransactions,
         ]);
     }
 

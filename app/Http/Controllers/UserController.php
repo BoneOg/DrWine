@@ -50,7 +50,7 @@ class UserController extends Controller
         Auth::logout();
 
         return Inertia::render('user_side/user_deleted', [
-            'message' => 'Account deleted successfully.',
+            'message' => 'Account Deleted Successfully.',
         ]);
     }
 

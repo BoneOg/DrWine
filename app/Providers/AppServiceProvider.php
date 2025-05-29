@@ -26,5 +26,8 @@ class AppServiceProvider extends ServiceProvider
                 'user' => Auth::user(),
             ],
         ]);
+        
     }
+
+     
 }
