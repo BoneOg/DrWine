@@ -154,21 +154,21 @@ export default function UserDashboard({ user, customer, transactions }) {
                       </button>
                     </div>
                     
-                    <div className="space-y-4 md:space-y-6 font-monts divide-y divide-white/10">
-                      <div className="pb-4">
-                        <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Username</p>
+                    <div className="font-monts divide-y divide-white/10">
+                      <div className="pb-3">
+                        <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-1">Username</p>
                         <p className="text-white/90 text-sm">{user.username}</p>
                       </div>
-                      <div className="pb-4">
-                        <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Full Name</p>
+                      <div className="py-3">
+                        <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-1">Full Name</p>
                         <p className="text-white/90 text-sm">{customer?.name || user.username}</p>
                       </div>
-                      <div className="py-4">
-                        <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Email Address</p>
+                      <div className="py-3">
+                        <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-1">Email Address</p>
                         <p className="text-white/90 text-sm">{customer?.email || user.email}</p>
                       </div>
-                      <div className="py-4">
-                        <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Phone Number</p>
+                      <div className="py-3">
+                        <p className="text-xs tracking-wider text-[#CDAF7B] uppercase mb-1">Phone Number</p>
                         <p className="text-white/90 text-sm">{customer?.phone || 'Not Provided'}</p>
                       </div>
                       <div className="mt-12 space-y-4">

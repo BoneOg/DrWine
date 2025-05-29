@@ -8,7 +8,7 @@ export default function Reservation() { // Renamed to Reservation to follow comm
   const today = new Date();
   const months = ['January', 'February', 'March', 'April', 'May', 'June',
                   'July', 'August', 'September', 'October', 'November', 'December'];
-  const timeSlots = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
+  const timeSlots = ['09:00 AM', '11:00 AM', '01:00 PM', '03:00 PM', '05:00 PM', '07:00 PM'];
   const guests = Array.from({ length: 10 }, (_, i) => i + 1);
 
   const [availableTimes, setAvailableTimes] = useState([]);
@@ -43,37 +43,29 @@ export default function Reservation() { // Renamed to Reservation to follow comm
     selectedGuests > 0 &&
     !isPast(selectedDay);
 
-
-  useEffect(() => {
-    const fetchAvailableTimes = async () => {
-      try {
-        const formattedDate = `${currentYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
-
-        const response = await fetch('/reservation/available-times', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-          },
-          body: JSON.stringify({ date: formattedDate, size: selectedGuests }),
-        });
-
-        const data = await response.json();
-        setAvailableTimes(data);
-      } catch {
-        setAvailableTimes([]);
-      }
-    };
-
-    fetchAvailableTimes();
-  }, [selectedMonth, selectedDay, selectedGuests]);
-
+  // Convert 12-hour format to 24-hour format for backend
+  const convertTo24Hour = (time12h) => {
+    const [time, modifier] = time12h.split(' ');
+    let [hours, minutes] = time.split(':');
+    
+    if (hours === '12') {
+      hours = '00';
+    }
+    
+    if (modifier === 'PM') {
+      hours = parseInt(hours, 10) + 12;
+    }
+    
+    return `${hours.padStart(2, '0')}:${minutes}`;
+  };
 
   const handleSubmit = async () => {
     if (!formValid) return;
 
     const formattedDate = `${currentYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
-    const dateTime = `${formattedDate} ${selectedTime}`;
+    // Convert the selected time to 24-hour format for the backend
+    const time24 = convertTo24Hour(selectedTime);
+    const dateTime = `${formattedDate} ${time24}`;
 
     try {
       // First availability check
@@ -97,10 +89,8 @@ export default function Reservation() { // Renamed to Reservation to follow comm
         return;
       }
 
-      setError(null); // Clear any existing error if availability is confirmed
+      setError(null);
 
-      // Perform the Inertia POST request.
-      // Inertia will automatically handle the redirect returned by the Laravel controller.
       router.post('/reservation', {
         name,
         email,
@@ -110,7 +100,7 @@ export default function Reservation() { // Renamed to Reservation to follow comm
       });
 
     } catch (err) {
-      console.error('Reservation process failed:', err); // More generic error message
+      console.error('Reservation process failed:', err);
       setError('An error occurred during the reservation process. Please try again.');
     }
   };
@@ -123,6 +113,38 @@ export default function Reservation() { // Renamed to Reservation to follow comm
     `w-4 h-4 absolute right-1 top-1/2 pointer-events-none transition-transform duration-300 ease-in-out ${
       isOpen ? 'rotate-[180deg]' : 'rotate-0'
     }`;
+
+  useEffect(() => {
+    const fetchAvailableTimes = async () => {
+      try {
+        const formattedDate = `${currentYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
+
+        const response = await fetch('/reservation/available-times', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          },
+          body: JSON.stringify({ date: formattedDate, size: selectedGuests }),
+        });
+
+        const data = await response.json();
+        // Convert received times (24-hour) to 12-hour format
+        const formattedTimes = data.map(time => {
+          const [hours, minutes] = time.split(':');
+          const hour = parseInt(hours);
+          const ampm = hour >= 12 ? 'PM' : 'AM';
+          const hour12 = hour % 12 || 12;
+          return `${String(hour12).padStart(2, '0')}:${minutes} ${ampm}`;
+        });
+        setAvailableTimes(formattedTimes);
+      } catch {
+        setAvailableTimes([]);
+      }
+    };
+
+    fetchAvailableTimes();
+  }, [selectedMonth, selectedDay, selectedGuests]);
 
   return (
     <Layout>
@@ -165,7 +187,7 @@ export default function Reservation() { // Renamed to Reservation to follow comm
                     onBlur={() => setIsTimeOpen(false)}
                     className="w-full text-white bg-transparent border-b border-gray-500 text-base font-light font-monts tracking-wide py-1 pr-6 appearance-none focus:outline-none focus:border-[#CDAF7B]"
                   >
-                    {timeSlots.map((slot) => {
+                    {availableTimes.map((slot) => {
                       const isAvailable = availableTimes.includes(slot);
                       return (
                         <option

@@ -28,7 +28,7 @@ class UserController extends Controller
             })
             ->get();
 
-        // Optionally show first customer info
+        // Get customer info only if they have made reservations
         $primaryCustomer = Customer::where('userID', $user->userID)->first();
 
         return Inertia::render('user_side/user', [
@@ -65,12 +65,15 @@ class UserController extends Controller
             'phone' => 'nullable|string|max:20',
         ]);
 
-        // Update username only in users table
+        // Update all fields in users table
         $user->update([
             'username' => $request->username,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
         ]);
 
-        // Update customer info
+        // If user has a customer record (has made reservations), update that too
         $customer = Customer::where('userID', $user->userID)->first();
         if ($customer) {
             $customer->update([

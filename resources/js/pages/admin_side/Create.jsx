@@ -1,6 +1,6 @@
 import React from 'react';
 import { Head, useForm, Link } from '@inertiajs/react';
-import AdminLayout from '../admin';
+import AdminLayout from './admin_sidebar';
 
 export default function UserCreate() {
     const { data, setData, post, processing, errors, reset } = useForm({

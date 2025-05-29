@@ -55,6 +55,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/reservations/action', [AdminController::class, 'handleReservationAction'])->name('reservation-action');
         Route::get('/users', [AdminController::class, 'userlist'])->name('userlist'); 
         Route::delete('/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
+        Route::put('/users/{user}', [AdminController::class, 'update'])->name('users.update');
+        Route::post('/users', [AdminController::class, 'store'])->name('users.store');
     });
 });
 

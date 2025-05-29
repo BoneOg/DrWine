@@ -23,7 +23,7 @@ export default function Welcome() {
                 <div className="absolute inset-0 bg-[#000C1C] opacity-50 z-0"></div>
                 <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-center min-h-screen">
                     <div>
-                        <h3 className="mt-16 text-4xl text-center sm:text-5xl md:text-7xl font-felix">
+                        <h3 className="mt-16 text-6xl text-center sm:text-6xl md:text-8xl font-felix">
                             <span>{heroSloganPart1}</span>
                             <br />
                             <span className="mt-6 inline-block">{heroSloganPart2}</span>
@@ -31,7 +31,7 @@ export default function Welcome() {
                         <div className="pt-10 text-center">
                         <Link
                             href="/reservation"
-                            className="animated-gold-border inline-block px-6 py-2 sm:px-8 sm:py-2 md:px-10 text-sm sm:text-base font-monts bg-transparent text-white transition-colors duration-500 hover:text-[#CDAF7B]"
+                            className="animated-gold-border font-bold inline-block px-6 py-2 sm:px-8 sm:py-2 md:px-10 text-sm sm:text-base font-monts bg-transparent text-white transition-colors duration-500 hover:text-[#CDAF7B]"
                         >
                             Book a Table
                         </Link>

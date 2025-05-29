@@ -130,15 +130,14 @@ export default function Transaction({ transaction }) {
                                             {(() => {
                                                 const dateTime = new Date(reservation?.date_time);
                                                 const dateStr = dateTime.toLocaleDateString('en-US', { 
-                                                    timeZone: 'UTC',
                                                     month: 'long',
                                                     day: 'numeric',
                                                     year: 'numeric'
                                                 });
                                                 const timeStr = dateTime.toLocaleTimeString('en-US', {
-                                                    timeZone: 'UTC',
                                                     hour: '2-digit',
-                                                    minute: '2-digit'
+                                                    minute: '2-digit',
+                                                    hour12: true
                                                 });
 
                                                 return (
