@@ -4,46 +4,79 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Faker\Factory as Faker;
 
 class ReservationTransactionSeeder extends Seeder
 {
     public function run()
     {
+        $faker = Faker::create();
         $now = Carbon::now();
 
-        // Assuming customers and tables exist
-        $customerIDs = DB::table('customer')->pluck('customerID')->toArray();
-        $tableIDs = DB::table('restaurant_tables')->pluck('tableID')->toArray();
+        // Create 6 fake customers
+        $customerIDs = [];
+        for ($i = 0; $i < 6; $i++) {
+            $customerIDs[] = DB::table('customer')->insertGetId([
+                'name' => Str::limit($faker->name, 20),
+                'email' => Str::limit($faker->unique()->safeEmail, 20),
+                'phone' => $faker->numerify('09#########'),
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+        }
 
-        // Fixed time slots (24-hour format)
+        // Get first 6 tables (assuming IDs 1 to 6 exist)
+        $tableIDs = range(1, 6);
+
+        // Fixed 6 reservations on June 1 at 11:00 using different payment methods
+        $fixedDateTime = Carbon::create(2025, 6, 1, 11, 0, 0);
+        $paymentMethods = ['GCash', 'Mastercard', 'Visa', 'Paypal', 'Paymaya'];
+
+        foreach ($tableIDs as $i => $tableID) {
+            $reservationID = DB::table('reservation')->insertGetId([
+                'customerID' => $customerIDs[$i],
+                'tableID' => $tableID,
+                'date_time' => $fixedDateTime,
+                'size' => rand(1, 6),
+                'status' => 'confirmed',
+                'duration' => 120,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+
+            DB::table('transaction')->insert([
+                'reservationID' => $reservationID,
+                'status' => 'completed',
+                'amount' => rand(1000, 5000),
+                'transaction_type' => 'reservation',
+                'payment_method' => $paymentMethods[$i] ?? $paymentMethods[array_rand($paymentMethods)],
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+        }
+
+        // Remaining random data generation
+        $allCustomerIDs = DB::table('customer')->pluck('customerID')->toArray();
+        $allTableIDs = DB::table('restaurant_tables')->pluck('tableID')->toArray();
+
         $timeSlots = [
-            '09:00:00',
-            '11:00:00',
-            '13:00:00',
-            '15:00:00',
-            '17:00:00',
-            '19:00:00',
-            '21:00:00',
+            '09:00:00', '11:00:00', '13:00:00',
+            '15:00:00', '17:00:00', '19:00:00', '21:00:00',
         ];
 
-        // Random date between June 1-7, 2025 with random fixed time slot
         $randomDateTime = function () use ($timeSlots) {
             $day = rand(1, 7);
             $date = Carbon::create(2025, 6, $day);
-
-            // Pick a random time slot
             $time = $timeSlots[array_rand($timeSlots)];
-
-            // Combine date + time and return full datetime
             return Carbon::parse($date->toDateString() . ' ' . $time);
         };
 
-        // Helper to create a confirmed reservation
-        $createConfirmedReservation = function () use (&$customerIDs, &$tableIDs, $randomDateTime, $now) {
+        $createConfirmedReservation = function () use (&$allCustomerIDs, &$allTableIDs, $randomDateTime, $now) {
             return DB::table('reservation')->insertGetId([
-                'customerID' => $customerIDs[array_rand($customerIDs)],
-                'tableID' => $tableIDs[array_rand($tableIDs)],
+                'customerID' => $allCustomerIDs[array_rand($allCustomerIDs)],
+                'tableID' => $allTableIDs[array_rand($allTableIDs)],
                 'date_time' => $randomDateTime(),
                 'size' => rand(1, 6),
                 'status' => 'confirmed',
@@ -53,7 +86,7 @@ class ReservationTransactionSeeder extends Seeder
             ]);
         };
 
-        // 1) Create 6 confirmed reservations + completed transactions
+        // 1) 6 more confirmed + completed transactions
         for ($i = 0; $i < 6; $i++) {
             $reservationID = $createConfirmedReservation();
             DB::table('transaction')->insert([
@@ -61,13 +94,13 @@ class ReservationTransactionSeeder extends Seeder
                 'status' => 'completed',
                 'amount' => rand(1000, 5000),
                 'transaction_type' => 'reservation',
-                'payment_method' => 'Visa',
+                'payment_method' => $paymentMethods[array_rand($paymentMethods)],
                 'created_at' => $now,
                 'updated_at' => $now,
             ]);
         }
 
-        // 2) Create 4 confirmed reservations + confirmed transactions
+        // 2) 4 confirmed + confirmed transactions
         for ($i = 0; $i < 4; $i++) {
             $reservationID = $createConfirmedReservation();
             DB::table('transaction')->insert([
@@ -75,13 +108,13 @@ class ReservationTransactionSeeder extends Seeder
                 'status' => 'confirmed',
                 'amount' => rand(1000, 5000),
                 'transaction_type' => 'reservation',
-                'payment_method' => 'Mastercard',
+                'payment_method' => $paymentMethods[array_rand($paymentMethods)],
                 'created_at' => $now,
                 'updated_at' => $now,
             ]);
         }
 
-        // 3) Create 2 confirmed reservations + cancelled transactions
+        // 3) 2 confirmed + cancelled transactions
         for ($i = 0; $i < 2; $i++) {
             $reservationID = $createConfirmedReservation();
             DB::table('transaction')->insert([
@@ -89,17 +122,17 @@ class ReservationTransactionSeeder extends Seeder
                 'status' => 'cancelled',
                 'amount' => rand(1000, 5000),
                 'transaction_type' => 'reservation',
-                'payment_method' => 'GCash',
+                'payment_method' => $paymentMethods[array_rand($paymentMethods)],
                 'created_at' => $now,
                 'updated_at' => $now,
             ]);
         }
 
-        // 4) Create 2 pending reservations with NO transactions
+        // 4) 2 pending reservations (no transaction)
         for ($i = 0; $i < 2; $i++) {
             DB::table('reservation')->insert([
-                'customerID' => $customerIDs[array_rand($customerIDs)],
-                'tableID' => $tableIDs[array_rand($tableIDs)],
+                'customerID' => $allCustomerIDs[array_rand($allCustomerIDs)],
+                'tableID' => $allTableIDs[array_rand($allTableIDs)],
                 'date_time' => $randomDateTime(),
                 'size' => rand(1, 6),
                 'status' => 'pending',
