@@ -107,23 +107,6 @@ class ReservationController extends Controller
         return redirect()->route('checkout', ['reservationID' => $reservation->reservationID]);
     }
 
-    public function cancel(Request $request, $reservationID)
-    {
-        $reservation = Reservation::findOrFail($reservationID);
-
-        if (auth()->check()) {
-            $customer = Customer::where('userID', auth()->id())->first();
-            if ($reservation->customerID !== $customer?->customerID) {
-                return redirect()->route('reservation')->with('error', 'You are not authorized to cancel this reservation.');
-            }
-        }
-
-        $reservation->status = 'cancelled';
-        $reservation->save();
-
-        return redirect()->route('reservation')->with('success', 'Reservation cancelled successfully');
-    }
-
     private function isTimeSlotAvailable($dateTime, $guestCount)
     {
         // Get the end time for the requested reservation (2 hours duration)
