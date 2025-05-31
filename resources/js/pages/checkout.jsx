@@ -36,12 +36,10 @@ export default function Checkout({ reservation }) {
   const handlePayment = () => {
     if (!selectedMethod) return;
 
-    router.post('/transactions', {
-      reservationID: reservation.reservationID,
+    router.post(`/checkout/${reservation.reservationID}/pay`, {
       amount: 20,
       transaction_type: 'reservation',
       payment_method: selectedMethod,
-      payment_details: paymentInfo,
     });
   };
 
