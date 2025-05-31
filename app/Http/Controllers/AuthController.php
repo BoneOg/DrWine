@@ -59,6 +59,7 @@ class AuthController extends Controller
             } elseif ($user->role === 'user') {
                 return Inertia::location(route('user.dashboard'));
             } else {
+                // If no specific role, or a default route is needed
                 return Inertia::location(route('menu'));
             }
         }
@@ -70,14 +71,12 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        
         Auth::logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-        Inertia::clearHistory();
-
-        return redirect('/login');
+        
+        // Use Inertia::location for a full page visit after logout.
+        // This ensures a fresh page load and new CSRF token.
+        return Inertia::location(route('login'));
     }
 }

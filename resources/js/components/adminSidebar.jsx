@@ -22,7 +22,7 @@ export default function AdminSidebar() {
   }, []);
 
   const handleLogout = () => {
-    router.post('/logout');
+    router.post('/logout'); // No need for onSuccess callback with window.location.href
   };
 
   const goHome = () => {
