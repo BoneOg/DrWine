@@ -32,6 +32,7 @@ Route::post('/reservation/available-times', [ReservationController::class, 'getA
 Route::post('/reservation/check', [ReservationController::class, 'checkAvailability'])->name('reservation.check');
 
 Route::get('/checkout/{reservationID}', [CheckoutController::class, 'index'])->name('checkout');
+Route::post('/checkout/{reservationID}/pay', [CheckoutController::class, 'processPayment'])->name('checkout.pay');
 Route::delete('/reservation/{reservationID}/cancel', [CheckoutController::class, 'cancel'])->name('reservation.cancel');
 
 Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
