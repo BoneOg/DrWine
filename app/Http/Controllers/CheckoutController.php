@@ -11,11 +11,8 @@ class CheckoutController extends Controller
 {
     public function index(Request $request, $reservationID)
     {
-        $token = $request->query('token');
-
         $reservation = Reservation::with(['customer', 'table'])
             ->where('reservationID', $reservationID)
-            ->where('token', $token)
             ->where('status', 'pending')
             ->firstOrFail();
 
@@ -84,8 +81,7 @@ class CheckoutController extends Controller
         $transaction = Transaction::create($transactionData);
 
         $reservation->update([
-            'status' => 'confirmed',
-            'token' => null,
+            'status' => 'confirmed'
         ]);
 
         return redirect()->route('transactions.show', ['transaction' => $transaction->transactionID]);

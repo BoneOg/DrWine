@@ -76,7 +76,7 @@ export default function Register() {
                         <img 
                             src="/assets/logo2.png" 
                             alt="Dr. Wine Logo" 
-                            className="h-30 w-70 mx-auto mb-8 object-contain"
+                            className="h-20 w-50 mx-auto mb-8 object-contain"
                         />
                         <motion.div 
                             className="w-16 md:w-20 h-[2px] bg-gradient-to-r from-transparent via-[#CDAF7B] to-transparent mx-auto mb-6"

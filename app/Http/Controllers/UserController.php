@@ -37,7 +37,7 @@ class UserController extends Controller
                 return [
                     'id' => $reservation->reservationID,
                     'date' => $reservation->date_time->format('Y-m-d'),
-                    'time' => $reservation->date_time->format('H:i'),
+                    'time' => $reservation->date_time->format('g:i A'),
                     'size' => $reservation->size,
                     'status' => $reservation->status,
                     'table_id' => $reservation->tableID,
@@ -55,7 +55,19 @@ class UserController extends Controller
             ->whereHas('reservation', function ($query) use ($customers) {
                 $query->whereIn('customerID', $customers);
             })
-            ->get();
+            ->get()
+            ->map(function ($transaction) {
+                return [
+                    'transactionID' => $transaction->transactionID,
+                    'amount' => $transaction->amount,
+                    'transaction_type' => $transaction->transaction_type,
+                    'status' => $transaction->status,
+                    'created_at' => $transaction->created_at,
+                    'reservation' => $transaction->reservation ? [
+                        'date_time' => $transaction->reservation->date_time
+                    ] : null
+                ];
+            });
 
         // Get customer info only if they have made reservations
         $primaryCustomer = Customer::where('userID', $user->userID)->first();
@@ -81,7 +93,7 @@ class UserController extends Controller
             'reservation' => [
                 'id' => $reservation->reservationID,
                 'date' => $reservation->date_time->format('Y-m-d'),
-                'time' => $reservation->date_time->format('H:i'),
+                'time' => $reservation->date_time->format('g:i A'),
                 'size' => $reservation->size,
                 'status' => $reservation->status,
                 'table' => $reservation->table->name,

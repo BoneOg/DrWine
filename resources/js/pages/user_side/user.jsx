@@ -351,19 +351,18 @@ export default function UserDashboard({ user, customer, transactions, reservatio
                                     </span>
                                   </td>
                                   <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">
-                                    {transaction.reservation?.date_time
+                                    {transaction.created_at
                                       ? (() => {
-                                          const dateTime = new Date(transaction.reservation.date_time);
+                                          const dateTime = new Date(transaction.created_at);
                                           const dateStr = dateTime.toLocaleDateString('en-US', { 
-                                            timeZone: 'UTC',
                                             month: 'short',
                                             day: 'numeric',
                                             year: 'numeric'
                                           });
                                           const timeStr = dateTime.toLocaleTimeString('en-US', {
-                                            timeZone: 'UTC',
-                                            hour: '2-digit',
+                                            hour: 'numeric',
                                             minute: '2-digit',
+                                            hour12: true
                                           });
                                           return `${dateStr} at ${timeStr}`;
                                         })()
