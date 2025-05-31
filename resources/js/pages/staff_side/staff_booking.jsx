@@ -38,6 +38,7 @@ export default function StaffBooking() {
     const [sort, setSort] = useState({ field: null, order: "asc" });
     const [filterStatus, setFilterStatus] = useState(null); // New state for dashboard filter
     const [isMobile, setIsMobile] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -152,9 +153,30 @@ export default function StaffBooking() {
     return (
         <>
             <Head title="Staff Bookings" />
-            <div className="min-h-screen bg-gradient-to-b from-[#000C1C] to-[#000C1C] text-white flex">
-                <StaffSidebar />
-                <main className="flex-1 px-6 sm:px-10 lg:px-8 pt-16 pb-8 lg:ml-64">
+            <div className="min-h-screen bg-gradient-to-b from-[#000C1C] to-[#000C1C] text-white flex relative">
+                {/* Mobile menu button */}
+                <button
+                    className="md:hidden fixed top-4 left-4 z-50 p-2 text-white bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#000C1C] focus:ring-[#CDAF7B]"
+                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    aria-label="Toggle sidebar"
+                >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+
+                {/* StaffSidebar component */}
+                <StaffSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+
+                {/* Overlay for mobile when sidebar is open */}
+                {isMobile && isSidebarOpen && (
+                    <div
+                        className="fixed inset-0 bg-black bg-opacity-50 z-30"
+                        onClick={() => setIsSidebarOpen(false)}
+                    ></div>
+                )}
+
+                <main className={`flex-1 px-4 sm:px-6 md:px-8 pt-16 md:pt-20 transition-all duration-300 ease-in-out ${isMobile ? 'ml-0' : 'ml-64'}`}>
                     {/* Header Section */}
                     <motion.div
                         className="mb-8 lg:mb-12"

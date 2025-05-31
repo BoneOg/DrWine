@@ -1,11 +1,10 @@
-// StaffSidebar.jsx
 import React, { useState, useEffect } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion'; // Keep if you use it for animations
 
-export default function StaffSidebar() {
-  const { url, auth } = usePage().props;
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+export default function StaffSidebar({ isOpen, onClose }) {
+  const { url } = usePage();
+  const { auth } = usePage().props;
   const [isMobile, setIsMobile] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -23,14 +22,14 @@ export default function StaffSidebar() {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
       if (window.innerWidth >= 768) {
-        setIsMobileMenuOpen(false);
+        onClose?.();
       }
     };
 
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [onClose]);
 
   const handleLogout = () => {
     router.post('/logout');
@@ -93,7 +92,7 @@ export default function StaffSidebar() {
     <>
       {/* Mobile Menu Button */}
       <button
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        onClick={() => onClose?.()}
         className="md:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-[#000C1C] border border-white/10 text-white hover:bg-white/5 transition-colors duration-200"
       >
         <svg
@@ -103,7 +102,7 @@ export default function StaffSidebar() {
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {isMobileMenuOpen ? (
+          {isOpen ? (
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
           ) : (
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -117,7 +116,7 @@ export default function StaffSidebar() {
           fixed top-0 left-0 h-screen w-64 bg-[#000C1C] border-r border-white/10
           flex flex-col font-monts text-white shadow-xl z-40
           transform transition-transform duration-300 ease-in-out
-          ${isMobile ? (isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full') : 'translate-x-0'}
+          ${isMobile ? (isOpen ? 'translate-x-0' : '-translate-x-full') : 'translate-x-0'}
         `}
         style={{
           boxShadow: `
@@ -152,7 +151,7 @@ export default function StaffSidebar() {
         <div className="flex-1 py-6 px-4">
           <nav className="space-y-1">
             {navLinks.map((link) => {
-              const isActive = url === link.path;
+              const isActive = url.startsWith(link.path);
               return (
                 <div key={link.name}>
                   <Link
@@ -160,13 +159,13 @@ export default function StaffSidebar() {
                     className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-300 ${
                       isActive
                         ? 'bg-[#CDAF7B]/20 text-[#CDAF7B]'
-                        : 'text-white/80 hover:bg-white/5 hover:text-white'
+                        : 'text-white/80 hover:bg-[#CDAF7B]/10 hover:text-[#CDAF7B]'
                     }`}
-                    onClick={() => isMobile && setIsMobileMenuOpen(false)}
+                    onClick={() => isMobile && onClose?.()}
                     preserveScroll
                     preserveState
                   >
-                    <span className={`${isActive ? 'text-[#CDAF7B]' : 'text-white/60'}`}>
+                    <span className={`${isActive ? 'text-[#CDAF7B]' : 'text-white/60 group-hover:text-[#CDAF7B]'}`}>
                       {link.icon}
                     </span>
                     <span className="font-medium tracking-wide text-sm">
@@ -186,7 +185,7 @@ export default function StaffSidebar() {
             <button
               onClick={() => {
                 goHome();
-                isMobile && setIsMobileMenuOpen(false);
+                isMobile && onClose?.();
               }}
               className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-[#CDAF7B] to-[#E5C992] text-black font-medium text-sm tracking-wide hover:from-[#E5C992] hover:to-[#CDAF7B] transition-all duration-300"
             >
@@ -200,7 +199,7 @@ export default function StaffSidebar() {
             <button
               onClick={() => {
                 handleLogout();
-                isMobile && setIsMobileMenuOpen(false);
+                isMobile && onClose?.();
               }}
               className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-red-500/30 text-red-400 font-medium text-sm tracking-wide hover:bg-red-500/10 transition-all duration-300"
             >
@@ -214,10 +213,10 @@ export default function StaffSidebar() {
       </aside>
 
       {/* Backdrop for mobile */}
-      {isMobile && isMobileMenuOpen && (
+      {isMobile && isOpen && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30"
-          onClick={() => setIsMobileMenuOpen(false)}
+          onClick={() => onClose?.()}
         />
       )}
 

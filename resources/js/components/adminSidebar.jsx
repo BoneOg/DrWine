@@ -4,7 +4,8 @@ import { Link, router, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 
 export default function AdminSidebar() {
-  const { url, auth } = usePage().props;
+  const { url } = usePage();
+  const { auth } = usePage().props;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
