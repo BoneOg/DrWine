@@ -33,7 +33,8 @@ class ReservationController extends Controller
         foreach ($fixedSlots as $slot) {
             $dateTime = Carbon::createFromFormat('Y-m-d H:i', "$date $slot");
 
-            if ($this->isTimeSlotAvailable($dateTime, $size)) {
+            // FIX: Clone the Carbon instance to avoid mutation issues in isTimeSlotAvailable
+            if ($this->isTimeSlotAvailable($dateTime->copy(), $size)) {
                 $availableSlots[] = $slot;
             }
         }
@@ -83,10 +84,8 @@ class ReservationController extends Controller
             ->get()
             ->filter(function ($table) use ($dateTime) {
                 return !Reservation::where('tableID', $table->tableID)
-                    ->whereBetween('date_time', [
-                        $dateTime,
-                        $dateTime->copy()->addMinutes(120)
-                    ])
+                    ->where('date_time', '<', $dateTime->copy()->addMinutes(120))  // Slot end
+                    ->whereRaw('DATE_ADD(date_time, INTERVAL duration MINUTE) > ?', [$dateTime]) // Slot start
                     ->exists();
             })
             ->first();
@@ -109,40 +108,17 @@ class ReservationController extends Controller
 
     private function isTimeSlotAvailable($dateTime, $guestCount)
     {
-        // Get the end time for the requested reservation (2 hours duration)
         $reservationEnd = $dateTime->copy()->addMinutes(120);
 
-        // Get all tables that can accommodate the party size
-        $availableTables = RestaurantTable::where('capacity', '>=', $guestCount)
+        return RestaurantTable::where('capacity', '>=', $guestCount)
             ->where('table_status', 'available')
-            ->get();
-
-        // If no tables can accommodate the party size, return false
-        if ($availableTables->isEmpty()) {
-            return false;
-        }
-
-        // Check each table for availability during the requested time slot
-        foreach ($availableTables as $table) {
-            // Check for any overlapping reservations
-            $hasOverlap = Reservation::where('tableID', $table->tableID)
-                ->where(function ($query) use ($dateTime, $reservationEnd) {
-                    $query->where(function ($q) use ($dateTime, $reservationEnd) {
-                        // Check if any existing reservation overlaps with the requested time
-                        $q->where('date_time', '<', $reservationEnd)
-                          ->whereRaw('DATE_ADD(date_time, INTERVAL duration MINUTE) > ?', [$dateTime]);
-                    })
-                    ->where('status', '!=', 'cancelled'); // Exclude cancelled reservations
-                })
-                ->exists();
-
-            // If we found a table with no overlapping reservations, return true
-            if (!$hasOverlap) {
-                return true;
-            }
-        }
-
-        // If we get here, no tables are available for the requested time
-        return false;
+            ->get()
+            ->filter(function ($table) use ($dateTime, $reservationEnd) {
+                return !Reservation::where('tableID', $table->tableID)
+                    ->where('date_time', '<', $reservationEnd)  // Existing reservation starts before slot ends
+                    ->whereRaw('DATE_ADD(date_time, INTERVAL duration MINUTE) > ?', [$dateTime])  // Existing reservation ends after slot starts
+                    ->exists();
+            })
+            ->isNotEmpty();
     }
 }
