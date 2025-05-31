@@ -4,11 +4,18 @@ import { router } from '@inertiajs/react';
 import { useEffect } from 'react';
 
 
-export default function Reservation() { // Renamed to Reservation to follow common React component naming conventions
+export default function Reservation() {
   const today = new Date();
   const months = ['January', 'February', 'March', 'April', 'May', 'June',
                   'July', 'August', 'September', 'October', 'November', 'December'];
-  const timeSlots = ['09:00 AM', '11:00 AM', '01:00 PM', '03:00 PM', '05:00 PM', '07:00 PM'];
+  const timeSlots = [
+    '09:00 AM', // 9:00 AM
+    '11:00 AM', // 11:00 AM
+    '01:00 PM', // 1:00 PM
+    '03:00 PM', // 3:00 PM
+    '05:00 PM', // 5:00 PM
+    '07:00 PM'  // 7:00 PM
+  ];
   const guests = Array.from({ length: 10 }, (_, i) => i + 1);
 
   const [availableTimes, setAvailableTimes] = useState([]);
@@ -48,15 +55,16 @@ export default function Reservation() { // Renamed to Reservation to follow comm
     const [time, modifier] = time12h.split(' ');
     let [hours, minutes] = time.split(':');
     
-    if (hours === '12') {
-      hours = '00';
+    hours = parseInt(hours);
+    
+    if (modifier === 'PM' && hours < 12) {
+      hours = hours + 12;
+    }
+    if (modifier === 'AM' && hours === 12) {
+      hours = 0;
     }
     
-    if (modifier === 'PM') {
-      hours = parseInt(hours, 10) + 12;
-    }
-    
-    return `${hours.padStart(2, '0')}:${minutes}`;
+    return `${String(hours).padStart(2, '0')}:${minutes}`;
   };
 
   const handleSubmit = async () => {
