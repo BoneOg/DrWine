@@ -19,7 +19,7 @@ class ReservationTransactionSeeder extends Seeder
         $customerIDs = [];
         for ($i = 0; $i < 12; $i++) {
             $customerIDs[] = DB::table('customer')->insertGetId([
-                'name' => Str::limit($faker->name, 20),
+                'name' => substr($faker->name, 0, 30),
                 'email' => Str::limit($faker->unique()->safeEmail, 20),
                 'phone' => $faker->numerify('09#########'),
                 'created_at' => $now,

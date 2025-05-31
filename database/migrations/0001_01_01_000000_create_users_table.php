@@ -12,18 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id('userID'); // Renamed from 'id' to 'userID' as per your schema
-            $table->enum('role', ['admin', 'user', 'guest'])->default('guest');
-            $table->string('username')->unique(); // username is unique for login
-            $table->string('email')->nullable(); // removed unique() to allow duplicates and made nullable
+            $table->id('userID'); // Custom primary key
+            $table->enum('role', ['admin', 'user', 'guest', 'staff'])->default('guest');
+            $table->string('username')->unique();
+            $table->string('name')->nullable(); // Removed ->after()
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable(); // Removed ->after()
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });
 
-        // These are standard Laravel tables for password resets and sessions.
-        // It's generally good to keep them if you plan to use Laravel's built-in authentication features.
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
@@ -45,8 +45,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
     }
 };
