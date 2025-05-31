@@ -4,7 +4,7 @@ import { router } from '@inertiajs/react';
 import { useEffect } from 'react';
 
 
-export default function Reservation() { // Renamed to Reservation to follow common React component naming conventions
+export default function Reservation() {
   const today = new Date();
   const months = ['January', 'February', 'March', 'April', 'May', 'June',
                   'July', 'August', 'September', 'October', 'November', 'December'];
@@ -20,6 +20,7 @@ export default function Reservation() { // Renamed to Reservation to follow comm
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [error, setError] = useState(null);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const currentYear = today.getFullYear();
   const selectedDate = new Date(currentYear, selectedMonth, selectedDay);
@@ -36,12 +37,55 @@ export default function Reservation() { // Renamed to Reservation to follow comm
     return date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
   };
 
+  // Email validation regex pattern
+  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  // Validate form fields
+  const validateForm = () => {
+    const errors = {};
+
+    // Name validation
+    if (!name.trim()) {
+      errors.name = 'Name is required';
+    } else if (name.trim().length < 2) {
+      errors.name = 'Name must be at least 2 characters long';
+    }
+
+    // Email validation
+    if (!email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!emailPattern.test(email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+
+    // Phone validation
+    if (!phone.trim()) {
+      errors.phone = 'Phone number is required';
+    } else if (phone.length < 10) {
+      errors.phone = 'Please enter a valid phone number';
+    }
+
+    // Guest validation
+    if (selectedGuests < 1) {
+      errors.guests = 'Please select number of guests';
+    }
+
+    // Date validation
+    if (isPast(selectedDay)) {
+      errors.date = 'Please select a future date';
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const formValid =
     name.trim() !== '' &&
     email.trim() !== '' &&
     phone.trim() !== '' &&
     selectedGuests > 0 &&
-    !isPast(selectedDay);
+    !isPast(selectedDay) &&
+    emailPattern.test(email);
 
 
   useEffect(() => {
@@ -70,7 +114,7 @@ export default function Reservation() { // Renamed to Reservation to follow comm
 
 
   const handleSubmit = async () => {
-    if (!formValid) return;
+    if (!validateForm()) return;
 
     const formattedDate = `${currentYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
     const dateTime = `${formattedDate} ${selectedTime}`;
@@ -97,20 +141,24 @@ export default function Reservation() { // Renamed to Reservation to follow comm
         return;
       }
 
-      setError(null); // Clear any existing error if availability is confirmed
+      setError(null);
+      setValidationErrors({});
 
-      // Perform the Inertia POST request.
-      // Inertia will automatically handle the redirect returned by the Laravel controller.
+      // Perform the Inertia POST request
       router.post('/reservation', {
         name,
         email,
         phone,
         size: selectedGuests,
         date_time: dateTime
+      }, {
+        onError: (errors) => {
+          setValidationErrors(errors);
+        }
       });
 
     } catch (err) {
-      console.error('Reservation process failed:', err); // More generic error message
+      console.error('Reservation process failed:', err);
       setError('An error occurred during the reservation process. Please try again.');
     }
   };
@@ -258,8 +306,13 @@ export default function Reservation() { // Renamed to Reservation to follow comm
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
-                    className="w-full bg-transparent border-b border-gray-400 pb-1 text-xs font-monts outline-none focus:border-[#CDAF7B]"
+                    className={`w-full bg-transparent border-b ${
+                      validationErrors.name ? 'border-red-500' : 'border-gray-400'
+                    } pb-1 text-xs font-monts outline-none focus:border-[#CDAF7B]`}
                   />
+                  {validationErrors.name && (
+                    <p className="text-red-500 text-xs mt-1">{validationErrors.name}</p>
+                  )}
                 </div>
 
                 {/* Email */}
@@ -269,8 +322,13 @@ export default function Reservation() { // Renamed to Reservation to follow comm
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-400 pb-1 text-xs font-monts outline-none focus:border-[#CDAF7B]"
+                    className={`w-full bg-transparent border-b ${
+                      validationErrors.email ? 'border-red-500' : 'border-gray-400'
+                    } pb-1 text-xs font-monts outline-none focus:border-[#CDAF7B]`}
                   />
+                  {validationErrors.email && (
+                    <p className="text-red-500 text-xs mt-1">{validationErrors.email}</p>
+                  )}
                 </div>
 
                 {/* Phone */}
@@ -280,8 +338,13 @@ export default function Reservation() { // Renamed to Reservation to follow comm
                     type="text"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-                    className="w-full bg-transparent border-b border-gray-400 pb-1 text-xs font-monts outline-none focus:border-[#CDAF7B]"
+                    className={`w-full bg-transparent border-b ${
+                      validationErrors.phone ? 'border-red-500' : 'border-gray-400'
+                    } pb-1 text-xs font-monts outline-none focus:border-[#CDAF7B]`}
                   />
+                  {validationErrors.phone && (
+                    <p className="text-red-500 text-xs mt-1">{validationErrors.phone}</p>
+                  )}
                 </div>
 
                 {error && (
