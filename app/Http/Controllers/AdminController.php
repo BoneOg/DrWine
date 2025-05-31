@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
@@ -291,5 +293,43 @@ class AdminController extends Controller
             'revenueStats' => $revenueStats,
             'recentActivity' => $recentActivity,
         ]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+        
+        $validated = $request->validate([
+            'username' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->userID, 'userID')],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->userID, 'userID')],
+            'name' => ['required', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'current_password' => ['nullable', 'string'],
+            'new_password' => ['nullable', 'string', 'min:6', 'confirmed'],
+        ]);
+
+        // If current password is provided, verify it
+        if ($request->filled('current_password')) {
+            if (!Hash::check($validated['current_password'], $user->password)) {
+                return back()->withErrors([
+                    'current_password' => 'The provided password does not match your current password.'
+                ]);
+            }
+        }
+
+        // Update basic information
+        $user->username = $validated['username'];
+        $user->email = $validated['email'];
+        $user->name = $validated['name'];
+        $user->phone = $validated['phone'];
+
+        // Update password if provided
+        if ($request->filled('new_password')) {
+            $user->password = Hash::make($validated['new_password']);
+        }
+
+        $user->save();
+
+        return back()->with('success', 'Profile updated successfully');
     }
 }

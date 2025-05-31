@@ -34,7 +34,7 @@ export default function UserDashboard({ user, customer, transactions }) {
   };
 
   const handleLogout = () => {
-    router.post('/logout'); // No need for onSuccess callback with window.location.href
+    router.post('/logout');
   };
 
   const handleDelete = () => {

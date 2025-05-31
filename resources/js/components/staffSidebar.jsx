@@ -4,9 +4,20 @@ import { Link, router, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion'; // Keep if you use it for animations
 
 export default function StaffSidebar() {
-  const { url } = usePage();
+  const { url, auth } = usePage().props;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    username: auth.user.username,
+    name: auth.user.name || '',
+    email: auth.user.email || '',
+    phone: auth.user.phone || '',
+    current_password: '',
+    new_password: '',
+    new_password_confirmation: ''
+  });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const handleResize = () => {
@@ -22,11 +33,38 @@ export default function StaffSidebar() {
   }, []);
 
   const handleLogout = () => {
-    router.post('/logout'); // No need for onSuccess callback with window.location.href
+    router.post('/logout');
   };
 
   const goHome = () => {
     router.visit('/');
+  };
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    router.post('/staff/profile/update', editForm, {
+      onSuccess: () => {
+        setIsEditModalOpen(false);
+        setEditForm(prev => ({
+          ...prev,
+          current_password: '',
+          new_password: '',
+          new_password_confirmation: ''
+        }));
+        setErrors({});
+      },
+      onError: (errors) => {
+        setErrors(errors);
+      },
+    });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const navLinks = [
@@ -92,6 +130,22 @@ export default function StaffSidebar() {
         {/* Logo Section */}
         <div className="p-6 border-b border-white/10">
           <img src="/assets/logo2.png" alt="Logo" className="h-16 md:h-20 mx-auto" />
+        </div>
+
+        {/* Welcome Section */}
+        <div className="px-6 py-4 border-b border-white/10">
+          <h2 className="text-[#CDAF7B] font-monts text-sm tracking-wider uppercase">Welcome Back</h2>
+          <p className="text-white font-felix text-xl mt-1">{auth.user?.name || auth.user?.username}</p>
+          <p className="text-white/60 font-monts text-xs tracking-wide mt-1">Staff Member</p>
+          <button
+            onClick={() => setIsEditModalOpen(true)}
+            className="mt-3 w-full text-left text-[#CDAF7B] hover:text-[#E5C992] text-xs tracking-wider font-monts transition-colors duration-300 flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
+            Edit Profile
+          </button>
         </div>
 
         {/* Navigation Section */}
@@ -165,6 +219,166 @@ export default function StaffSidebar() {
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30"
           onClick={() => setIsMobileMenuOpen(false)}
         />
+      )}
+
+      {/* Edit Profile Modal */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 z-[100] overflow-y-auto">
+          <div className="fixed inset-0 bg-black/75 backdrop-blur-sm" aria-hidden="true" onClick={() => setIsEditModalOpen(false)} />
+          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20">
+            <div className="relative w-full max-w-lg">
+              <div className="relative backdrop-blur-xl bg-[#000C1C]/90 border border-[#CDAF7B]/20 rounded-none px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:p-6">
+                <div className="absolute top-4 right-4">
+                  <button
+                    onClick={() => setIsEditModalOpen(false)}
+                    className="text-white/60 hover:text-white transition-colors duration-200"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-felix text-white mb-6">Edit Staff Profile</h3>
+                  <form onSubmit={handleEditSubmit} className="space-y-4 font-monts">
+                    <div>
+                      <label htmlFor="username" className="block text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Username</label>
+                      <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        value={editForm.username}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
+                        placeholder:text-[#CDAF7B]/60 focus:outline-none focus:border-[#CDAF7B] focus:ring-1 
+                        focus:ring-[#CDAF7B]/50 transition-all duration-300 font-monts text-sm"
+                      />
+                      {errors.username && <p className="text-red-400 text-xs mt-1">{errors.username}</p>}
+                    </div>
+
+                    <div>
+                      <label htmlFor="name" className="block text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Full Name</label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={editForm.name}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
+                        placeholder:text-[#CDAF7B]/60 focus:outline-none focus:border-[#CDAF7B] focus:ring-1 
+                        focus:ring-[#CDAF7B]/50 transition-all duration-300 font-monts text-sm"
+                      />
+                      {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
+                    </div>
+
+                    <div>
+                      <label htmlFor="email" className="block text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Email Address</label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={editForm.email}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
+                        placeholder:text-[#CDAF7B]/60 focus:outline-none focus:border-[#CDAF7B] focus:ring-1 
+                        focus:ring-[#CDAF7B]/50 transition-all duration-300 font-monts text-sm"
+                      />
+                      {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
+                    </div>
+
+                    <div>
+                      <label htmlFor="phone" className="block text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Phone Number</label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={editForm.phone}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
+                        placeholder:text-[#CDAF7B]/60 focus:outline-none focus:border-[#CDAF7B] focus:ring-1 
+                        focus:ring-[#CDAF7B]/50 transition-all duration-300 font-monts text-sm"
+                      />
+                      {errors.phone && <p className="text-red-400 text-xs mt-1">{errors.phone}</p>}
+                    </div>
+
+                    <div className="border-t border-white/10 mt-6 pt-6">
+                      <h4 className="text-white font-felix text-lg mb-4">Change Password</h4>
+                      
+                      <div className="space-y-4">
+                        <div>
+                          <label htmlFor="current_password" className="block text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Current Password</label>
+                          <input
+                            type="password"
+                            id="current_password"
+                            name="current_password"
+                            value={editForm.current_password}
+                            onChange={handleInputChange}
+                            className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
+                            placeholder:text-[#CDAF7B]/60 focus:outline-none focus:border-[#CDAF7B] focus:ring-1 
+                            focus:ring-[#CDAF7B]/50 transition-all duration-300 font-monts text-sm"
+                          />
+                          {errors.current_password && <p className="text-red-400 text-xs mt-1">{errors.current_password}</p>}
+                        </div>
+
+                        <div>
+                          <label htmlFor="new_password" className="block text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">New Password</label>
+                          <input
+                            type="password"
+                            id="new_password"
+                            name="new_password"
+                            value={editForm.new_password}
+                            onChange={handleInputChange}
+                            className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
+                            placeholder:text-[#CDAF7B]/60 focus:outline-none focus:border-[#CDAF7B] focus:ring-1 
+                            focus:ring-[#CDAF7B]/50 transition-all duration-300 font-monts text-sm"
+                          />
+                          {errors.new_password && <p className="text-red-400 text-xs mt-1">{errors.new_password}</p>}
+                        </div>
+
+                        <div>
+                          <label htmlFor="new_password_confirmation" className="block text-xs tracking-wider text-[#CDAF7B] uppercase mb-2">Confirm New Password</label>
+                          <input
+                            type="password"
+                            id="new_password_confirmation"
+                            name="new_password_confirmation"
+                            value={editForm.new_password_confirmation}
+                            onChange={handleInputChange}
+                            className="w-full px-4 py-3 bg-black/20 border border-[#CDAF7B]/30 rounded-none text-white 
+                            placeholder:text-[#CDAF7B]/60 focus:outline-none focus:border-[#CDAF7B] focus:ring-1 
+                            focus:ring-[#CDAF7B]/50 transition-all duration-300 font-monts text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-8 flex justify-end space-x-4">
+                      <button
+                        type="button"
+                        onClick={() => setIsEditModalOpen(false)}
+                        className="px-4 py-2 font-monts text-sm tracking-wider text-[#CDAF7B] border border-[#CDAF7B]/30 hover:bg-[#CDAF7B]/10 transition-colors duration-300"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="group relative px-6 py-2 overflow-hidden border border-[#CDAF7B]/30"
+                      >
+                        <span className="relative z-10 text-black font-monts font-bold text-sm tracking-wider">
+                          Save Changes
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#CDAF7B] to-[#E5C992]"></div>
+                        <div 
+                          className="absolute inset-0 bg-gradient-to-r from-[#E5C992] via-white/10 to-[#CDAF7B] opacity-0 
+                          group-hover:opacity-100 transition-all duration-500 scale-x-[102%] scale-y-[110%]"
+                        ></div>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

@@ -58,13 +58,15 @@ Route::middleware('auth')->group(function () {
         Route::delete('/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
         Route::put('/users/{user}', [AdminController::class, 'update'])->name('users.update');
         Route::post('/users', [AdminController::class, 'store'])->name('users.store');
+        Route::post('/profile/update', [AdminController::class, 'updateProfile'])->name('profile.update');
     });
 
     // Staff routes
     Route::middleware('role:staff')->prefix('staff')->name('staff.')->group(function () {
-        Route::get('/', [StaffController::class, 'dashboard'])->name('dashboard'); // Assuming StaffController
-        Route::get('/booking', [StaffController::class, 'booking'])->name('booking'); // Assuming StaffController
+        Route::get('/', [StaffController::class, 'dashboard'])->name('dashboard');
+        Route::get('/booking', [StaffController::class, 'booking'])->name('booking');
         Route::post('/reservations/action', [StaffController::class, 'handleReservationAction'])->name('reservation-action');
+        Route::post('/profile/update', [StaffController::class, 'updateProfile'])->name('profile.update');
     });
 
 });
