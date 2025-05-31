@@ -467,6 +467,7 @@ export default function AdminUsers() {
                       >
                         <option value="user">User</option>
                         <option value="admin">Admin</option>
+                        <option value="staff">Staff</option>
                       </select>
                     </div>
                     <div className="mt-6">
@@ -537,6 +538,7 @@ export default function AdminUsers() {
                         <option value="">Select Role</option>
                         <option value="user">User</option>
                         <option value="admin">Admin</option>
+                        <option value="staff">Staff</option>
                       </select>
                     </div>
                     <div className="flex justify-end gap-4 mt-6">

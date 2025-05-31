@@ -201,7 +201,7 @@ class AdminController extends Controller
         $request->validate([
             'username' => 'required|string|max:255|unique:users,username,' . $user->userID . ',userID',
             'email' => 'required|email|max:255|unique:users,email,' . $user->userID . ',userID',
-            'role' => 'required|in:user,admin',
+            'role' => 'required|in:user,admin,staff',
         ]);
 
         $user->update([
@@ -219,7 +219,7 @@ class AdminController extends Controller
             'username' => 'required|string|max:255|unique:users,username',
             'email' => 'required|email|max:255',
             'password' => 'required|string|min:8',
-            'role' => 'required|in:user,admin',
+            'role' => 'required|in:user,admin,staff',
         ]);
 
         // Create user with all profile information
