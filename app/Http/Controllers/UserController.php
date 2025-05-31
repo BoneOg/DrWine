@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Customer;
 use App\Models\Transaction; // make sure to import Transaction if you use it
+use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -22,6 +23,34 @@ class UserController extends Controller
 
         $customers = Customer::where('userID', $user->userID)->pluck('customerID');
 
+        // Get all reservations for the user
+        $reservations = Reservation::with(['customer', 'table', 'transaction'])
+            ->whereIn('customerID', $customers)
+            ->orderBy('date_time', 'desc')
+            ->get()
+            ->map(function ($reservation) {
+                // Allow cancellation for pending and confirmed reservations
+                $canCancel = in_array($reservation->status, ['pending', 'confirmed']) && 
+                            // Only allow cancellation if the reservation date hasn't passed
+                            $reservation->date_time > now();
+
+                return [
+                    'id' => $reservation->reservationID,
+                    'date' => $reservation->date_time->format('Y-m-d'),
+                    'time' => $reservation->date_time->format('H:i'),
+                    'size' => $reservation->size,
+                    'status' => $reservation->status,
+                    'table_id' => $reservation->tableID,
+                    'table_name' => $reservation->table->name,
+                    'table_number' => $reservation->table->table_number,
+                    'can_cancel' => $canCancel,
+                    'transaction' => $reservation->transaction ? [
+                        'status' => $reservation->transaction->status,
+                        'amount' => $reservation->transaction->amount,
+                    ] : null,
+                ];
+            });
+
         $transactions = Transaction::with('reservation')
             ->whereHas('reservation', function ($query) use ($customers) {
                 $query->whereIn('customerID', $customers);
@@ -34,10 +63,35 @@ class UserController extends Controller
         return Inertia::render('user_side/user', [
             'user' => $user,
             'customer' => $primaryCustomer,
+            'reservations' => $reservations,
             'transactions' => $transactions,
         ]);
     }
 
+    public function viewReservation($reservationID)
+    {
+        $user = Auth::user();
+        $customers = Customer::where('userID', $user->userID)->pluck('customerID');
+        
+        $reservation = Reservation::with(['customer', 'table', 'transaction'])
+            ->whereIn('customerID', $customers)
+            ->findOrFail($reservationID);
+
+        return Inertia::render('user_side/reservation_details', [
+            'reservation' => [
+                'id' => $reservation->reservationID,
+                'date' => $reservation->date_time->format('Y-m-d'),
+                'time' => $reservation->date_time->format('H:i'),
+                'size' => $reservation->size,
+                'status' => $reservation->status,
+                'table' => $reservation->table->name,
+                'transaction' => $reservation->transaction ? [
+                    'status' => $reservation->transaction->status,
+                    'amount' => $reservation->transaction->amount,
+                ] : null,
+            ]
+        ]);
+    }
 
     public function deleteAccount()
     {

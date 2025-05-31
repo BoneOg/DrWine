@@ -29,6 +29,16 @@ class CheckoutController extends Controller
             }
         }
 
+        // Check if reservation date has passed
+        if ($reservation->date_time <= now()) {
+            return redirect()->back()->with('error', 'Cannot cancel past reservations.');
+        }
+
+        // Check if reservation status is valid for cancellation
+        if (!in_array($reservation->status, ['pending', 'confirmed'])) {
+            return redirect()->back()->with('error', 'This reservation cannot be cancelled.');
+        }
+
         // If there's no transaction, just delete the reservation
         if (!$reservation->transaction) {
             // Delete the customer record if it was created just for this reservation
@@ -42,24 +52,14 @@ class CheckoutController extends Controller
             return redirect()->route('reservation')->with('success', 'Reservation cancelled successfully');
         }
 
-        // For reservations with transactions, handle as before
-        if ($reservation->transaction->status === 'cancelled') {
-            return redirect()->back()->with('error', 'This reservation is already cancelled.');
-        }
-
-        if (in_array($reservation->transaction->status, ['completed', 'confirmed'])) {
-            return redirect()->back()->with('error', 'Cannot cancel a paid reservation. Please contact support.');
-        }
-
-        // Cancel both the reservation and its pending transaction
+        // Cancel both the reservation and its transaction
         $reservation->status = 'cancelled';
         $reservation->save();
 
-        if ($reservation->transaction->status === 'pending') {
-            $reservation->transaction->status = 'cancelled';
-            $reservation->transaction->save();
-        }
+        // Update the transaction status to cancelled
+        $reservation->transaction->status = 'cancelled';
+        $reservation->transaction->save();
 
-        return redirect()->route('reservation')->with('success', 'Reservation cancelled successfully');
+        return redirect()->route('reservation')->with('success', 'Reservation cancelled successfully. If you made a payment, it will be refunded according to our refund policy.');
     }
 }

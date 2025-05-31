@@ -47,6 +47,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('user.dashboard');
         Route::post('/users/delete-account', [UserController::class, 'deleteAccount'])->name('user.delete');
         Route::post('/user/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
+        Route::get('/user/reservations/{reservationID}', [UserController::class, 'viewReservation'])->name('user.reservation.view');
+        Route::delete('/user/reservations/{reservationID}/cancel', [CheckoutController::class, 'cancel'])->name('user.reservation.cancel');
     });
 
     // ADMIN-only routes

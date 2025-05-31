@@ -5,7 +5,7 @@ import Layout from '@/components/layout';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
-export default function UserDashboard({ user, customer, transactions }) {
+export default function UserDashboard({ user, customer, transactions, reservations }) {
   const [isMobile, setIsMobile] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -191,91 +191,90 @@ export default function UserDashboard({ user, customer, transactions }) {
                   </div>
                 </motion.div>
 
-                {/* Transactions Card */}
+                {/* Reservations Card */}
                 <motion.div 
                   className="lg:col-span-2"
                   {...fadeIn}
                   transition={{ delay: 0.2 }}
                 >
-                  <div className="backdrop-blur-xl bg-white/[0.02] border border-white/10 rounded-none p-6 md:p-8 hover:bg-white/[0.04] transition-all duration-300">
+                  <div className="backdrop-blur-xl bg-white/[0.02] border border-white/10 rounded-none p-6 md:p-8 hover:bg-white/[0.04] transition-all duration-300 mb-8">
                     <div className="flex items-center justify-between mb-6 md:mb-8">
-                      <h2 className="text-xl md:text-2xl font-felix text-white">Transaction History</h2>
+                      <h2 className="text-xl md:text-2xl font-felix text-white">My Reservations</h2>
                       <div className="w-12 h-[1px] bg-gradient-to-r from-[#CDAF7B] to-transparent"></div>
                     </div>
 
-                    {transactions.length === 0 ? (
+                    {!reservations || reservations.length === 0 ? (
                       <div className="text-center py-12">
-                        <p className="text-[#CDAF7B] font-monts text-sm">No transactions found</p>
+                        <p className="text-[#CDAF7B] font-monts text-sm">No reservations found</p>
                       </div>
                     ) : (
                       <div className="overflow-x-auto">
                         <table className="w-full border-collapse font-monts">
                           <thead>
                             <tr className="border-b border-white/10">
-                              <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Transaction ID</th>
-                              <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Amount</th>
-                              <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Type</th>
-                              <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Status</th>
                               <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Date</th>
+                              <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Time</th>
+                              <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Table</th>
+                              <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Size</th>
+                              <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Status</th>
+                              <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Actions</th>
                             </tr>
                           </thead>
                           <tbody className="text-white/90">
-                            {transactions.map((transaction, index) => (
+                            {reservations.map((reservation) => (
                               <tr 
-                                key={transaction.transactionID}
+                                key={reservation.id}
                                 className="border-b border-white/10 hover:bg-white/[0.02] transition-colors duration-300"
                               >
-                                <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">{transaction.transactionID}</td>
-                                <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">${transaction.amount.toLocaleString()}</td>
-                                <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">{transaction.transaction_type}</td>
+                                <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">{reservation.date}</td>
+                                <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">{reservation.time}</td>
+                                <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">
+                                  {reservation.table_name}
+                                  <span className="text-[#CDAF7B] ml-1"># {reservation.table_number}</span>
+                                </td>
+                                <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">{reservation.size} people</td>
                                 <td className="py-3 md:py-4 px-3 md:px-4">
                                   <span className={`inline-flex items-center px-3 py-1 text-xs tracking-wider uppercase font-monts
-                                    ${transaction.status === 'paid' ? 
-                                      'text-emerald-300 border border-emerald-500/30 bg-emerald-500/10' : 
-                                    transaction.status === 'pending' ? 
+                                    ${reservation.status === 'pending' ? 
                                       'text-amber-300 border border-amber-500/30 bg-amber-500/10' : 
-                                    transaction.status === 'failed' ? 
-                                      'text-rose-300 border border-rose-500/30 bg-rose-500/10' :
-                                    transaction.status === 'cancelled' ?
+                                    reservation.status === 'cancelled' ?
                                       'text-slate-300 border border-slate-500/30 bg-slate-500/10' :
-                                    transaction.status === 'confirmed' ?
+                                    reservation.status === 'confirmed' ?
                                       'text-emerald-300 border border-emerald-500/30 bg-emerald-500/10' :
-                                    transaction.status === 'completed' ?
+                                    reservation.status === 'completed' ?
                                       'text-sky-300 border border-sky-500/30 bg-sky-500/10' :
                                       'text-gray-300 border border-gray-500/30 bg-gray-500/10'
                                     }`}
                                   >
                                     <div className={`w-1.5 h-1.5 rounded-full mr-2
-                                      ${transaction.status === 'paid' ? 'bg-emerald-400' :
-                                        transaction.status === 'pending' ? 'bg-amber-400' :
-                                        transaction.status === 'failed' ? 'bg-rose-400' :
-                                        transaction.status === 'cancelled' ? 'bg-slate-400' :
-                                        transaction.status === 'confirmed' ? 'bg-emerald-400' :
-                                        transaction.status === 'completed' ? 'bg-sky-400' :
+                                      ${reservation.status === 'pending' ? 'bg-amber-400' :
+                                        reservation.status === 'cancelled' ? 'bg-slate-400' :
+                                        reservation.status === 'confirmed' ? 'bg-emerald-400' :
+                                        reservation.status === 'completed' ? 'bg-sky-400' :
                                         'bg-gray-400'
                                       }`}
                                     />
-                                    {transaction.status}
+                                    {reservation.status}
                                   </span>
                                 </td>
                                 <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">
-                                  {transaction.reservation?.date_time
-                                    ? (() => {
-                                        const dateTime = new Date(transaction.reservation.date_time);
-                                        const dateStr = dateTime.toLocaleDateString('en-US', { 
-                                          timeZone: 'UTC',
-                                          month: 'short',
-                                          day: 'numeric',
-                                          year: 'numeric'
-                                        });
-                                        const timeStr = dateTime.toLocaleTimeString('en-US', {
-                                          timeZone: 'UTC',
-                                          hour: '2-digit',
-                                          minute: '2-digit',
-                                        });
-                                        return `${dateStr} at ${timeStr}`;
-                                      })()
-                                    : 'N/A'}
+                                  {reservation.can_cancel && (
+                                    <button
+                                      onClick={() => {
+                                        if (confirm('Are you sure you want to cancel this reservation?')) {
+                                          router.delete(`/user/reservations/${reservation.id}/cancel`, {
+                                            onSuccess: () => {
+                                              // The page will automatically refresh due to Inertia
+                                            },
+                                          });
+                                        }
+                                      }}
+                                      className="text-rose-400 hover:text-rose-300 border border-rose-500/30 hover:bg-rose-500/10 
+                                      px-3 py-1 transition-all duration-300 text-xs tracking-wider uppercase"
+                                    >
+                                      Cancel
+                                    </button>
+                                  )}
                                 </td>
                               </tr>
                             ))}
@@ -284,6 +283,100 @@ export default function UserDashboard({ user, customer, transactions }) {
                       </div>
                     )}
                   </div>
+
+                  {/* Transactions Card */}
+                  <motion.div 
+                    {...fadeIn}
+                    transition={{ delay: 0.3 }}
+                  >
+                    <div className="backdrop-blur-xl bg-white/[0.02] border border-white/10 rounded-none p-6 md:p-8 hover:bg-white/[0.04] transition-all duration-300">
+                      <div className="flex items-center justify-between mb-6 md:mb-8">
+                        <h2 className="text-xl md:text-2xl font-felix text-white">Transaction History</h2>
+                        <div className="w-12 h-[1px] bg-gradient-to-r from-[#CDAF7B] to-transparent"></div>
+                      </div>
+
+                      {transactions.length === 0 ? (
+                        <div className="text-center py-12">
+                          <p className="text-[#CDAF7B] font-monts text-sm">No transactions found</p>
+                        </div>
+                      ) : (
+                        <div className="overflow-x-auto">
+                          <table className="w-full border-collapse font-monts">
+                            <thead>
+                              <tr className="border-b border-white/10">
+                                <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Transaction ID</th>
+                                <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Amount</th>
+                                <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Type</th>
+                                <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Status</th>
+                                <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Date</th>
+                              </tr>
+                            </thead>
+                            <tbody className="text-white/90">
+                              {transactions.map((transaction, index) => (
+                                <tr 
+                                  key={transaction.transactionID}
+                                  className="border-b border-white/10 hover:bg-white/[0.02] transition-colors duration-300"
+                                >
+                                  <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">{transaction.transactionID}</td>
+                                  <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">${transaction.amount.toLocaleString()}</td>
+                                  <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">{transaction.transaction_type}</td>
+                                  <td className="py-3 md:py-4 px-3 md:px-4">
+                                    <span className={`inline-flex items-center px-3 py-1 text-xs tracking-wider uppercase font-monts
+                                      ${transaction.status === 'paid' ? 
+                                        'text-emerald-300 border border-emerald-500/30 bg-emerald-500/10' : 
+                                      transaction.status === 'pending' ? 
+                                        'text-amber-300 border border-amber-500/30 bg-amber-500/10' : 
+                                      transaction.status === 'failed' ? 
+                                        'text-rose-300 border border-rose-500/30 bg-rose-500/10' :
+                                      transaction.status === 'cancelled' ?
+                                        'text-slate-300 border border-slate-500/30 bg-slate-500/10' :
+                                      transaction.status === 'confirmed' ?
+                                        'text-emerald-300 border border-emerald-500/30 bg-emerald-500/10' :
+                                      transaction.status === 'completed' ?
+                                        'text-sky-300 border border-sky-500/30 bg-sky-500/10' :
+                                        'text-gray-300 border border-gray-500/30 bg-gray-500/10'
+                                      }`}
+                                    >
+                                      <div className={`w-1.5 h-1.5 rounded-full mr-2
+                                        ${transaction.status === 'paid' ? 'bg-emerald-400' :
+                                          transaction.status === 'pending' ? 'bg-amber-400' :
+                                          transaction.status === 'failed' ? 'bg-rose-400' :
+                                          transaction.status === 'cancelled' ? 'bg-slate-400' :
+                                          transaction.status === 'confirmed' ? 'bg-emerald-400' :
+                                          transaction.status === 'completed' ? 'bg-sky-400' :
+                                          'bg-gray-400'
+                                        }`}
+                                      />
+                                      {transaction.status}
+                                    </span>
+                                  </td>
+                                  <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">
+                                    {transaction.reservation?.date_time
+                                      ? (() => {
+                                          const dateTime = new Date(transaction.reservation.date_time);
+                                          const dateStr = dateTime.toLocaleDateString('en-US', { 
+                                            timeZone: 'UTC',
+                                            month: 'short',
+                                            day: 'numeric',
+                                            year: 'numeric'
+                                          });
+                                          const timeStr = dateTime.toLocaleTimeString('en-US', {
+                                            timeZone: 'UTC',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                          });
+                                          return `${dateStr} at ${timeStr}`;
+                                        })()
+                                      : 'N/A'}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
                 </motion.div>
               </div>
             </div>
