@@ -8,6 +8,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\StaffController;
 
 
 // Public Pages
@@ -58,6 +59,14 @@ Route::middleware('auth')->group(function () {
         Route::put('/users/{user}', [AdminController::class, 'update'])->name('users.update');
         Route::post('/users', [AdminController::class, 'store'])->name('users.store');
     });
+
+    // Staff routes
+    Route::middleware('role:staff')->prefix('staff')->name('staff.')->group(function () {
+        Route::get('/', [StaffController::class, 'dashboard'])->name('dashboard'); // Assuming StaffController
+        Route::get('/booking', [StaffController::class, 'booking'])->name('booking'); // Assuming StaffController
+        Route::post('/reservations/action', [StaffController::class, 'handleReservationAction'])->name('reservation-action');
+    });
+
 });
 
 // Fallback

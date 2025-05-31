@@ -54,6 +54,8 @@ class AuthController extends Controller
 
             if ($user->role === 'admin') {
                 return Inertia::location(route('admin.dashboard'));
+            } elseif ($user->role === 'staff') {
+                return Inertia::location(route('staff.dashboard'));
             } elseif ($user->role === 'user') {
                 return Inertia::location(route('user.dashboard'));
             } else {
