@@ -4,11 +4,11 @@ import { router } from '@inertiajs/react';
 import { useEffect } from 'react';
 
 
-export default function Reservation() { // Renamed to Reservation to follow common React component naming conventions
+export default function Reservation() {
   const today = new Date();
   const months = ['January', 'February', 'March', 'April', 'May', 'June',
                   'July', 'August', 'September', 'October', 'November', 'December'];
-  const timeSlots = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
+  const timeSlots = ['09:00 AM', '11:00 AM', '01:00 PM', '03:00 PM', '05:00 PM', '07:00 PM'];
   const guests = Array.from({ length: 10 }, (_, i) => i + 1);
 
   const [availableTimes, setAvailableTimes] = useState([]);
@@ -43,31 +43,21 @@ export default function Reservation() { // Renamed to Reservation to follow comm
     selectedGuests > 0 &&
     !isPast(selectedDay);
 
-
-  useEffect(() => {
-    const fetchAvailableTimes = async () => {
-      try {
-        const formattedDate = `${currentYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
-
-        const response = await fetch('/reservation/available-times', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-          },
-          body: JSON.stringify({ date: formattedDate, size: selectedGuests }),
-        });
-
-        const data = await response.json();
-        setAvailableTimes(data);
-      } catch {
-        setAvailableTimes([]);
-      }
-    };
-
-    fetchAvailableTimes();
-  }, [selectedMonth, selectedDay, selectedGuests]);
-
+  // Convert 12-hour format to 24-hour format for backend
+  const convertTo24Hour = (time12h) => {
+    const [time, modifier] = time12h.split(' ');
+    let [hours, minutes] = time.split(':');
+    
+    if (hours === '12') {
+      hours = '00';
+    }
+    
+    if (modifier === 'PM') {
+      hours = parseInt(hours, 10) + 12;
+    }
+    
+    return `${hours.padStart(2, '0')}:${minutes}`;
+  };
 
   const handleSubmit = async () => {
     if (!formValid) return;
