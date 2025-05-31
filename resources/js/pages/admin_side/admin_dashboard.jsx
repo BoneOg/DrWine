@@ -136,6 +136,7 @@ export default function AdminDashboard({
               <div className="grid grid-cols-2 gap-4">
                 <StatItem label="Total Users" value={userStats.total} />
                 <StatItem label="Admin Users" value={userStats.admin} />
+                <StatItem label="Staff Users" value={userStats.staff} />
                 <StatItem label="Regular Users" value={userStats.user} />
                 <StatItem label="New This Month" value={userStats.newThisMonth} />
               </div>

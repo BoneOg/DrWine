@@ -27,6 +27,7 @@ class AdminController extends Controller
             'total' => User::count(),
             'admin' => User::where('role', 'admin')->count(),
             'user' => User::where('role', 'user')->count(),
+            'staff' => User::where('role', 'staff')->count(),
             'newThisMonth' => User::whereMonth('created_at', now()->month)->count(),
         ];
 
@@ -246,6 +247,7 @@ class AdminController extends Controller
             'total' => User::count(),
             'admin' => User::where('role', 'admin')->count(),
             'user' => User::where('role', 'user')->count(),
+            'staff' => User::where('role', 'staff')->count(),
             'newThisMonth' => User::whereBetween('created_at', [$monthStart, now()])->count(),
         ];
 
