@@ -27,14 +27,7 @@ class ReservationController extends Controller
 
         $date = $request->input('date');
         $size = $request->input('size');
-        $fixedSlots = [
-            '09:00', // 9:00 AM
-            '11:00', // 11:00 AM
-            '13:00', // 1:00 PM
-            '15:00', // 3:00 PM
-            '17:00', // 5:00 PM
-            '19:00'  // 7:00 PM
-        ];
+        $fixedSlots = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
         $availableSlots = [];
 
         foreach ($fixedSlots as $slot) {
@@ -59,29 +52,9 @@ class ReservationController extends Controller
         $dateTime = Carbon::createFromFormat('Y-m-d H:i', $request->date_time);
         $size = $request->size;
 
-        // Check if the requested time is in the past
-        if ($dateTime <= now()) {
-            return response()->json([
-                'available' => false,
-                'message' => 'Cannot book reservations in the past'
-            ]);
-        }
-
-        // Check if it's one of our valid time slots
-        $validTimeSlots = ['09:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'];
-        if (!in_array($dateTime->format('H:i'), $validTimeSlots)) {
-            return response()->json([
-                'available' => false,
-                'message' => 'Invalid time slot selected'
-            ]);
-        }
-
         $isAvailable = $this->isTimeSlotAvailable($dateTime, $size);
 
-        return response()->json([
-            'available' => $isAvailable,
-            'message' => $isAvailable ? 'Time slot is available' : 'No tables available for this time slot'
-        ]);
+        return response()->json(['available' => $isAvailable]);
     }
 
     public function store(Request $request)
@@ -94,24 +67,6 @@ class ReservationController extends Controller
             'size' => 'required|integer|min:1|max:10',
         ]);
 
-        $dateTime = Carbon::createFromFormat('Y-m-d H:i', $request->date_time);
-
-        // Check if the requested time is in the past
-        if ($dateTime <= now()) {
-            return back()->withErrors(['date_time' => 'Cannot book reservations in the past']);
-        }
-
-        // Check if it's one of our valid time slots
-        $validTimeSlots = ['09:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'];
-        if (!in_array($dateTime->format('H:i'), $validTimeSlots)) {
-            return back()->withErrors(['date_time' => 'Invalid time slot selected']);
-        }
-
-        // Check if the time slot is available
-        if (!$this->isTimeSlotAvailable($dateTime, $request->size)) {
-            return back()->withErrors(['date_time' => 'No available tables for this time and party size.']);
-        }
-
         $user = auth()->user();
 
         $customer = Customer::create([
@@ -121,16 +76,16 @@ class ReservationController extends Controller
             'email' => $request->email,
         ]);
 
+        $dateTime = Carbon::createFromFormat('Y-m-d H:i', $request->date_time);
+
         $table = RestaurantTable::where('capacity', '>=', $request->size)
             ->where('table_status', 'available')
             ->orderBy('capacity', 'asc')
             ->get()
             ->filter(function ($table) use ($dateTime) {
                 return !Reservation::where('tableID', $table->tableID)
-                    ->whereBetween('date_time', [
-                        $dateTime,
-                        $dateTime->copy()->addMinutes(120)
-                    ])
+                    ->where('date_time', '<', $dateTime->copy()->addMinutes(120))  // Slot end
+                    ->whereRaw('DATE_ADD(date_time, INTERVAL duration MINUTE) > ?', [$dateTime]) // Slot start
                     ->exists();
             })
             ->first();
@@ -157,34 +112,13 @@ class ReservationController extends Controller
 
         return RestaurantTable::where('capacity', '>=', $guestCount)
             ->where('table_status', 'available')
-            ->get();
-
-        // If no tables can accommodate the party size, return false
-        if ($availableTables->isEmpty()) {
-            return false;
-        }
-
-        // Check each table for availability during the requested time slot
-        foreach ($availableTables as $table) {
-            // Check for any overlapping reservations
-            $hasOverlap = Reservation::where('tableID', $table->tableID)
-                ->where(function ($query) use ($dateTime, $reservationEnd) {
-                    $query->where(function ($q) use ($dateTime, $reservationEnd) {
-                        // Check if any existing reservation overlaps with the requested time
-                        $q->where('date_time', '<', $reservationEnd)
-                          ->whereRaw('DATE_ADD(date_time, INTERVAL duration MINUTE) > ?', [$dateTime]);
-                    })
-                    ->where('status', '!=', 'cancelled'); // Exclude cancelled reservations
-                })
-                ->exists();
-
-            // If we found a table with no overlapping reservations, return true
-            if (!$hasOverlap) {
-                return true;
-            }
-        }
-
-        // If we get here, no tables are available for the requested time
-        return false;
+            ->get()
+            ->filter(function ($table) use ($dateTime, $reservationEnd) {
+                return !Reservation::where('tableID', $table->tableID)
+                    ->where('date_time', '<', $reservationEnd)  // Existing reservation starts before slot ends
+                    ->whereRaw('DATE_ADD(date_time, INTERVAL duration MINUTE) > ?', [$dateTime])  // Existing reservation ends after slot starts
+                    ->exists();
+            })
+            ->isNotEmpty();
     }
 }
