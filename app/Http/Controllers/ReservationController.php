@@ -43,7 +43,8 @@ class ReservationController extends Controller
         foreach ($fixedSlots as $slot) {
             $dateTime = Carbon::createFromFormat('Y-m-d H:i', "$date $slot");
 
-            if ($this->isTimeSlotAvailable($dateTime, $size)) {
+            // FIX: Clone the Carbon instance to avoid mutation issues in isTimeSlotAvailable
+            if ($this->isTimeSlotAvailable($dateTime->copy(), $size)) {
                 $availableSlots[] = $slot;
             }
         }
@@ -129,18 +130,10 @@ class ReservationController extends Controller
             ->get()
             ->filter(function ($table) use ($dateTime) {
                 return !Reservation::where('tableID', $table->tableID)
-                    ->where(function ($query) use ($dateTime) {
-                        $reservationEnd = $dateTime->copy()->addMinutes(120);
-                        $query->where(function ($q) use ($dateTime, $reservationEnd) {
-                            $q->where('date_time', '<=', $dateTime)
-                                ->whereRaw('DATE_ADD(date_time, INTERVAL duration MINUTE) > ?', [$dateTime]);
-                        })->orWhere(function ($q) use ($dateTime, $reservationEnd) {
-                            $q->where('date_time', '<', $reservationEnd)
-                                ->where('date_time', '>', $dateTime);
-                        });
-                    })
-                    ->where('status', '!=', 'cancelled')
-                    ->where('status', '!=', 'completed')
+                    ->whereBetween('date_time', [
+                        $dateTime,
+                        $dateTime->copy()->addMinutes(120)
+                    ])
                     ->exists();
             })
             ->first();
@@ -163,11 +156,9 @@ class ReservationController extends Controller
 
     private function isTimeSlotAvailable($dateTime, $guestCount)
     {
-        // Get the end time for the requested reservation (2 hours duration)
         $reservationEnd = $dateTime->copy()->addMinutes(120);
 
-        // Get all tables that can accommodate the party size
-        $availableTables = RestaurantTable::where('capacity', '>=', $guestCount)
+        return RestaurantTable::where('capacity', '>=', $guestCount)
             ->where('table_status', 'available')
             ->get();
 
@@ -183,18 +174,10 @@ class ReservationController extends Controller
                 ->where(function ($query) use ($dateTime, $reservationEnd) {
                     $query->where(function ($q) use ($dateTime, $reservationEnd) {
                         // Check if any existing reservation overlaps with the requested time
-                        $q->where(function ($subQ) use ($dateTime, $reservationEnd) {
-                            // New reservation starts during an existing reservation
-                            $subQ->where('date_time', '<=', $dateTime)
-                                ->whereRaw('DATE_ADD(date_time, INTERVAL duration MINUTE) > ?', [$dateTime]);
-                        })->orWhere(function ($subQ) use ($dateTime, $reservationEnd) {
-                            // New reservation ends during an existing reservation
-                            $subQ->where('date_time', '<', $reservationEnd)
-                                ->where('date_time', '>', $dateTime);
-                        });
+                        $q->where('date_time', '<', $reservationEnd)
+                          ->whereRaw('DATE_ADD(date_time, INTERVAL duration MINUTE) > ?', [$dateTime]);
                     })
-                    ->where('status', '!=', 'cancelled')
-                    ->where('status', '!=', 'completed');
+                    ->where('status', '!=', 'cancelled'); // Exclude cancelled reservations
                 })
                 ->exists();
 

@@ -30,9 +30,9 @@ Route::get('/reservation', [ReservationController::class, 'index'])->name('reser
 Route::post('/reservation', [ReservationController::class, 'store'])->name('reservation.store');
 Route::post('/reservation/available-times', [ReservationController::class, 'getAvailableTimes'])->name('reservation.times');
 Route::post('/reservation/check', [ReservationController::class, 'checkAvailability'])->name('reservation.check');
-Route::delete('/reservation/{reservationID}/cancel', [CheckoutController::class, 'cancel'])->name('reservation.cancel');
 
 Route::get('/checkout/{reservationID}', [CheckoutController::class, 'index'])->name('checkout');
+Route::delete('/reservation/{reservationID}/cancel', [CheckoutController::class, 'cancel'])->name('reservation.cancel');
 
 Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
 Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
