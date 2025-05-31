@@ -4,11 +4,19 @@ import { router } from '@inertiajs/react';
 import { useEffect } from 'react';
 
 
-export default function Reservation() {
+export default function Reservation() { // Renamed to Reservation to follow common React component naming conventions
   const today = new Date();
   const months = ['January', 'February', 'March', 'April', 'May', 'June',
                   'July', 'August', 'September', 'October', 'November', 'December'];
   const timeSlots = ['09:00 AM', '11:00 AM', '01:00 PM', '03:00 PM', '05:00 PM', '07:00 PM'];
+  const timeMap = {
+    '09:00': '09:00 AM',
+    '11:00': '11:00 AM',
+    '13:00': '01:00 PM',
+    '15:00': '03:00 PM',
+    '17:00': '05:00 PM',
+    '19:00': '07:00 PM'
+  };
   const guests = Array.from({ length: 10 }, (_, i) => i + 1);
 
   const [availableTimes, setAvailableTimes] = useState([]);
@@ -52,8 +60,8 @@ export default function Reservation() {
       hours = '00';
     }
     
-    if (modifier === 'PM') {
-      hours = parseInt(hours, 10) + 12;
+    if (modifier === 'PM' && hours !== '12') {
+      hours = String(parseInt(hours, 10) + 12);
     }
     
     return `${hours.padStart(2, '0')}:${minutes}`;
@@ -63,7 +71,9 @@ export default function Reservation() {
     if (!formValid) return;
 
     const formattedDate = `${currentYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
-    const dateTime = `${formattedDate} ${selectedTime}`;
+    // Convert the selected time to 24-hour format for the backend
+    const time24 = convertTo24Hour(selectedTime);
+    const dateTime = `${formattedDate} ${time24}`;
 
     try {
       // First availability check
@@ -87,10 +97,8 @@ export default function Reservation() {
         return;
       }
 
-      setError(null); // Clear any existing error if availability is confirmed
+      setError(null);
 
-      // Perform the Inertia POST request.
-      // Inertia will automatically handle the redirect returned by the Laravel controller.
       router.post('/reservation', {
         name,
         email,
@@ -100,7 +108,7 @@ export default function Reservation() {
       });
 
     } catch (err) {
-      console.error('Reservation process failed:', err); // More generic error message
+      console.error('Reservation process failed:', err);
       setError('An error occurred during the reservation process. Please try again.');
     }
   };
@@ -113,6 +121,32 @@ export default function Reservation() {
     `w-4 h-4 absolute right-1 top-1/2 pointer-events-none transition-transform duration-300 ease-in-out ${
       isOpen ? 'rotate-[180deg]' : 'rotate-0'
     }`;
+
+  useEffect(() => {
+    const fetchAvailableTimes = async () => {
+      try {
+        const formattedDate = `${currentYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
+
+        const response = await fetch('/reservation/available-times', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          },
+          body: JSON.stringify({ date: formattedDate, size: selectedGuests }),
+        });
+
+        const data = await response.json();
+        // Convert received times (24-hour) to 12-hour format using our mapping
+        const formattedTimes = data.map(time => timeMap[time] || time);
+        setAvailableTimes(formattedTimes);
+      } catch {
+        setAvailableTimes([]);
+      }
+    };
+
+    fetchAvailableTimes();
+  }, [selectedMonth, selectedDay, selectedGuests]);
 
   return (
     <Layout>
@@ -155,17 +189,8 @@ export default function Reservation() {
                     onBlur={() => setIsTimeOpen(false)}
                     className="w-full text-white bg-transparent border-b border-gray-500 text-base font-light font-monts tracking-wide py-1 pr-6 appearance-none focus:outline-none focus:border-[#CDAF7B]"
                   >
-                    {timeSlots.map((slot) => {
+                    {availableTimes.map((slot) => {
                       const isAvailable = availableTimes.includes(slot);
-
-                      // Convert "13:00" → "1:00 PM"
-                      const formatTime = (time24) => {
-                        const [hour, minute] = time24.split(':').map(Number);
-                        const suffix = hour >= 12 ? 'PM' : 'AM';
-                        const hour12 = ((hour + 11) % 12) + 1;
-                        return `${hour12}:${minute.toString().padStart(2, '0')} ${suffix}`;
-                      };
-
                       return (
                         <option
                           key={slot}
@@ -173,7 +198,7 @@ export default function Reservation() {
                           disabled={!isAvailable}
                           className={!isAvailable ? 'text-gray-600' : ''}
                         >
-                          {formatTime(slot)}
+                          {slot}
                         </option>
                       );
                     })}
