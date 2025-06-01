@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/users', [AdminController::class, 'store'])->name('users.store');
         Route::post('/profile/update', [AdminController::class, 'updateProfile'])->name('profile.update');
         Route::get('/tables', [AdminController::class, 'tables'])->name('tables');
+        Route::post('/createReservation', [AdminController::class, 'createReservation']);
     });
 
     // Staff routes
@@ -71,6 +72,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/booking', [StaffController::class, 'booking'])->name('booking');
         Route::post('/reservations/action', [StaffController::class, 'handleReservationAction'])->name('reservation-action');
         Route::post('/profile/update', [StaffController::class, 'updateProfile'])->name('profile.update');
+        Route::post('/createReservation', [StaffController::class, 'createReservation']);
     });
 
 });

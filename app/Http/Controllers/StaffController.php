@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers; 
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Reservation;
 use App\Models\Transaction;
 use App\Models\User;
@@ -208,6 +209,74 @@ class StaffController extends Controller
         $user->save();
 
         return back()->with('success', 'Profile updated successfully');
+    }
+
+    public function createReservation(Request $request) 
+    {
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $phone = $request->input('phone');
+        $date = $request->input('date'); 
+        $time = $request->input('time'); 
+        $guests = (int) $request->input('guests');
+
+        $dateTimeStr = $date . ' ' . $time; 
+        $requestedStart = Carbon::createFromFormat('Y-m-d H:i', $dateTimeStr);
+        $requestedEnd = $requestedStart->copy()->addMinutes(120);
+        $customer = Customer::where('email', $email)->orWhere('phone', $phone)->first();
+        if (!$customer) {
+            $customer = Customer::create([
+                'name' => $name,
+                'email' => $email,
+                'phone' => $phone,
+                'userID' => null,
+            ]);
+        }
+
+        $tables = RestaurantTable::where('capacity', '>=', $guests)
+            ->orderBy('capacity')
+            ->get();
+
+        $availableTable = null;
+        foreach ($tables as $table) {
+            $conflicts = Reservation::where('tableID', $table->tableID)
+                ->where('status', '!=', 'cancelled')
+                ->where(function ($query) use ($requestedStart, $requestedEnd) {
+                    $query->whereBetween('date_time', [$requestedStart, $requestedEnd])
+                        ->orWhereRaw('DATE_ADD(date_time, INTERVAL duration MINUTE) > ?', [$requestedStart]);
+                })
+                ->count();
+
+            if ($conflicts === 0) {
+                $availableTable = $table;
+                break;
+            }
+        }
+
+        if (!$availableTable) {
+            return response()->json(['error' => 'No available tables for this date/time/guest count'], 409);
+        }
+
+        $reservation = Reservation::create([
+            'customerID' => $customer->customerID,
+            'tableID' => $availableTable->tableID,
+            'date_time' => $requestedStart,
+            'size' => $guests,
+            'status' => 'confirmed',
+            'duration' => 120,
+        ]);
+
+        DB::table('transaction')->insert([
+            'reservationID' => $reservation->reservationID,
+            'status' => 'confirmed',
+            'amount' => 20,
+            'transaction_type' => 'reservation',
+            'payment_method' => 'WalkIn',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('staff.booking')->with('success', 'Reservation created!');
     }
 
 }

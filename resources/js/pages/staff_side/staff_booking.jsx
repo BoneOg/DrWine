@@ -13,8 +13,25 @@ const RESERVATION_STATUSES = {
     UNKNOWN: 'unknown',
 };
 
+const months = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
+
+const timeslots = [
+  "09:00",
+  "11:00",
+  "13:00",
+  "15:00",
+  "17:00",
+  "19:00",
+  "21:00",
+];
+
 export default function StaffBooking() {
     const { reservations = [], flash = {} } = usePage().props;
+    const [showModal, setShowModal] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
 
     const counts = {
         pending: reservations.filter(res => res.status === RESERVATION_STATUSES.PENDING).length,
@@ -39,6 +56,64 @@ export default function StaffBooking() {
     const [filterStatus, setFilterStatus] = useState(null); // New state for dashboard filter
     const [isMobile, setIsMobile] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [month, setMonth] = useState("");
+    const [day, setDay] = useState("");
+    const [time, setTime] = useState("");
+    const [guests, setGuests] = useState("");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [disabledDays, setDisabledDays] = useState([]);
+    const [disabledTimes, setDisabledTimes] = useState([]);
+    const today = new Date();
+
+    const isMonthDisabled = (m) => {
+        const thisYear = today.getFullYear();
+        const monthDate = new Date(thisYear, m - 1, 1);
+        return monthDate < new Date(today.getFullYear(), today.getMonth(), 1);
+    };
+
+    // Disable past days for selected month
+    useEffect(() => {
+        if (!month) return setDisabledDays([]);
+
+        const year = today.getFullYear();
+        const selectedMonth = month;
+        const daysInMonth = new Date(year, selectedMonth, 0).getDate();
+
+        let disabled = [];
+        for (let d = 1; d <= daysInMonth; d++) {
+        const date = new Date(year, selectedMonth - 1, d);
+        if (date < new Date(today.getFullYear(), today.getMonth(), today.getDate()))
+            disabled.push(d);
+        }
+        setDisabledDays(disabled);
+    }, [month]);
+
+    useEffect(() => {
+            async function fetchOccupiedTimes() {
+            if (!month || !day) return setDisabledTimes([]);
+    
+            // Format date string YYYY-MM-DD
+            const year = today.getFullYear();
+            const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    
+            try {
+                const res = await fetch(
+                `/api/staff/getOccupiedTables?date=${dateStr}`
+                );
+                const data = await res.json();
+    
+                const disabled = timeslots.filter(
+                (slot) => data[slot] >= 6
+                );
+                setDisabledTimes(disabled);
+            } catch (err) {
+                console.error(err);
+            }
+            }
+            fetchOccupiedTimes();
+        }, [month, day]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -150,6 +225,61 @@ export default function StaffBooking() {
         transition: { duration: 0.6 }
     };
 
+    const handleReserveClick = () => {
+        if (!month || !day || !time || !guests || !name || !email || !phone) {
+        alert("Please fill out all fields.");
+        return;
+        }
+        setShowConfirmModal(true);
+        setShowModal(false);
+    };
+
+
+    const handleYesClick = () => {
+    setShowConfirmModal(false);
+
+    const year = today.getFullYear();
+    const date = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+    router.post('/staff/createReservation', {
+        name,
+        email,
+        phone,
+        date,
+        time,
+        guests: Number(guests),
+    }, {
+        onSuccess: () => {
+        setMonth("");
+        setDay("");
+        setTime("");
+        setGuests("");
+        setName("");
+        setEmail("");
+        setPhone("");
+        },
+        onError: () => {
+        alert("Failed to create reservation");
+        }
+    });
+    };
+
+    const isFormValid = () => {
+    const nameValid = /^[a-zA-Z\s]+$/.test(name);
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const phoneValid = /^\d{11}$/.test(phone);
+
+    return (
+        month !== "" &&
+        day !== "" &&
+        time !== "" &&
+        guests !== "" &&
+        nameValid &&
+        emailValid &&
+        phoneValid
+    );
+    };
+
     return (
         <>
             <Head title="Staff Bookings" />
@@ -259,50 +389,62 @@ export default function StaffBooking() {
                         {...fadeIn}
                     >
                         {/* Filter Bar */}
-                        <div className="flex flex-col sm:flex-row mb-4 font-monts justify-between items-stretch sm:items-center gap-4 p-4 lg:p-6">
+                        <div className="flex flex-col sm:flex-row mb-4 font-monts justify-between items-stretch gap-4 p-4 lg:p-6">
+
+                        {/* Left side: Create Reservation button */}
+                        <button
+                            onClick={() => setShowModal(true)}
+                            className="px-4 py-2 bg-[#CDAF7B] hover:bg-[#d6bb8f]/60 font-monts text-black"
+                        >
+                            Create Reservation
+                        </button>
+
+                        {/* Right side: Sort + Search */}
+                        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto sm:ml-auto">
                             {/* Sort dropdown */}
                             <select
-                                className="w-full sm:w-auto py-2.5 px-4 text-sm border border-white/10 rounded-lg bg-white/[0.02] text-white placeholder-[#CDAF7B] focus:outline-none focus:ring-2 focus:ring-[#CDAF7B]"
-                                value={sort.field ? `${sort.field}-${sort.order}` : ""}
-                                onChange={handleSortChange}
+                            className="py-2.5 px-4 text-sm border border-white/10 rounded-lg bg-white/[0.02] text-white placeholder-[#CDAF7B] focus:outline-none focus:ring-2 focus:ring-[#CDAF7B]"
+                            value={sort.field ? `${sort.field}-${sort.order}` : ""}
+                            onChange={handleSortChange}
                             >
-                                <option value="">Sort by...</option>
-                                <option value="name-asc">Alphabet Name ↑</option>
-                                <option value="name-desc">Alphabet Name ↓</option>
-                                <option value="guests-asc">Guests ↑</option>
-                                <option value="guests-desc">Guests ↓</option>
-                                <option value="status-asc">Status ↑</option>
-                                <option value="status-desc">Status ↓</option>
-                                <option value="date-asc">Date & Time ↑</option>
-                                <option value="date-desc">Date & Time ↓</option>
+                            <option value="">Sort by...</option>
+                            <option value="name-asc">Alphabet Name ↑</option>
+                            <option value="name-desc">Alphabet Name ↓</option>
+                            <option value="guests-asc">Guests ↑</option>
+                            <option value="guests-desc">Guests ↓</option>
+                            <option value="status-asc">Status ↑</option>
+                            <option value="status-desc">Status ↓</option>
+                            <option value="date-asc">Date & Time ↑</option>
+                            <option value="date-desc">Date & Time ↓</option>
                             </select>
 
                             {/* Search input */}
-                            <div className="relative font-monts w-full sm:w-72 lg:w-96">
-                                <input
-                                    type="text"
-                                    placeholder="Search by name..."
-                                    className="w-full py-2.5 px-4 pl-10 text-sm border border-white/10 rounded-lg bg-white/[0.02] text-white placeholder-[#CDAF7B] focus:outline-none focus:ring-2 focus:ring-[#CDAF7B]"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
+                            <div className="relative w-full sm:w-72 lg:w-96">
+                            <input
+                                type="text"
+                                placeholder="Search by name..."
+                                className="w-full py-2.5 px-4 pl-10 text-sm border border-white/10 rounded-lg bg-white/[0.02] text-white placeholder-[#CDAF7B] focus:outline-none focus:ring-2 focus:ring-[#CDAF7B]"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg
+                                className="w-5 h-5 text-[#CDAF7B]"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                >
+                                <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                                 />
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg
-                                        className="w-5 h-5 text-[#CDAF7B]"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                                        />
-                                    </svg>
-                                </div>
+                                </svg>
                             </div>
+                            </div>
+                        </div>
                         </div>
 
                         {/* Header Row */}
@@ -436,6 +578,167 @@ export default function StaffBooking() {
                             </div>
                         </div>
                     </motion.div>
+
+                    {/* Reservation Modal */}
+                    {showModal && (
+                        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+                        <div className="bg-[#000C1C] text-white rounded-lg shadow-xl w-full max-w-md p-3 border border-[#CDAF7B] space-y-4">
+                            <h2 className="font-monts text-lg text-[#CDAF7B]">Create Reservation</h2>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                            {/* Month */}
+                            <select
+                                value={month}
+                                onChange={e => setMonth(e.target.value)}
+                                className="font-monts bg-white/[0.02] text-white text-sm border border-white/10 rounded-md px-3 py-2 focus:ring-2 focus:ring-[#CDAF7B]"
+                                >
+                                <option value="">Month</option>
+                                {months.map((m, index) => {
+                                    const monthNumber = index + 1;
+                                    const disabled = isMonthDisabled(monthNumber);
+                                    return (
+                                    <option key={m} value={monthNumber} disabled={disabled}>
+                                        {m}
+                                    </option>
+                                    );
+                                })}
+                                </select>
+
+                            {/* Day */}
+                            <select
+                                className="font-monts bg-white/[0.02] text-white text-sm border border-white/10 rounded-md px-3 py-2 focus:ring-2 focus:ring-[#CDAF7B]"
+                                value={day}
+                                onChange={(e) => setDay(Number(e.target.value))}
+                                disabled={!month}
+                            >
+                                <option value="">Day</option>
+                                {month &&
+                                [...Array(new Date(today.getFullYear(), month, 0).getDate())].map((_, i) => {
+                                    const d = i + 1;
+                                    return (
+                                    <option key={d} value={d} disabled={disabledDays.includes(d)}>
+                                        {d}
+                                    </option>
+                                    );
+                                })}
+                            </select>
+
+                            {/* Time */}
+                            <select
+                                className="font-monts bg-white/[0.02] text-white text-sm border border-white/10 rounded-md px-3 py-2 focus:ring-2 focus:ring-[#CDAF7B]"
+                                value={time}
+                                onChange={(e) => setTime(e.target.value)}
+                                disabled={!month || !day}
+                            >
+                                <option value="">Time</option>
+                                {timeslots.map((slot) => (
+                                <option key={slot} value={slot} disabled={disabledTimes.includes(slot)}>
+                                    {slot}
+                                </option>
+                                ))}
+                            </select>
+
+                            {/* Guests */}
+                            <select
+                                className="font-monts bg-white/[0.02] text-white text-sm border border-white/10 rounded-md px-3 py-2 focus:ring-2 focus:ring-[#CDAF7B]"
+                                value={guests}
+                                onChange={(e) => setGuests(e.target.value)}
+                            >
+                                <option value="">Guests</option>
+                                {[...Array(10)].map((_, i) => (
+                                <option key={i + 1} value={i + 1}>
+                                    {i + 1}
+                                </option>
+                                ))}
+                            </select>
+                            </div>
+
+                            <input
+                            type="text"
+                            placeholder="Name"
+                            className="font-monts w-full px-3 py-2 text-sm bg-white/[0.02] text-white border border-white/10 rounded-md focus:ring-2 focus:ring-[#CDAF7B]"
+                            value={name}
+                            onChange={(e) => {
+                                // Only letters and spaces allowed (basic string validation)
+                                const val = e.target.value;
+                                if (/^[a-zA-Z\s]*$/.test(val)) {
+                                setName(val);
+                                }
+                            }}
+                            required
+                            />
+
+                            <input
+                            type="email"
+                            placeholder="Email"
+                            className="font-monts w-full px-3 py-2 text-sm bg-white/[0.02] text-white border border-white/10 rounded-md focus:ring-2 focus:ring-[#CDAF7B]"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            />
+
+                            <input
+                            type="tel"
+                            placeholder="Phone Number"
+                            className="font-monts w-full px-3 py-2 text-sm bg-white/[0.02] text-white border border-white/10 rounded-md focus:ring-2 focus:ring-[#CDAF7B]"
+                            value={phone}
+                            onChange={(e) => {
+                                // Allow only digits, max length 11
+                                const val = e.target.value;
+                                if (/^\d{0,11}$/.test(val)) {
+                                setPhone(val);
+                                }
+                            }}
+                            maxLength={11}
+                            required
+                            />
+
+                            <div className="flex justify-end gap-2 pt-2">
+                            <button
+                                onClick={() => setShowModal(false)}
+                                className="font-monts px-4 py-2 text-sm rounded-md border border-white/10 bg-white/[0.02] hover:bg-white/[0.05]"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                            onClick={handleReserveClick}
+                            className="font-monts px-4 py-2 text-sm rounded-md bg-[#CDAF7B] text-black hover:bg-[#d6bb8f] transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={!isFormValid()}
+                            >
+                            Reserve Table
+                            </button>
+                            </div>
+                        </div>
+                        </div>
+                    )}
+
+                    {/* Confirmation modal */}
+                    {showConfirmModal && (
+                        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+                        <div className="bg-[#000C1C] text-white rounded-lg shadow-xl w-full max-w-sm p-6 space-y-4 text-center">
+                            <h2 className="font-monts text-lg text-[#CDAF7B]">
+                            Do you want to confirm this reservation?
+                            </h2>
+                            <div className="flex justify-center gap-4 pt-4">
+                            <button
+                                onClick={handleYesClick}
+                                className="font-monts px-6 py-2 bg-[#CDAF7B] text-black rounded-md hover:bg-[#d6bb8f] transition"
+                            >
+                                Yes
+                            </button>
+                            <button
+                                onClick={() => {
+                                setShowConfirmModal(false);
+                                setShowModal(true);
+                                }}
+                                className="font-monts px-6 py-2 bg-white/[0.02] border border-white/10 rounded-md hover:bg-white/[0.05]"
+                            >
+                                No
+                            </button>
+                            </div>
+                        </div>
+                        </div>
+                    )}
 
                     {/* Flash Message */}
                     {flash.success && (

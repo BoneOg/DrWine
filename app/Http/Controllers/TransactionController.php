@@ -22,13 +22,11 @@ class TransactionController extends Controller
             return redirect()->back()->withErrors(['reservation' => 'Cannot proceed with cancelled reservation.']);
         }
 
-        // ✅ Add default 'status' to transaction
         $validated['status'] = 'confirmed';
 
         $transaction = Transaction::create($validated);
         $transaction->load('reservation.customer');
 
-        // ✅ Update reservation status to confirmed after successful transaction
         $reservation->update(['status' => 'confirmed']);
 
         return Inertia::render('transaction', [

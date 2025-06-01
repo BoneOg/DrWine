@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('status', ['confirmed', 'cancelled', 'completed'])->default('confirmed');
             $table->integer('amount');
             $table->enum('transaction_type', ['reservation', 'food'])->default('reservation');
-            $table->enum('payment_method', ['GCash', 'Mastercard', 'Visa', 'PayMaya', 'PayPal'])->nullable();
+            $table->enum('payment_method', ['GCash', 'Mastercard', 'Visa', 'PayMaya', 'PayPal', 'WalkIn'])->nullable();
             $table->timestamps(); // created_at & updated_at
         });
     }
