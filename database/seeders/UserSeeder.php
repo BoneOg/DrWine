@@ -41,5 +41,13 @@ class UserSeeder extends Seeder
             'phone' => '123123',
             'email' => $user->email,
         ]);
+
+        $staff = User::create([
+            'username' => 'staff',
+            'password' => Hash::make('123123'),
+            'role' => 'staff',
+            'email' => 'staff@example.com',
+            'email_verified_at' => now(),
+        ]);
     }
 }

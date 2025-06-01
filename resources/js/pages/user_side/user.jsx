@@ -221,7 +221,7 @@ export default function UserDashboard({ user, customer, transactions, reservatio
                             </tr>
                           </thead>
                           <tbody className="text-white/90">
-                            {reservations.map((reservation) => (
+                            {reservations.filter(reservation => reservation.status !== 'pending').map((reservation) => (
                               <tr 
                                 key={reservation.id}
                                 className="border-b border-white/10 hover:bg-white/[0.02] transition-colors duration-300"
@@ -235,8 +235,7 @@ export default function UserDashboard({ user, customer, transactions, reservatio
                                 <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">{reservation.size} people</td>
                                 <td className="py-3 md:py-4 px-3 md:px-4">
                                   <span className={`inline-flex items-center px-3 py-1 text-xs tracking-wider uppercase font-monts
-                                    ${reservation.status === 'pending' ? 
-                                      'text-amber-300 border border-amber-500/30 bg-amber-500/10' : 
+                                    ${
                                     reservation.status === 'cancelled' ?
                                       'text-slate-300 border border-slate-500/30 bg-slate-500/10' :
                                     reservation.status === 'confirmed' ?
@@ -247,7 +246,7 @@ export default function UserDashboard({ user, customer, transactions, reservatio
                                     }`}
                                   >
                                     <div className={`w-1.5 h-1.5 rounded-full mr-2
-                                      ${reservation.status === 'pending' ? 'bg-amber-400' :
+                                      ${
                                         reservation.status === 'cancelled' ? 'bg-slate-400' :
                                         reservation.status === 'confirmed' ? 'bg-emerald-400' :
                                         reservation.status === 'completed' ? 'bg-sky-400' :
@@ -324,8 +323,6 @@ export default function UserDashboard({ user, customer, transactions, reservatio
                                     <span className={`inline-flex items-center px-3 py-1 text-xs tracking-wider uppercase font-monts
                                       ${transaction.status === 'paid' ? 
                                         'text-emerald-300 border border-emerald-500/30 bg-emerald-500/10' : 
-                                      transaction.status === 'pending' ? 
-                                        'text-amber-300 border border-amber-500/30 bg-amber-500/10' : 
                                       transaction.status === 'failed' ? 
                                         'text-rose-300 border border-rose-500/30 bg-rose-500/10' :
                                       transaction.status === 'cancelled' ?
@@ -339,7 +336,6 @@ export default function UserDashboard({ user, customer, transactions, reservatio
                                     >
                                       <div className={`w-1.5 h-1.5 rounded-full mr-2
                                         ${transaction.status === 'paid' ? 'bg-emerald-400' :
-                                          transaction.status === 'pending' ? 'bg-amber-400' :
                                           transaction.status === 'failed' ? 'bg-rose-400' :
                                           transaction.status === 'cancelled' ? 'bg-slate-400' :
                                           transaction.status === 'confirmed' ? 'bg-emerald-400' :

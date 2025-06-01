@@ -27,6 +27,7 @@ export default function Header() {
 
     // **UPDATED: Determine the dashboard route based on user role**
     const dashboardRoute = user
+<<<<<<< Updated upstream
         ? (user.role === 'admin'
             ? route('admin.dashboard')
             : (user.role === 'staff'
@@ -35,6 +36,10 @@ export default function Header() {
               )
           )
         : route('login'); // Redirect to login if not authenticated
+=======
+        ? user.role === 'admin' ? route('admin.dashboard') : user.role === 'staff' ? route('staff.dashboard') : route('user.dashboard')
+    : route('login');
+>>>>>>> Stashed changes
 
     // Define navigation links
     const navLinks = [

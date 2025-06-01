@@ -336,8 +336,14 @@ export default function Reservation() {
                   <label className="block text-sm font-monts text-gray-400 mb-1">Phone Number</label>
                   <input
                     type="text"
+                    inputMode="numeric"
+                    pattern="\d*"
+                    maxLength={11}
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                    onChange={(e) => {
+                      const onlyNums = e.target.value.replace(/\D/g, '');
+                      setPhone(onlyNums.slice(0, 11));
+                    }}
                     className={`w-full bg-transparent border-b ${
                       validationErrors.phone ? 'border-red-500' : 'border-gray-400'
                     } pb-1 text-xs font-monts outline-none focus:border-[#CDAF7B]`}
@@ -346,6 +352,7 @@ export default function Reservation() {
                     <p className="text-red-500 text-xs mt-1">{validationErrors.phone}</p>
                   )}
                 </div>
+
 
                 {error && (
                   <div className="text-red-500 text-xs font-monts mb-3">{error}</div>

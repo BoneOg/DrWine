@@ -6,117 +6,55 @@ use App\Models\Reservation;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Customer;
+use App\Models\RestaurantTable;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class StaffController extends Controller
 {
  
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        // Basic reservation stats
-        $totalPendingReservations = Reservation::where('status', 'pending')->count();
-        $totalConfirmedReservations = Transaction::where('status', 'confirmed')->count();
-        $totalCancelledReservations = Transaction::where('status', 'cancelled')->count();
-        $totalCompletedReservations = Transaction::where('status', 'completed')->count();
+        // 1. Determine selected date (default = today)
+        $selectedDate = $request->query('date', now()->toDateString());
 
-        // User statistics
-        $userStats = [
-            'total' => User::count(),
-            'user' => User::where('role', 'user')->count(),
-            'newThisMonth' => User::whereMonth('created_at', now()->month)->count(),
-        ];
-
-        // Time-based reservation statistics
-        $today = now()->startOfDay();
-        $weekStart = now()->startOfWeek();
-        $monthStart = now()->startOfMonth();
-
-        $reservationStats = [
-            'today' => Reservation::whereDate('date_time', $today)->count(),
-            'thisWeek' => Reservation::whereBetween('date_time', [$weekStart, now()])->count(),
-            'thisMonth' => Reservation::whereBetween('date_time', [$monthStart, now()])->count(),
-        ];
-
-        // Revenue statistics
-        $revenueStats = [
-            'today' => Transaction::whereDate('created_at', $today)
-                ->where('status', 'completed')
-                ->sum('amount'),
-            'thisWeek' => Transaction::whereBetween('created_at', [$weekStart, now()])
-                ->where('status', 'completed')
-                ->sum('amount'),
-            'thisMonth' => Transaction::whereBetween('created_at', [$monthStart, now()])
-                ->where('status', 'completed')
-                ->sum('amount'),
-            'total' => Transaction::where('status', 'completed')->sum('amount'),
-        ];
-
-        // Popular reservation times (for the past month)
-        $popularTimes = Reservation::selectRaw('HOUR(date_time) as hour, COUNT(*) as count')
-            ->whereBetween('date_time', [now()->subMonth(), now()])
-            ->groupBy('hour')
-            ->orderByDesc('count')
-            ->limit(5)
+        // 2. Fetch all reservations for that date (eager‐load customer, table, transaction)
+        $rawReservations = Reservation::with(['customer', 'table', 'transaction'])
+            ->whereDate('date_time', $selectedDate)
+            ->orderBy('date_time')
             ->get();
 
-        // Table utilization for the past month
-        try {
-            $tableUtilization = Reservation::selectRaw('tableID, COUNT(*) as usage_count')
-                ->whereBetween('date_time', [now()->subMonth(), now()])
-                ->groupBy('tableID')
-                ->with('table')
-                ->get()
-                ->filter(function ($reservation) {
-                    return $reservation->table !== null;
-                })
-                ->map(function ($reservation) {
-                    return [
-                        'table_number' => $reservation->table->table_number,
-                        'usage_count' => $reservation->usage_count,
-                    ];
-                })
-                ->values()
-                ->all();
-        } catch (\Exception $e) {
-            $tableUtilization = [];
-            \Log::error('Error fetching table utilization: ' . $e->getMessage());
-        }
+        // 3. Build reservationsForDate exactly as React expects:
+        $reservationsForDate = $rawReservations->map(function ($res) {
+            return [
+                'id'            => $res->reservationID,
+                // Format as "h:i A" → e.g. "03:00 PM"
+                'time'          => Carbon::parse($res->date_time)->format('h:i A'),
+                'customer_name' => $res->customer->name ?? 'N/A',
+                'guest_count'   => $res->size,
+                'table_number'  => $res->table?->table_number ?? 'N/A',
+                // If there's a transaction, use that status; otherwise fallback to reservation.status
+                'status'        => $res->transaction->status ?? $res->status,
+            ];
+        });
 
-        // Recent activity (last 10 reservations/transactions)
-        try {
-            $recentActivity = Reservation::with(['customer', 'transaction'])
-                ->orderByDesc('created_at')
-                ->limit(10)
-                ->get()
-                ->map(function ($reservation) {
-                    return [
-                        'id' => $reservation->reservationID,
-                        'customer_name' => $reservation->customer ? $reservation->customer->name : 'N/A',
-                        'date_time' => $reservation->date_time,
-                        'status' => $reservation->transaction ? $reservation->transaction->status : $reservation->status,
-                        'amount' => $reservation->transaction ? $reservation->transaction->amount : null,
-                        'created_at' => $reservation->created_at,
-                    ];
-                });
-        } catch (\Exception $e) {
-            $recentActivity = [];
-            \Log::error('Error fetching recent activity: ' . $e->getMessage());
-        }
+        // 4. Fetch every table (no "status" here)
+        $tableOccupancy = RestaurantTable::all()->map(function ($tbl) {
+            return [
+                'id'           => $tbl->tableID,
+                'table_number' => $tbl->table_number,
+                'capacity'     => $tbl->capacity,
+            ];
+        });
 
+        // 5. Return just the props we need:
         return Inertia::render('staff_side/staff_dashboard', [
-            'totalPendingReservations' => $totalPendingReservations,
-            'totalConfirmedReservations' => $totalConfirmedReservations,
-            'totalCancelledReservations' => $totalCancelledReservations,
-            'totalCompletedReservations' => $totalCompletedReservations,
-            'userStats' => $userStats,
-            'reservationStats' => $reservationStats,
-            'revenueStats' => $revenueStats,
-            'popularTimes' => $popularTimes,
-            'tableUtilization' => $tableUtilization,
-            'recentActivity' => $recentActivity,
+            'selectedDate'        => $selectedDate,
+            'reservationsForDate' => $reservationsForDate,
+            'tableOccupancy'      => $tableOccupancy,
         ]);
     }
 
