@@ -258,9 +258,9 @@ export default function Reservation() {
               </div>
 
               {/* Calendar */}
-              <div className="grid grid-cols-7 font-monts text-center gap-1 text-base max-w-md pt-2 flex-grow">
+              <div className="grid grid-cols-7 font-monts  text-center gap-1 text-base max-w-md pt-2 flex-grow">
                 {['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'].map(day => (
-                  <div key={day} className="font-bold">{day}</div>
+                  <div key={day} className=" text-[#CDAF7B]">{day}</div>
                 ))}
                 {Array.from({ length: emptyCellsCount }).map((_, i) => (
                   <div key={`empty-${i}`}></div>
