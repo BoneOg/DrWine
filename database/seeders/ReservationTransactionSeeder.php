@@ -47,7 +47,7 @@ class ReservationTransactionSeeder extends Seeder
         $paymentMethods = ['GCash', 'Mastercard', 'Visa', 'Paypal', 'Paymaya'];
 
         // Existing 6 completed reservations (unchanged)
-        $completedTime = Carbon::create(2025, 6, 1, 15, 0, 0);
+        $completedTime = Carbon::create(2025, 6, 3, 15, 0, 0);
         $sizesCompleted = [2, 2, 4, 4, 6, 8];
         $usedTableIDs = [1, 2, 3, 4, 5, 6];
 
