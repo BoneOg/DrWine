@@ -6,10 +6,12 @@ use App\Models\Reservation;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Customer;
+use App\Models\RestaurantTable;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -333,5 +335,40 @@ class AdminController extends Controller
         $user->save();
 
         return back()->with('success', 'Profile updated successfully');
+    }
+
+    public function tables(Request $request)
+    {
+        $selectedDate = $request->query('date', now()->toDateString());
+
+        $rawReservations = Reservation::with(['customer', 'table', 'transaction'])
+            ->whereDate('date_time', $selectedDate)
+            ->orderBy('date_time')
+            ->get();
+
+        $reservationsForDate = $rawReservations->map(function ($res) {
+            return [
+                'id'            => $res->reservationID,
+                'time'          => Carbon::parse($res->date_time)->format('h:i A'),
+                'customer_name' => $res->customer->name ?? 'N/A',
+                'guest_count'   => $res->size,
+                'table_number'  => $res->table?->table_number ?? 'N/A',
+                'status'        => $res->transaction->status ?? $res->status,
+            ];
+        });
+
+        $tableOccupancy = RestaurantTable::all()->map(function ($tbl) {
+            return [
+                'id'           => $tbl->tableID,
+                'table_number' => $tbl->table_number,
+                'capacity'     => $tbl->capacity,
+            ];
+        });
+
+        return Inertia::render('admin_side/admin_tables', [
+            'selectedDate'        => $selectedDate,
+            'reservationsForDate' => $reservationsForDate,
+            'tableOccupancy'      => $tableOccupancy,
+        ]);
     }
 }

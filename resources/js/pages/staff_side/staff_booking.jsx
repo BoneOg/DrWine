@@ -328,7 +328,8 @@ export default function StaffBooking() {
                                         const currentStatus = (res.transaction?.status || res.status)?.toLowerCase();
                                         const isCompletedOrCancelled =
                                             currentStatus === RESERVATION_STATUSES.COMPLETED ||
-                                            currentStatus === RESERVATION_STATUSES.CANCELLED;
+                                            currentStatus === RESERVATION_STATUSES.CANCELLED ||
+                                            currentStatus === RESERVATION_STATUSES.PENDING;
                                         return (
                                             <div
                                                 key={res.reservationID}
@@ -354,9 +355,9 @@ export default function StaffBooking() {
                                                                         e.stopPropagation();
                                                                         openModal(res.reservationID, "confirm");
                                                                     }}
-                                                                    className="bg-green-800/20 text-green-400 border border-green-800 hover:bg-green-700 text-xs px-3 py-1 rounded transition duration-150"
+                                                                    className="bg-blue-800/20 text-blue-400 border border-blue-800 hover:bg-blue-700 text-xs px-3 py-1 rounded transition duration-150"
                                                                 >
-                                                                    Confirm
+                                                                    Complete
                                                                 </button>
                                                                 <button
                                                                     onClick={(e) => {
@@ -389,9 +390,9 @@ export default function StaffBooking() {
                                                                         e.stopPropagation();
                                                                         openModal(res.reservationID, "confirm");
                                                                     }}
-                                                                    className="bg-green-800/20 text-green-400 border border-green-800 hover:bg-green-700 text-xs px-3 py-1 rounded transition duration-150"
+                                                                    className="bg-blue-800/20 text-blue-400 border border-blue-800 hover:bg-blue-700 text-xs px-3 py-1 rounded transition duration-150"
                                                                 >
-                                                                    Confirm
+                                                                    Complete
                                                                 </button>
                                                                 <button
                                                                     onClick={(e) => {

@@ -62,6 +62,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/users/{user}', [AdminController::class, 'update'])->name('users.update');
         Route::post('/users', [AdminController::class, 'store'])->name('users.store');
         Route::post('/profile/update', [AdminController::class, 'updateProfile'])->name('profile.update');
+        Route::get('/tables', [AdminController::class, 'tables'])->name('tables');
     });
 
     // Staff routes
