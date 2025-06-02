@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StaffController;
+use App\Http\Middleware\NoCache;
 
 
 // Public Pages
@@ -30,7 +31,7 @@ Route::post('/transactions', [TransactionController::class, 'store'])->name('tra
 Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
 
 // Guest-only (auth pages)
-Route::middleware('guest')->group(function () {
+Route::middleware(['guest', NoCache::class])->group(function () {
     Route::inertia('/login', 'login')->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 

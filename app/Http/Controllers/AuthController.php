@@ -51,22 +51,24 @@ class AuthController extends Controller
 
         if (Auth::attempt([$loginField => $credentials['usernameOrEmail'], 'password' => $credentials['password']])) {
             $user = Auth::user();
+            Inertia::clearHistory();
 
             if ($user->role === 'admin') {
+                Inertia::clearHistory();
                 return Inertia::location(route('admin.dashboard'));
             } elseif ($user->role === 'staff') {
+                Inertia::clearHistory();
                 return Inertia::location(route('staff.dashboard'));
             } elseif ($user->role === 'user') {
+                Inertia::clearHistory();
                 return Inertia::location(route('user.dashboard'));
             } else {
-                // If no specific role, or a default route is needed
+                Inertia::clearHistory();
                 return Inertia::location(route('menu'));
             }
         }
-
-        return back()->withErrors([
-            'usernameOrEmail' => 'Invalid credentials.',
-        ]);
+        
+        return back()->withErrors(['usernameOrEmail' => 'Invalid credentials.',]);
     }
 
     public function logout(Request $request)
@@ -75,8 +77,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         
-        // Use Inertia::location for a full page visit after logout.
-        // This ensures a fresh page load and new CSRF token.
+        Inertia::clearHistory();
         return Inertia::location(route('login'));
     }
 }

@@ -1,6 +1,9 @@
-import { Link, useForm } from '@inertiajs/react';
+import { Link, useForm, } from '@inertiajs/react';
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Head } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 
 export default function Login() {
   const { data, setData, post, processing, errors } = useForm({
@@ -8,10 +11,34 @@ export default function Login() {
     password: '',
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    post('/login');
-  };
+  const { props } = usePage();
+  const user = props.auth?.user;
+
+  useEffect(() => {
+    if (user) {
+      router.clearHistory(); // Clear navigation stack
+
+      const role = user.role;
+      if (role === 'admin') {
+        router.visit('/admin');
+      } else if (role === 'staff') {
+        router.visit('/staff');
+      } else {
+        router.visit('/users');
+      }
+    }
+  }, [user]);
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    await post('/login');
+    // After successful login, replace history
+    Inertia.replace('/dashboard');
+  } catch (error) {
+    // handle errors if needed
+  }
+};
 
   return (
     <>

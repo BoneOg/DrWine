@@ -215,7 +215,7 @@ export default function UserDashboard({ user, customer, transactions, reservatio
                               <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Date</th>
                               <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Time</th>
                               <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Table</th>
-                              <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Size</th>
+                              <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Guest</th>
                               <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Status</th>
                               <th className="text-left py-3 md:py-4 px-3 md:px-4 text-xs tracking-wider text-[#CDAF7B] uppercase font-normal">Actions</th>
                             </tr>
@@ -232,7 +232,7 @@ export default function UserDashboard({ user, customer, transactions, reservatio
                                   {reservation.table_name}
                                   <span className="text-[#CDAF7B] ml-1"># {reservation.table_number}</span>
                                 </td>
-                                <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">{reservation.size} people</td>
+                                <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm">{reservation.size} Guest</td>
                                 <td className="py-3 md:py-4 px-3 md:px-4">
                                   <span className={`inline-flex items-center px-3 py-1 text-xs tracking-wider uppercase font-monts
                                     ${
