@@ -84,7 +84,7 @@ export default function Header() {
                         <div className="flex items-center flex-1 justify-end mr-2">
                             <Link
                                 href={route('reservation')}
-                                className="hidden lg:inline-flex items-center px-6 xl:px-6 py-2 xl:py-3 border-[0.5px] border-[#CDAF7B] text-sm xl:text-base text-white transition-all duration-300 hover:bg-[#CDAF7B] hover:scale-105 uppercase tracking-wider"
+                                className="hidden lg:inline-flex items-center font-monts px-6 xl:px-6 py-2 xl:py-3 border-[0.5px] border-[#CDAF7B] text-sm xl:text-base text-white transition-all duration-300 hover:bg-[#CDAF7B] hover:scale-105 uppercase tracking-wider"
                             >
                                 Make a Reservation
                             </Link>

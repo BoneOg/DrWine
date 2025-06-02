@@ -119,7 +119,7 @@ const menuData = {
                         { name: 'Duval Leroy, Pinot Noir | Chardonnay | Pinot Meunier', description: 'Elegant and structured with fine bubbles and a fresh finish.', price: { '750ml': 5900.00, '1500ml': 10800.00 } },
                         { name: 'Veuve Clicquot Yellow Label, Pinot Noir | Chardonnay | Pinot Meunier', description: 'Vibrant and full-bodied with notes of white fruit and vanilla.', price: 7200.00 },
                         { name: 'Ruinart Blanc De Blancs, Chardonnay', description: 'Pure and luminous, made exclusively from Chardonnay grapes.', price: 18000.00 },
-                        { name: 'Dom Pérignon, Pinot Noir | Chardonnay | Pinot Meunier', description: 'Prestigious vintage champagne known for complexity and longevity.', price: { '750ml': 29000.00, '1500ml': 55000.00 } },
+                        { name: 'Dom Pérignon, Pinot Noir | Chardonnay | Pinot Meunier', description: 'Prestigious vintage champagne known for complexity and longevity.', price: { '750ml (Vintage 2013)': 29000.00, '1500ml (Vintage 2012)': 55000.00 } },
                     ],
                     image: '/assets/champagne.png',
                     imagePosition: 'right',
@@ -232,148 +232,148 @@ const menuData = {
     },
 };
 
-    export default function Menu() {
-        const [activeCategory, setActiveCategory] = useState('foodMenu');
-        const currentSection = menuData.sections[activeCategory];
+export default function Menu() {
+    const [activeCategory, setActiveCategory] = useState('foodMenu');
+    const currentSection = menuData.sections[activeCategory];
 
-        const MenuSection = ({ section }) => (
-            <div className="relative mb-32">
-                {/* Section Title */}
-                {section.name && (
-                    <div className="absolute -left-2 md:-left-1 top-8 transform -translate-x-full -rotate-90 origin-top-right">
-                        <h2 className="text-3xl font-felix text-[#CDAF7B] whitespace-nowrap tracking-wider">
-                            {section.name}
-                        </h2>
-                    </div>
-                )}
+    const MenuSection = ({ section }) => (
+        <div className="relative mb-32">
+            {/* Section Title */}
+            {section.name && (
+                <div className="absolute -left-2 md:-left-8 top-8 transform -translate-x-full -rotate-90 origin-top-right">
+                    <h2 className="text-3xl font-felix text-[#CDAF7B] whitespace-nowrap tracking-wider">
+                        {section.name}
+                    </h2>
+                </div>
+            )}
 
-                <div className={`grid grid-cols-1 lg:grid-cols-2 gap-16 items-start ${
-                    section.imagePosition === 'right' ? 'lg:grid-flow-col' : 'lg:grid-flow-col-dense'
-                }`}>
-                    {/* Menu Items */}
-                    <div className="space-y-8 pl-10 lg:pl-10">
-                        <div className="bg-[#000C1C]/40 backdrop-blur-sm p-8 rounded-none border border-[#CDAF7B]/20">
-                            {section.items.map((item, itemIndex) => (
-                                <div key={itemIndex} className="mb-8 last:mb-0 group">
-                                    <div className="flex items-baseline justify-between">
-                                        <h3 className="text-white text-xl font-felix tracking-wide group-hover:text-[#CDAF7B] transition-colors duration-300">
-                                            {item.name}
-                                        </h3>
-                                        <div className="flex-1 mx-4 border-b border-dotted border-[#CDAF7B]/30 group-hover:border-[#CDAF7B] transition-colors duration-300"></div>
-                                        {item.price && (
-                                            <span className="text-[#CDAF7B] text-lg font-felix whitespace-nowrap">
-                                                {typeof item.price === 'object' ? (
-                                                    Object.entries(item.price).map(([key, value], idx) => (
-                                                        <div key={idx} className="text-right">
-                                                            <span className="text-xs text-gray-400">{key}</span>
-                                                            <span className="ml-2">₱{value.toLocaleString()}</span>
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    `₱${item.price.toLocaleString()}`
-                                                )}
-                                            </span>
-                                        )}
-                                    </div>
-                                    {item.description && (
-                                        <p className="text-gray-400 text-sm mt-2 leading-relaxed font-monts">
-                                            {item.description}
-                                        </p>
+            <div className={`grid grid-cols-1 lg:grid-cols-2 gap-16 items-start ${
+                section.imagePosition === 'right' ? 'lg:grid-flow-col' : 'lg:grid-flow-col-dense'
+            }`}>
+                {/* Menu Items */}
+                <div className="space-y-8 pl-10 lg:pl-10">
+                    <div className="bg-[#000C1C]/40 backdrop-blur-sm p-8 rounded-none border border-[#CDAF7B]/20">
+                        {section.items.map((item, itemIndex) => (
+                            <div key={itemIndex} className="mb-8 last:mb-0 group">
+                                <div className="flex items-baseline justify-between">
+                                    <h3 className="text-white text-xl font-felix tracking-wide group-hover:text-[#CDAF7B] transition-colors duration-300">
+                                        {item.name}
+                                    </h3>
+                                    <div className="flex-1 mx-4"></div>
+                                    {item.price && (
+                                        <span className="text-[#CDAF7B] text-lg font-felix whitespace-nowrap">
+                                            {typeof item.price === 'object' ? (
+                                                Object.entries(item.price).map(([key, value], idx) => (
+                                                    <div key={idx} className="text-right">
+                                                        <span className="text-sm text-gray-400">{key}</span>
+                                                        <span className="ml-2">₱{value.toLocaleString()}</span>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                `₱${item.price.toLocaleString()}`
+                                            )}
+                                        </span>
                                     )}
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Section Image */}
-                    {section.image && (
-                        <div className={`${section.imagePosition === 'right' ? 'lg:order-last' : 'lg:order-first'}`}>
-                            <div className="relative group">
-                                <div className="absolute inset-0 bg-[#CDAF7B]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-none"></div>
-                                <div className="overflow-hidden rounded-none shadow-xl">
-                                    <img
-                                        src={section.image}
-                                        alt={section.name}
-                                        className="w-full h-[500px] object-cover transform group-hover:scale-105 transition-transform duration-700"
-                                    />
-                                </div>
+                                {item.description && (
+                                    <p className="text-gray-400 text-sm mt-2 leading-relaxed font-monts">
+                                        {item.description}
+                                    </p>
+                                )}
                             </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-        );
-
-        return (
-            <Layout>
-                <Head title="Menu - Dr. Wine" />
-                
-        {/* Hero Section */}
-        <div className="relative h-[50vh] bg-[#000C1C] overflow-hidden">
-            <img
-            src="/assets/menu-section-background.png"
-            alt="Menu Hero"
-            className="w-full h-full object-cover opacity-30"
-            />
-            <div className="absolute inset-0 bg-/70 to-transparent"></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <h1 className="text-5xl md:text-7xl font-felix text-white tracking-wider pt-16 mb-4">
-                MENU
-                </h1>
-                <div className="w-16 md:w-20 h-[2px] bg-gradient-to-r from-transparent via-[#CDAF7B] to-transparent mb-4 md:mb-6"></div>
-            </div>
-        </div>
-
-                {/* Menu Categories */}
-                <div className="bg-[#000C1C] text-white min-h-screen">
-                    <div className="max-w-7xl mx-auto px-4 py-16">
-                    {/* Category Navigation */}
-                    <nav className="flex justify-center mb-16 px-2">
-                    <div className="flex flex-wrap justify-center gap-2 p-1 bg-[#000C1C]/50 backdrop-blur-sm border border-[#CDAF7B]/20 max-w-full">
-                        {menuData.categories.map((category) => (
-                        <button
-                            key={category.key}
-                            onClick={() => setActiveCategory(category.key)}
-                            className={`text-sm md:text-lg font-felix tracking-wide transition-all duration-300
-                            px-3 sm:px-6 py-3
-                            ${
-                                activeCategory === category.key
-                                ? 'bg-[#CDAF7B] shadow-lg'
-                                : 'text-white hover:text-white hover:bg-white/5'
-                            }
-                            `}
-                        >
-                            {category.name}
-                        </button>
                         ))}
                     </div>
-                    </nav>
+                </div>
 
-                        {/* Section Content */}
-                        <div className="max-w-6xl mx-auto">
-                            {currentSection && (
-                                <>
-                                    {currentSection.description && (
-                                        <p className="text-center text-[#CDAF7B] text-xl mb-8 font-light italic">
-                                            {currentSection.description}
-                                        </p>
-                                    )}
-                                    {currentSection.priceOptions && (
-                                        <div className="text-center mb-16">
-                                            <p className="text-2xl font-serif text-white mb-2">Prix Fixe</p>
-                                            <p className="text-[#CDAF7B] text-xl font-light">
-                                                {currentSection.priceOptions}
-                                            </p>
-                                        </div>
-                                    )}
-                                    {currentSection.subsections.map((subsection, index) => (
-                                        <MenuSection key={index} section={subsection} />
-                                    ))}
-                                </>
-                            )}
+                {/* Section Image */}
+                {section.image && (
+                    <div className={`${section.imagePosition === 'right' ? 'lg:order-last' : 'lg:order-first'}`}>
+                        <div className="relative group">
+                            <div className="absolute inset-0 bg-[#CDAF7B]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-none"></div>
+                            <div className="overflow-hidden rounded-none shadow-xl">
+                                <img
+                                    src={section.image}
+                                    alt={section.name}
+                                    className="w-full h-[500px] object-cover transform group-hover:scale-105 transition-transform duration-700"
+                                />
+                            </div>
                         </div>
                     </div>
+                )}
+            </div>
+        </div>
+    );
+
+    return (
+        <Layout>
+            <Head title="Menu - Dr. Wine" />
+            
+      {/* Hero Section */}
+      <div className="relative h-[50vh] bg-[#000C1C] overflow-hidden">
+        <img
+          src="/assets/menu-section-background.png"
+          alt="Menu Hero"
+          className="w-full h-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-/70 to-transparent"></div>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <h1 className="text-5xl md:text-7xl font-felix text-white tracking-wider pt-16 mb-4">
+              MENU
+            </h1>
+            <div className="w-16 md:w-20 h-[2px] bg-gradient-to-r from-transparent via-[#CDAF7B] to-transparent mb-4 md:mb-6"></div>
+        </div>
+      </div>
+
+            {/* Menu Categories */}
+            <div className="bg-[#000C1C] text-white min-h-screen">
+                <div className="max-w-7xl mx-auto px-4 py-16">
+                {/* Category Navigation */}
+                <nav className="flex justify-center mb-16 px-2">
+                <div className="flex flex-wrap justify-center gap-2 p-1 bg-[#000C1C]/50 backdrop-blur-sm border border-[#CDAF7B]/20 max-w-full">
+                    {menuData.categories.map((category) => (
+                    <button
+                        key={category.key}
+                        onClick={() => setActiveCategory(category.key)}
+                        className={`text-sm md:text-lg font-felix tracking-wide transition-all duration-300
+                        px-3 sm:px-6 py-3
+                        ${
+                            activeCategory === category.key
+                            ? 'bg-[#CDAF7B] shadow-lg'
+                            : 'text-white hover:text-white hover:bg-white/5'
+                        }
+                        `}
+                    >
+                        {category.name}
+                    </button>
+                    ))}
                 </div>
-            </Layout>
-        );
-    }
+                </nav>
+
+                    {/* Section Content */}
+                    <div className="max-w-6xl mx-auto">
+                        {currentSection && (
+                            <>
+                                {currentSection.description && (
+                                    <p className="text-center text-[#CDAF7B] text-xl mb-8 font-light italic">
+                                        {currentSection.description}
+                                    </p>
+                                )}
+                                {currentSection.priceOptions && (
+                                    <div className="text-center mb-16">
+                                        <p className="text-2xl font-serif text-white mb-2">Prix Fixe</p>
+                                        <p className="text-[#CDAF7B] text-xl font-light">
+                                            {currentSection.priceOptions}
+                                        </p>
+                                    </div>
+                                )}
+                                {currentSection.subsections.map((subsection, index) => (
+                                    <MenuSection key={index} section={subsection} />
+                                ))}
+                            </>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </Layout>
+    );
+}
