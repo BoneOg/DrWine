@@ -6,11 +6,11 @@ import { MdEmail } from 'react-icons/md';
 import emailjs from '@emailjs/browser';
 
 export default function Contact() {
-  // Ref for the contact form to be used with EmailJS
+
   const formRef = useRef();
-  // State to manage the visibility and content of the message box
-  const [message, setMessage] = useState(null); // { type: 'success' | 'error', text: string }
-  // Size for the social media and contact icons
+
+  const [message, setMessage] = useState(null); 
+
   const iconSize = "1.2em";
 
   /**
@@ -19,28 +19,28 @@ export default function Contact() {
    * @param {Event} e - The form submission event.
    */
   const sendEmail = (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault(); 
 
-    // Send form data using EmailJS
+
     emailjs.sendForm(
-      'service_xdu3624', // Your EmailJS service ID
-      'template_2k3twwh', // Your EmailJS template ID
-      formRef.current,    // The form element to send
-      'FvPitcDCCMIJ1KzMO'  // Your EmailJS public key
+      'service_xdu3624', 
+      'template_2k3twwh', 
+      formRef.current,    
+      'FvPitcDCCMIJ1KzMO'  
     ).then(
       (result) => {
-        // Log success and display a success message
+
         console.log('Email sent:', result.text);
         setMessage({ type: 'success', text: 'Message sent successfully!' });
-        e.target.reset(); // Reset the form fields
-        // Automatically hide the message after 5 seconds
+        e.target.reset(); 
+
         setTimeout(() => setMessage(null), 5000);
       },
       (error) => {
-        // Log error and display an error message
+
         console.error('Error sending email:', error.text);
         setMessage({ type: 'error', text: 'Failed to send message. Please try again.' });
-        // Automatically hide the message after 5 seconds
+
         setTimeout(() => setMessage(null), 5000);
       }
     );
@@ -122,7 +122,7 @@ export default function Contact() {
                           text: 'Forbestown Road, BGC, Taguig',
                         },
                       ].map(({ href, icon, text, isEmail }) => {
-                        // Special handling for Gmail link to open in new tab
+
                         const gmailHref = 'https://mail.google.com/mail/?view=cm&fs=1&to=reservation.drwinebgc@gmail.com';
 
                         return (
@@ -306,7 +306,7 @@ export default function Contact() {
                 <h2 className="font-fraunces font-light text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white mb-6">
                   BOOK A TABLE
                 </h2>
-                <p className="text-gray-300 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-8">
+                <p className="text-gray-300 text-sm sm:text-base font-monts md:text-lg max-w-2xl mx-auto mb-8">
                   Simply fill out the reservation form on our website
                   or give us a call to reserve your table today.
                 </p>
@@ -316,7 +316,7 @@ export default function Contact() {
                   border-2 border-[#CDAF7B] text-[#CDAF7B] hover:bg-[#CDAF7B] hover:text-black 
                   transition-all duration-300 text-sm sm:text-base uppercase tracking-wider font-medium group rounded-md"
                 >
-                  <span className="group-hover:scale-105 transition-transform duration-300">Make a Reservation</span>
+                  <span className="group-hover:scale-105 font-monts transition-transform duration-300">Make a Reservation</span>
                 </Link>
               </div>
 

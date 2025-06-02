@@ -17,15 +17,6 @@ Route::inertia('/menu', 'menu')->name('menu');
 Route::inertia('/contact', 'contact')->name('contact');
 Route::inertia('/about', 'about')->name('about');
 
-// Guest-only (auth pages)
-Route::middleware('guest')->group(function () {
-    Route::inertia('/login', 'login')->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
-
-    Route::inertia('/register', 'register')->name('register');
-    Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
-});
-
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation');
 Route::post('/reservation', [ReservationController::class, 'store'])->name('reservation.store');
 Route::post('/reservation/available-times', [ReservationController::class, 'getAvailableTimes'])->name('reservation.times');
@@ -38,12 +29,20 @@ Route::delete('/reservation/{reservationID}/cancel', [CheckoutController::class,
 Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
 Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
 
+// Guest-only (auth pages)
+Route::middleware('guest')->group(function () {
+    Route::inertia('/login', 'login')->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+
+    Route::inertia('/register', 'register')->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
+});
 
 Route::middleware('auth')->group(function () {
     // Logout for all authenticated users
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // USER-only routes
+    // User routes
     Route::middleware('role:user')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('user.dashboard');
         Route::post('/users/delete-account', [UserController::class, 'deleteAccount'])->name('user.delete');
@@ -52,7 +51,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/user/reservations/{reservationID}/cancel', [CheckoutController::class, 'cancel'])->name('user.reservation.cancel');
     });
 
-    // ADMIN-only routes
+    // Admin routes
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/booking', [AdminController::class, 'booking'])->name('booking'); 
