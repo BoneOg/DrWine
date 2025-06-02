@@ -67,7 +67,7 @@ export default function About() {
               alt="People at Dr. Wine"
               className="w-full h-auto object-contain max-w-full mx-auto"
             />
-            <p className="text-xs text-gray-300 leading-relaxed max-w-full break-words">
+            <p className="text-xs font-monts text-gray-300 leading-relaxed max-w-full break-words">
               Candlelight dances on deep mahogany tables as laughter lingers in the air—Dr. Wine is a place where time slows, and every moment is savored like a final sip.
             </p>
           </div>
@@ -79,7 +79,7 @@ export default function About() {
             </h2>
             <div>
               <h3 className="text-lg mb-4 uppercase tracking-wider text-[#CDAF7B]">Our Goal</h3>
-              <ul className="space-y-4 text-xs md:text-sm text-gray-300 list-none text-left break-words">
+              <ul className="space-y-4 text-xs font-monts md:text-sm text-gray-300 list-none text-left break-words">
                 <li>
                   To offer exceptional dining experiences by harmonizing world-class wines with thoughtfully crafted dishes.
                 </li>
@@ -110,8 +110,8 @@ export default function About() {
               className="w-full object-contain max-w-full"
             />
             <div className="text-white leading-relaxed break-words">
-              <h4 className="text-[#CDAF7B] text-md font-semibold mb-1">Chef Theo</h4>
-              <p className="text-sm">
+              <h4 className="text-[#CDAF7B] text-md font-semibold font-felix mb-1">Chef Theo</h4>
+              <p className="text-sm font-monts">
                 With a quiet grace and unwavering precision, Chef Theo approaches each dish as a canvas—layering textures, flavors, and colors into artful compositions. His culinary style is rooted in restraint and refinement, letting the ingredients speak with clarity and purpose.
               </p>
             </div>
@@ -125,8 +125,8 @@ export default function About() {
               className="w-full object-contain max-w-full"
             />
             <div className="text-white leading-relaxed break-words">
-              <h4 className="text-[#CDAF7B] text-md font-semibold mb-1">Chef Marc</h4>
-              <p className="text-sm">
+              <h4 className="text-[#CDAF7B] text-md font-semibold font-felix mb-1">Chef Marc</h4>
+              <p className="text-sm font-monts">
                 Bold yet grounded, Chef Marc brings a fearless creativity to the kitchen. His technique is shaped by tradition, but his passion lies in reinventing the familiar. Each plate he creates is a journey—rich with contrast, depth, and the unexpected joy of discovery.
               </p>
             </div>
@@ -140,8 +140,8 @@ export default function About() {
               className="w-full object-contain max-w-full"
             />
             <div className="text-white leading-relaxed break-words">
-              <h4 className="text-[#CDAF7B] text-md font-semibold mb-1">Chef Gema</h4>
-              <p className="text-sm">
+              <h4 className="text-[#CDAF7B] text-md font-semibold mb-1 font-felix">Chef Gema</h4>
+              <p className="text-sm font-monts">
                 Chef Gema cooks with intuition and heart, drawing inspiration from family traditions and the warmth of home. Her dishes are soulful, vibrant, and layered with memory—designed to evoke comfort, connection, and a sense of celebration in every bite.
               </p>
             </div>
