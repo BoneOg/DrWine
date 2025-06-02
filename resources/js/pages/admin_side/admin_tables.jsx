@@ -145,7 +145,7 @@ export default function StaffDashboard({
                 transition={{ duration: 0.8, delay: 0.2 }}
               />
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-felix text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#CDAF7B] via-white to-[#CDAF7B]">
-                Tables Overview
+                Tables Dashboard
               </h1>
               <motion.div
                 className="w-16 md:w-20 h-[2px] bg-gradient-to-r from-transparent via-[#CDAF7B] to-transparent mb-4"
