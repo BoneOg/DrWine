@@ -2,7 +2,7 @@
 
 import { Head, Link } from '@inertiajs/react';
 import Layout from '@/components/layout';
-import ContactSection from '@/components/Contact';
+import ContactSection from '@/components/contact';
 
 export default function Welcome() {
     const heroSloganPart1 = "WHERE FOOD";
