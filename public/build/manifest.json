@@ -1,0 +1,290 @@
+{
+  "_adminSidebar-B-gASObG.js": {
+    "file": "assets/adminSidebar-B-gASObG.js",
+    "name": "adminSidebar",
+    "imports": [
+      "resources/js/app.jsx"
+    ]
+  },
+  "_index-BzSwelpm.js": {
+    "file": "assets/index-BzSwelpm.js",
+    "name": "index",
+    "imports": [
+      "resources/js/app.jsx"
+    ]
+  },
+  "_layout-DiPm45NA.js": {
+    "file": "assets/layout-DiPm45NA.js",
+    "name": "layout",
+    "imports": [
+      "resources/js/app.jsx",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "_proxy-D3_HAvz0.js": {
+    "file": "assets/proxy-D3_HAvz0.js",
+    "name": "proxy",
+    "imports": [
+      "resources/js/app.jsx"
+    ]
+  },
+  "_staffSidebar-B-ZCx0dB.js": {
+    "file": "assets/staffSidebar-B-ZCx0dB.js",
+    "name": "staffSidebar",
+    "imports": [
+      "resources/js/app.jsx"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-B12nEXCV.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.jsx": {
+    "file": "assets/app-BFWJ2D-4.js",
+    "name": "app",
+    "src": "resources/js/app.jsx",
+    "isEntry": true,
+    "dynamicImports": [
+      "resources/js/pages/404.jsx",
+      "resources/js/pages/Welcome.jsx",
+      "resources/js/pages/about.jsx",
+      "resources/js/pages/admin_side/Create.jsx",
+      "resources/js/pages/admin_side/admin_booking.jsx",
+      "resources/js/pages/admin_side/admin_dashboard.jsx",
+      "resources/js/pages/admin_side/admin_tables.jsx",
+      "resources/js/pages/admin_side/admin_users.jsx",
+      "resources/js/pages/checkout.jsx",
+      "resources/js/pages/contact.jsx",
+      "resources/js/pages/login.jsx",
+      "resources/js/pages/menu.jsx",
+      "resources/js/pages/notfound.jsx",
+      "resources/js/pages/register.jsx",
+      "resources/js/pages/reservation.jsx",
+      "resources/js/pages/staff_side/staff_booking.jsx",
+      "resources/js/pages/staff_side/staff_dashboard.jsx",
+      "resources/js/pages/transaction.jsx",
+      "resources/js/pages/user_side/user.jsx",
+      "resources/js/pages/user_side/user_deleted.jsx"
+    ],
+    "css": [
+      "assets/app-B12nEXCV.css"
+    ]
+  },
+  "resources/js/pages/404.jsx": {
+    "file": "assets/404-BbYfde9k.js",
+    "name": "404",
+    "src": "resources/js/pages/404.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/Welcome.jsx": {
+    "file": "assets/Welcome-ByZ3kXwU.js",
+    "name": "Welcome",
+    "src": "resources/js/pages/Welcome.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_layout-DiPm45NA.js",
+      "_index-BzSwelpm.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/about.jsx": {
+    "file": "assets/about-JbjspQ6l.js",
+    "name": "about",
+    "src": "resources/js/pages/about.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_layout-DiPm45NA.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/admin_side/Create.jsx": {
+    "file": "assets/Create-DvYMsSb2.js",
+    "name": "Create",
+    "src": "resources/js/pages/admin_side/Create.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_adminSidebar-B-gASObG.js"
+    ]
+  },
+  "resources/js/pages/admin_side/admin_booking.jsx": {
+    "file": "assets/admin_booking-Jd5af2Cl.js",
+    "name": "admin_booking",
+    "src": "resources/js/pages/admin_side/admin_booking.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_adminSidebar-B-gASObG.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/admin_side/admin_dashboard.jsx": {
+    "file": "assets/admin_dashboard-C24yCzpR.js",
+    "name": "admin_dashboard",
+    "src": "resources/js/pages/admin_side/admin_dashboard.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_adminSidebar-B-gASObG.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/admin_side/admin_tables.jsx": {
+    "file": "assets/admin_tables-BtkP5AMn.js",
+    "name": "admin_tables",
+    "src": "resources/js/pages/admin_side/admin_tables.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_adminSidebar-B-gASObG.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/admin_side/admin_users.jsx": {
+    "file": "assets/admin_users-IGUFA2wW.js",
+    "name": "admin_users",
+    "src": "resources/js/pages/admin_side/admin_users.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_adminSidebar-B-gASObG.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/checkout.jsx": {
+    "file": "assets/checkout-QOdARNTq.js",
+    "name": "checkout",
+    "src": "resources/js/pages/checkout.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_layout-DiPm45NA.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/contact.jsx": {
+    "file": "assets/contact-CkTW_mau.js",
+    "name": "contact",
+    "src": "resources/js/pages/contact.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_layout-DiPm45NA.js",
+      "_index-BzSwelpm.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/login.jsx": {
+    "file": "assets/login-DeqO0aBr.js",
+    "name": "login",
+    "src": "resources/js/pages/login.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/menu.jsx": {
+    "file": "assets/menu-lUSexWkh.js",
+    "name": "menu",
+    "src": "resources/js/pages/menu.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_layout-DiPm45NA.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/notfound.jsx": {
+    "file": "assets/notfound-7ssfCP1q.js",
+    "name": "notfound",
+    "src": "resources/js/pages/notfound.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/register.jsx": {
+    "file": "assets/register-C7Fcf7S8.js",
+    "name": "register",
+    "src": "resources/js/pages/register.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/reservation.jsx": {
+    "file": "assets/reservation-C_6R4K_f.js",
+    "name": "reservation",
+    "src": "resources/js/pages/reservation.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_layout-DiPm45NA.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/staff_side/staff_booking.jsx": {
+    "file": "assets/staff_booking-D_HO-4_Y.js",
+    "name": "staff_booking",
+    "src": "resources/js/pages/staff_side/staff_booking.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_staffSidebar-B-ZCx0dB.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/staff_side/staff_dashboard.jsx": {
+    "file": "assets/staff_dashboard-D34ZODur.js",
+    "name": "staff_dashboard",
+    "src": "resources/js/pages/staff_side/staff_dashboard.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_staffSidebar-B-ZCx0dB.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/transaction.jsx": {
+    "file": "assets/transaction-BAsGqtCW.js",
+    "name": "transaction",
+    "src": "resources/js/pages/transaction.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_layout-DiPm45NA.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/user_side/user.jsx": {
+    "file": "assets/user-SuYMePXM.js",
+    "name": "user",
+    "src": "resources/js/pages/user_side/user.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_layout-DiPm45NA.js",
+      "_proxy-D3_HAvz0.js"
+    ]
+  },
+  "resources/js/pages/user_side/user_deleted.jsx": {
+    "file": "assets/user_deleted-BvxNTm9a.js",
+    "name": "user_deleted",
+    "src": "resources/js/pages/user_side/user_deleted.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_proxy-D3_HAvz0.js"
+    ]
+  }
+}
