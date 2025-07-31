@@ -58,7 +58,7 @@ export default function Welcome() {
                             The language of love, spoken in sauces and vintages — curated for those who dine with soul.
                         </h2>
                         <p className="mt-6 font-monts text-sm">{aboutUsDescription}</p>
-                        <div className="mt-5 mb-10">
+                        <div className="mt-8 mb-10">
                             <Link
                             href="/about"
                             className="animated-gold-border relative px-6 py-2 font-monts text-white text-sm bg-transparent transition-colors duration-500 hover:text-[#CDAF7B]"

@@ -1,6 +1,6 @@
-import React from 'react';
+
 import { Head, useForm, Link } from '@inertiajs/react';
-import AdminLayout from './admin_sidebar';
+import AdminSidebar from '../../components/adminSidebar';
 
 export default function UserCreate() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -15,7 +15,7 @@ export default function UserCreate() {
     // ... submit function ...
 
     return (
-        <AdminLayout>
+        <AdminSidebar>
             <Head title="Create New User" />
             <div className="container mt-4">
                 {/* ... header ... */}
@@ -55,6 +55,6 @@ export default function UserCreate() {
                     </form>
                 </div>
             </div>
-        </AdminLayout>
+        </AdminSidebar>
     );
 }
